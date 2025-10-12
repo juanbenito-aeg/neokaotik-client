@@ -95,8 +95,7 @@ const ScanQr = ({ route }) => {
       const isInside: boolean =
         acolyteEmailAndIsInside[1].substring(isInsideValueStartIndex) ===
         'true';
-      console.log(acolyteEmail);
-      console.log(isInside);
+
       socket.emit(
         SocketClientToServerEvents.ACCESS_TO_EXIT_FROM_LAB,
         acolyteEmail,
