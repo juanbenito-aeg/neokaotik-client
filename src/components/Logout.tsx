@@ -14,7 +14,7 @@ const Container = styled.View`
 
 const Logout = () => {
   const { setUser } = useContext(UserContext);
-  const setGeneralModalMessage = useContext(ModalContext);
+  const setGeneralModalMessage = useContext(ModalContext)!;
 
   async function logOut() {
     await GoogleAuth.signOut();

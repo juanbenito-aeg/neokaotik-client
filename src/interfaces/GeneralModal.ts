@@ -1,4 +1,8 @@
-export interface GeneralModalProps {
+interface GeneralModalProps {
   message: string;
-  setMessage(message: string): void;
+  setMessage: SetGeneralModalMessage;
 }
+
+type SetGeneralModalMessage = (message: string) => void;
+
+export type { GeneralModalProps, SetGeneralModalMessage };
