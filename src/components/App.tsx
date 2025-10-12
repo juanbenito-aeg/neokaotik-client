@@ -12,10 +12,13 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
+import { UserRole } from '../constants';
+import AcolytesContext from '../contexts/AcolytesContext';
 
 const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
+  const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -27,6 +30,14 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
+      if (user.rol === UserRole.MORTIMER) {
+        (async () => {
+          const acolytesArray = await getAcolytes();
+
+          setAcolytes(acolytesArray);
+        })();
+      }
+
       initSocket(user.email);
 
       return performSocketCleanUp;
@@ -78,6 +89,19 @@ const App = () => {
     return idToken;
   }
 
+  async function getAcolytes(): Promise<KaotikaUser[]> {
+    const url = 'https://cej-server.onrender.com/user/get-acolytes/';
+    const response = await fetch(url);
+
+    let acolytesArray = [];
+
+    if (response.ok) {
+      acolytesArray = await response.json();
+    }
+
+    return acolytesArray;
+  }
+
   return (
     <UserContext value={{ user, setUser }}>
       <SafeAreaView>
@@ -98,9 +122,11 @@ const App = () => {
               {isLoading && <CircleSpinner />}
             </>
           ) : (
-            <ModalContext value={setGeneralModalMessage}>
-              <Main />
-            </ModalContext>
+            <AcolytesContext value={{ acolytes, setAcolytes }}>
+              <ModalContext value={setGeneralModalMessage}>
+                <Main />
+              </ModalContext>
+            </AcolytesContext>
           )
         ) : (
           <SplashScreen />
