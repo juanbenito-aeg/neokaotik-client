@@ -3,6 +3,7 @@ import {
   ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
   SocketClientToServerEvents,
+  UserRole,
 } from '../../../constants';
 import {
   useCameraPermission,
@@ -13,17 +14,29 @@ import {
 } from 'react-native-vision-camera';
 import { Pressable, StyleSheet } from 'react-native';
 import Text from '../../Text';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../../Button';
 import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
+import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
+import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 
 const ScanQr = ({ route }) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
-  const setGeneralModalMessage = useContext(ModalContext);
+  useEffect(() => {
+    const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
+      UserRole.ISTVAN,
+      setGeneralModalMessage,
+    );
+
+    return clearAcolyteInsideOutsideLab;
+  }, []);
+
+  const setGeneralModalMessage: SetGeneralModalMessage =
+    useContext(ModalContext)!;
 
   // Elements needed to display the camera
   const device = useCameraDevice('back');
