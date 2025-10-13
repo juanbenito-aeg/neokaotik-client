@@ -3,7 +3,7 @@ export async function authenticateUser(
   idToken: string,
 ): Promise<number> {
   const { status: statusCode } = await fetch(
-    `http://10.50.0.50:6001/user/${endpoint}`,
+    `http://10.50.0.50:6000/user/${endpoint}`,
     {
       method: 'POST',
       body: JSON.stringify({ idToken }),
