@@ -1,4 +1,4 @@
-package com.cejclient
+package com.neokaotik
 
 import android.app.Application
 import com.facebook.react.PackageList

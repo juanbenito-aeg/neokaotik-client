@@ -21,6 +21,7 @@ const Login = ({
   async function logIn() {
     try {
       setIsLoading?.(true);
+
       const loginAttemptResult = await GoogleAuth.signIn();
 
       if (loginAttemptResult.type === 'success') {
