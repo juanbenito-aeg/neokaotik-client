@@ -12,12 +12,16 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
+import { UserRole } from '../constants';
+import AcolytesContext from '../contexts/AcolytesContext';
+import IsLoadingContext from '../contexts/IsLoadingContext';
 
 const App = () => {
-  const [isConfigured, setIsConfigured] = useState<boolean>(false);
-  const [user, setUser] = useState<KaotikaUser | null>(null);
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
+  const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<KaotikaUser | null>(null);
+  const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -27,6 +31,18 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
+      if (user.rol === UserRole.MORTIMER) {
+        (async () => {
+          setIsLoading(true);
+
+          const acolytesArray = await getAcolytes();
+
+          setAcolytes(acolytesArray);
+
+          setIsLoading(false);
+        })();
+      }
+
       initSocket(user.email);
 
       return performSocketCleanUp;
@@ -67,7 +83,7 @@ const App = () => {
     let tokens = await GoogleAuth.getTokens();
 
     const isIdTokenExpiredOrWillExpireSoon: boolean =
-      tokens.expiresAt - Date.now() <= 300000;
+      tokens.expiresAt! - Date.now() <= 300000;
 
     if (isIdTokenExpiredOrWillExpireSoon) {
       tokens = await GoogleAuth.refreshTokens();
@@ -78,6 +94,19 @@ const App = () => {
     return idToken;
   }
 
+  async function getAcolytes(): Promise<KaotikaUser[]> {
+    const url = 'https://cej-server.onrender.com/user/get-acolytes/';
+    const response = await fetch(url);
+
+    let acolytesArray = [];
+
+    if (response.ok) {
+      acolytesArray = await response.json();
+    }
+
+    return acolytesArray;
+  }
+
   return (
     <UserContext value={{ user, setUser }}>
       <SafeAreaView>
@@ -86,25 +115,28 @@ const App = () => {
           setMessage={setGeneralModalMessage}
         />
 
-        {isConfigured ? (
-          !user ? (
-            <>
-              <Login
-                setUser={setUser}
-                setGeneralModalMessage={setGeneralModalMessage}
-                setIsLoading={setIsLoading}
-              />
+        <IsLoadingContext value={{ isLoading, setIsLoading }}>
+          {isConfigured ? (
+            !user ? (
+              <>
+                <Login
+                  setUser={setUser}
+                  setGeneralModalMessage={setGeneralModalMessage}
+                />
 
-              {isLoading && <CircleSpinner />}
-            </>
+                {isLoading && <CircleSpinner />}
+              </>
+            ) : (
+              <AcolytesContext value={{ acolytes, setAcolytes }}>
+                <ModalContext value={setGeneralModalMessage}>
+                  <Main />
+                </ModalContext>
+              </AcolytesContext>
+            )
           ) : (
-            <ModalContext value={setGeneralModalMessage}>
-              <Main />
-            </ModalContext>
-          )
-        ) : (
-          <SplashScreen />
-        )}
+            <SplashScreen />
+          )}
+        </IsLoadingContext>
       </SafeAreaView>
     </UserContext>
   );
