@@ -31,7 +31,7 @@ const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
           await authenticateUser('log-in', idToken);
 
         if (authenticationAttemptResult.statusCode <= 201) {
-          setUser(authenticationAttemptResult.user);
+          setUser(authenticationAttemptResult.user!);
         } else {
           await GoogleAuth.signOut();
 

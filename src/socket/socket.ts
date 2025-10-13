@@ -7,7 +7,7 @@ import { SocketGeneralEvents } from '../constants';
 import { handleConnection } from './handlers/connection';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-  'https://cej-server.onrender.com/',
+  'https://neokaotik-server.onrender.com/',
   {
     autoConnect: false,
   },

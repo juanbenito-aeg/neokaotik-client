@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "68777880712",
-    "project_id": "er6-cej",
-    "storage_bucket": "er6-cej.firebasestorage.app"
+    "project_number": "756692371231",
+    "project_id": "neokaotik-5b796",
+    "storage_bucket": "neokaotik-5b796.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:68777880712:android:d128abdc80ac79a18dc33d",
+        "mobilesdk_app_id": "1:756692371231:android:5288e022d885180d6f122a",
         "android_client_info": {
-          "package_name": "com.cejclient"
+          "package_name": "com.neokaotik"
         }
       },
       "oauth_client": [
         {
-          "client_id": "68777880712-2g532perva72i7qrntf99cn3tv3j7cv6.apps.googleusercontent.com",
+          "client_id": "756692371231-157gtgnlbf7c51fn0q3n2fnsqt0nl3js.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.cejclient",
+            "package_name": "com.neokaotik",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
-          "client_id": "68777880712-79pl25jsa37639ibme1back16g29surs.apps.googleusercontent.com",
+          "client_id": "756692371231-2jkqbns00q59rv5353e741et9nfh4r1s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAfZZEegCYwyzyN-8pCKbs7uBrSU8J7010"
+          "current_key": "AIzaSyAvtN3X0KMFvvb_oN-kifVdkGnB38TMpec"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "68777880712-79pl25jsa37639ibme1back16g29surs.apps.googleusercontent.com",
+              "client_id": "756692371231-2jkqbns00q59rv5353e741et9nfh4r1s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

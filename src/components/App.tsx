@@ -48,7 +48,7 @@ const App = () => {
   async function configureGoogleAuth() {
     await GoogleAuth.configure({
       webClientId:
-        '68777880712-79pl25jsa37639ibme1back16g29surs.apps.googleusercontent.com',
+        '756692371231-2jkqbns00q59rv5353e741et9nfh4r1s.apps.googleusercontent.com',
       scopes: [GoogleAuthScopes.EMAIL],
     });
 

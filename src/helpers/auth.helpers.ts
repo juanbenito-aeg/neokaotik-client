@@ -5,7 +5,7 @@ export async function authenticateUser(
   idToken: string,
 ): Promise<AuthenticateUserReturnValue> {
   const response = await fetch(
-    `https://cej-server.onrender.com/user/${endpoint}`,
+    `https://neokaotik-server.onrender.com/user/${endpoint}`,
     {
       method: 'POST',
       body: JSON.stringify({ idToken }),
