@@ -5,6 +5,8 @@ import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { ButtonBackgroundImgSrc } from '../constants';
+import { useContext } from 'react';
+import IsLoadingContext from '../contexts/IsLoadingContext';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -13,14 +15,13 @@ const BackgroundImage = styled.ImageBackground`
   align-items: center;
 `;
 
-const Login = ({
-  setUser,
-  setGeneralModalMessage,
-  setIsLoading,
-}: LoginProps) => {
+const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
+  const { setIsLoading } = useContext(IsLoadingContext)!;
+
   async function logIn() {
     try {
-      setIsLoading?.(true);
+      setIsLoading(true);
+
       const loginAttemptResult = await GoogleAuth.signIn();
 
       if (loginAttemptResult.type === 'success') {

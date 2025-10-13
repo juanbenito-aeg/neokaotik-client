@@ -14,13 +14,14 @@ import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
+import IsLoadingContext from '../contexts/IsLoadingContext';
 
 const App = () => {
+  const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
-  const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setTimeout(() => {
@@ -78,7 +79,7 @@ const App = () => {
     let tokens = await GoogleAuth.getTokens();
 
     const isIdTokenExpiredOrWillExpireSoon: boolean =
-      tokens.expiresAt - Date.now() <= 300000;
+      tokens.expiresAt! - Date.now() <= 300000;
 
     if (isIdTokenExpiredOrWillExpireSoon) {
       tokens = await GoogleAuth.refreshTokens();
@@ -110,27 +111,28 @@ const App = () => {
           setMessage={setGeneralModalMessage}
         />
 
-        {isConfigured ? (
-          !user ? (
-            <>
-              <Login
-                setUser={setUser}
-                setGeneralModalMessage={setGeneralModalMessage}
-                setIsLoading={setIsLoading}
-              />
+        <IsLoadingContext value={{ isLoading, setIsLoading }}>
+          {isConfigured ? (
+            !user ? (
+              <>
+                <Login
+                  setUser={setUser}
+                  setGeneralModalMessage={setGeneralModalMessage}
+                />
 
-              {isLoading && <CircleSpinner />}
-            </>
+                {isLoading && <CircleSpinner />}
+              </>
+            ) : (
+              <AcolytesContext value={{ acolytes, setAcolytes }}>
+                <ModalContext value={setGeneralModalMessage}>
+                  <Main />
+                </ModalContext>
+              </AcolytesContext>
+            )
           ) : (
-            <AcolytesContext value={{ acolytes, setAcolytes }}>
-              <ModalContext value={setGeneralModalMessage}>
-                <Main />
-              </ModalContext>
-            </AcolytesContext>
-          )
-        ) : (
-          <SplashScreen />
-        )}
+            <SplashScreen />
+          )}
+        </IsLoadingContext>
       </SafeAreaView>
     </UserContext>
   );
