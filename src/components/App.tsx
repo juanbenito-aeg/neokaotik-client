@@ -33,9 +33,13 @@ const App = () => {
     if (user) {
       if (user.rol === UserRole.MORTIMER) {
         (async () => {
+          setIsLoading(true);
+
           const acolytesArray = await getAcolytes();
 
           setAcolytes(acolytesArray);
+
+          setIsLoading(false);
         })();
       }
 
