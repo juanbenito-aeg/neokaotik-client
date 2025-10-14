@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AcolyteHome from '../components/roles/acolyte/AcolyteHome';
 import AcolyteSettings from '../components/roles/acolyte/AcolyteSettings';
@@ -17,6 +17,10 @@ import VillainHome from '../components/roles/villain/VillainHome';
 import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
 import { Tab, UserRole } from '../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform, Linking } from 'react-native';
+
+const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
 
 const TabIcon = styled.Image`
   width: 25px;
@@ -30,116 +34,140 @@ function createNavigatorAdaptedToUserRole(
   adaptiveNavigatorData: AdaptiveNavigatorData,
 ) {
   const Navigator = createBottomTabNavigator({
-    screenOptions: ({ route }) => {
-      return {
-        tabBarShowLabel: false,
-        tabBarIcon: ({ focused }) => {
-          let tabIconSource;
-
-          switch (route.name) {
-            case Tab.HOME:
-              tabIconSource = require('../../public/images/home-icon.png');
-              break;
-
-            case Tab.ANGELO_LAB:
-              tabIconSource = require('../../public/images/angelo-lab-icon.png');
-              break;
-
-            case Tab.SCAN_QR:
-              tabIconSource = require('../../public/images/scan-qr-icon.png');
-              break;
-
-            case Tab.SETTINGS:
-              tabIconSource = require('../../public/images/settings-icon.png');
-              break;
-          }
-
-          return (
-            <TabIcon
-              source={tabIconSource}
-              $focused={focused}
-              $colorInDeg={adaptiveNavigatorData.thematicColorInDeg}
-            />
-          );
-        },
-        tabBarBackground: () => {
-          return (
-            <BlurView
-              blurAmount={1}
-              overlayColor={adaptiveNavigatorData.thematicColor}
-              style={{ height: '100%' }}
-            />
-          );
-        },
-        tabBarStyle: adaptiveNavigatorData.tabBarStyle,
-        headerShown: false,
-      };
-    },
+    screenOptions: ({ route }) => ({
+      tabBarShowLabel: false,
+      tabBarIcon: ({ focused }) => {
+        let tabIconSource;
+        switch (route.name) {
+          case Tab.HOME:
+            tabIconSource = require('../../public/images/home-icon.png');
+            break;
+          case Tab.ANGELO_LAB:
+            tabIconSource = require('../../public/images/angelo-lab-icon.png');
+            break;
+          case Tab.SCAN_QR:
+            tabIconSource = require('../../public/images/scan-qr-icon.png');
+            break;
+          case Tab.SETTINGS:
+            tabIconSource = require('../../public/images/settings-icon.png');
+            break;
+        }
+        return (
+          <TabIcon
+            source={tabIconSource}
+            $focused={focused}
+            $colorInDeg={adaptiveNavigatorData.thematicColorInDeg}
+          />
+        );
+      },
+      tabBarBackground: () => (
+        <BlurView
+          blurAmount={1}
+          overlayColor={adaptiveNavigatorData.thematicColor}
+          style={{ height: '100%' }}
+        />
+      ),
+      tabBarStyle: adaptiveNavigatorData.tabBarStyle,
+      headerShown: false,
+    }),
     screens: adaptiveNavigatorData.screens,
   });
 
   return Navigator;
 }
 
-function useAdaptiveNavigation() {
+export default function useAdaptiveNavigation() {
   const {
     user: { rol },
   } = useContext(UserContext);
 
-  const adaptiveNavigatorData: AdaptiveNavigatorData = {
-    screens: {},
-    thematicColor: '',
-    thematicColorInDeg: '',
-    tabBarStyle: {
-      position: 'absolute',
-      overflow: 'hidden',
-      borderTopWidth: 0,
-    },
+  const [isReady, setIsReady] = useState(Platform.OS === 'web');
+  const [initialState, setInitialState] = useState(undefined);
+
+  const NavigationComponent = useMemo(() => {
+    const adaptiveNavigatorData: AdaptiveNavigatorData = {
+      screens: {},
+      thematicColor: '',
+      thematicColorInDeg: '',
+      tabBarStyle: {
+        position: 'absolute',
+        overflow: 'hidden',
+        borderTopWidth: 0,
+      },
+    };
+
+    switch (rol) {
+      case UserRole.ACOLYTE:
+        adaptiveNavigatorData.screens.Home = AcolyteHome;
+        adaptiveNavigatorData.screens.AngeloLab = AcolyteAngeloLab;
+        adaptiveNavigatorData.screens.Settings = AcolyteSettings;
+        break;
+
+      case UserRole.ISTVAN:
+        adaptiveNavigatorData.screens.Home = IstvanHome;
+        adaptiveNavigatorData.screens.ScanQr = {
+          screen: ScanQr,
+          initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
+          options: { unmountOnBlur: false },
+        };
+        adaptiveNavigatorData.screens.Settings = IstvanSettings;
+        break;
+
+      case UserRole.MORTIMER:
+        adaptiveNavigatorData.screens.Home = MortimerHome;
+        adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
+        adaptiveNavigatorData.screens.Settings = MortimerSettings;
+        break;
+
+      case UserRole.VILLAIN:
+        adaptiveNavigatorData.screens.Home = VillainHome;
+        adaptiveNavigatorData.screens.Settings = VillainSettings;
+        break;
+    }
+
+    adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)';
+    adaptiveNavigatorData.thematicColorInDeg = '0deg';
+    adaptiveNavigatorData.tabBarStyle.boxShadow = `0 -11.5px 5px ${adaptiveNavigatorData.thematicColor}`;
+
+    const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);
+    return createStaticNavigation(Navigator);
+  }, [rol]);
+
+  useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const savedState = await AsyncStorage.getItem(PERSISTENCE_KEY);
+        if (savedState && !initialState) {
+          setInitialState(JSON.parse(savedState));
+        }
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) restoreState();
+  }, [rol]);
+
+  if (!isReady) return () => null;
+
+  return function PersistentNavigation() {
+    return (
+      <NavigationComponent
+        initialState={initialState}
+        onStateChange={async state => {
+          if (!state) return;
+          const currentRoute = state.routes[state.index];
+          const currentTabName = currentRoute.name;
+
+          const saved = await AsyncStorage.getItem(PERSISTENCE_KEY);
+          const parsed = saved ? JSON.parse(saved) : null;
+          const previousTab = parsed?.routes?.[parsed.index]?.name;
+
+          if (previousTab !== currentTabName) {
+            await AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
+          }
+        }}
+      />
+    );
   };
-
-  switch (rol) {
-    case UserRole.ACOLYTE:
-      adaptiveNavigatorData.screens.Home = AcolyteHome;
-      adaptiveNavigatorData.screens.AngeloLab = AcolyteAngeloLab;
-      adaptiveNavigatorData.screens.Settings = AcolyteSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-      adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
-      break;
-
-    case UserRole.ISTVAN:
-      adaptiveNavigatorData.screens.Home = IstvanHome;
-      adaptiveNavigatorData.screens.ScanQr = {
-        screen: ScanQr,
-        initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
-      };
-      adaptiveNavigatorData.screens.Settings = IstvanSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-      adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
-      break;
-
-    case UserRole.MORTIMER:
-      adaptiveNavigatorData.screens.Home = MortimerHome;
-      adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
-      adaptiveNavigatorData.screens.Settings = MortimerSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-      adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
-      break;
-
-    case UserRole.VILLAIN:
-      adaptiveNavigatorData.screens.Home = VillainHome;
-      adaptiveNavigatorData.screens.Settings = VillainSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-      adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
-      break;
-  }
-
-  adaptiveNavigatorData.tabBarStyle.boxShadow = `0 -11.5px 5px ${adaptiveNavigatorData.thematicColor}`;
-
-  const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);
-
-  const Navigation = createStaticNavigation(Navigator);
-
-  return Navigation;
 }
-
-export default useAdaptiveNavigation;
