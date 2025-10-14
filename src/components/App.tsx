@@ -15,6 +15,7 @@ import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
+import { listenForAcolyteInsideOutsideLab } from '../socket/events/angelo-lab';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -31,11 +32,20 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
+      let clearAcolyteInsideOutsideLab;
+
       if (user.rol === UserRole.MORTIMER) {
         (async () => {
           setIsLoading(true);
 
           const acolytesArray = await getAcolytes();
+
+          clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
+            UserRole.MORTIMER,
+            undefined,
+            acolytesArray,
+            setAcolytes,
+          );
 
           setAcolytes(acolytesArray);
 
@@ -45,7 +55,9 @@ const App = () => {
 
       initSocket(user.email);
 
-      return performSocketCleanUp;
+      return () => {
+        performSocketCleanUp(clearAcolyteInsideOutsideLab);
+      };
     }
   }, [user]);
 
@@ -95,7 +107,7 @@ const App = () => {
   }
 
   async function getAcolytes(): Promise<KaotikaUser[]> {
-    const url = 'https://cej-server.onrender.com/user/get-acolytes/';
+    const url = 'https://neokaotik-server.onrender.com/user/get-acolytes/';
     const response = await fetch(url);
 
     let acolytesArray = [];

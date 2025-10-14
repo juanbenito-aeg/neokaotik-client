@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { AcolytesContextInterface } from '../interfaces/AcolytesContext';
+import type { AcolytesContextInterface } from '../interfaces/Acolytes';
 
 const AcolytesContext = createContext<AcolytesContextInterface | null>(null);
 

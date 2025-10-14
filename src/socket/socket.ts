@@ -21,7 +21,13 @@ function initSocket(userEmail: string) {
   socket.connect();
 }
 
-function performSocketCleanUp() {
+function performSocketCleanUp(...eventListenersCleaners) {
+  eventListenersCleaners.forEach(eventListenersCleaner => {
+    if (eventListenersCleaner) {
+      eventListenersCleaner();
+    }
+  });
+
   socket.off(SocketGeneralEvents.CONNECT);
 
   socket.disconnect();
