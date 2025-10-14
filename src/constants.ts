@@ -37,6 +37,7 @@ enum SocketGeneralEvents {
 
 enum SocketServerToClientEvents {
   ACOLYTE_INSIDE_OUTSIDE_LAB = 'acolyte inside/outside lab',
+  ACOLYTE_DISCONNECTED = 'acolyte disconnected',
 }
 
 enum SocketClientToServerEvents {

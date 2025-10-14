@@ -3,7 +3,10 @@ import { SetAcolytes } from '../../interfaces/Acolytes';
 import { SetGeneralModalMessage } from '../../interfaces/GeneralModal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
-import { handleAcolyteInsideOutsideLab } from '../handlers/angelo-lab';
+import {
+  handleAcolyteInsideOutsideLab,
+  updateAcolytes,
+} from '../handlers/angelo-lab';
 import { socket } from '../socket';
 
 function listenForAcolyteInsideOutsideLab(
@@ -30,4 +33,22 @@ function listenForAcolyteInsideOutsideLab(
   };
 }
 
-export { listenForAcolyteInsideOutsideLab };
+function listenForAcolyteDisconnected(
+  acolytes: KaotikaUser[],
+  setAcolytes: SetAcolytes,
+) {
+  const isAcolyteInsideLab: boolean = false;
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_DISCONNECTED,
+    (acolyteEmail: string) => {
+      updateAcolytes(acolyteEmail, isAcolyteInsideLab, acolytes, setAcolytes);
+    },
+  );
+
+  return () => {
+    socket.off(SocketServerToClientEvents.ACOLYTE_DISCONNECTED);
+  };
+}
+
+export { listenForAcolyteInsideOutsideLab, listenForAcolyteDisconnected };

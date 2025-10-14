@@ -15,7 +15,10 @@ import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
-import { listenForAcolyteInsideOutsideLab } from '../socket/events/angelo-lab';
+import {
+  listenForAcolyteDisconnected,
+  listenForAcolyteInsideOutsideLab,
+} from '../socket/events/angelo-lab';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -32,31 +35,20 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      let clearAcolyteInsideOutsideLab;
+      let mortimerEventListenersCleaners = [];
 
       if (user.rol === UserRole.MORTIMER) {
         (async () => {
-          setIsLoading(true);
-
-          const acolytesArray = await getAcolytes();
-
-          clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
-            UserRole.MORTIMER,
-            undefined,
-            acolytesArray,
-            setAcolytes,
+          mortimerEventListenersCleaners = await setMortimerUp(
+            mortimerEventListenersCleaners,
           );
-
-          setAcolytes(acolytesArray);
-
-          setIsLoading(false);
         })();
       }
 
       initSocket(user.email);
 
       return () => {
-        performSocketCleanUp(clearAcolyteInsideOutsideLab);
+        performSocketCleanUp(...mortimerEventListenersCleaners);
       };
     }
   }, [user]);
@@ -104,6 +96,35 @@ const App = () => {
     const { idToken } = tokens;
 
     return idToken;
+  }
+
+  async function setMortimerUp(mortimerEventListenersCleaners) {
+    setIsLoading(true);
+
+    const acolytesArray = await getAcolytes();
+
+    setIsLoading(false);
+
+    setAcolytes(acolytesArray);
+
+    const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
+      UserRole.MORTIMER,
+      undefined,
+      acolytesArray,
+      setAcolytes,
+    );
+
+    const clearAcolyteDisconnected = listenForAcolyteDisconnected(
+      acolytesArray,
+      setAcolytes,
+    );
+
+    mortimerEventListenersCleaners.push(
+      clearAcolyteInsideOutsideLab,
+      clearAcolyteDisconnected,
+    );
+
+    return mortimerEventListenersCleaners;
   }
 
   async function getAcolytes(): Promise<KaotikaUser[]> {

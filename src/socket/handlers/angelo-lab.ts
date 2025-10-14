@@ -60,4 +60,4 @@ function updateAcolytes(
   setAcolytes(updatedAcolytes);
 }
 
-export { handleAcolyteInsideOutsideLab };
+export { handleAcolyteInsideOutsideLab, updateAcolytes };
