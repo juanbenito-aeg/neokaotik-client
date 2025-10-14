@@ -100,7 +100,10 @@ function useAdaptiveNavigation() {
   switch (rol) {
     case UserRole.ACOLYTE:
       adaptiveNavigatorData.screens.Home = AcolyteHome;
-      adaptiveNavigatorData.screens.AngeloLab = AcolyteAngeloLab;
+      adaptiveNavigatorData.screens.AngeloLab = {
+        screen: AcolyteAngeloLab,
+        initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
+      };
       adaptiveNavigatorData.screens.Settings = AcolyteSettings;
       adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
       adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
