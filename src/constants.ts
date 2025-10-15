@@ -44,6 +44,8 @@ enum SocketClientToServerEvents {
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
 }
 
+const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -52,4 +54,5 @@ export {
   SocketGeneralEvents,
   SocketServerToClientEvents,
   SocketClientToServerEvents,
+  PERSISTENCE_KEY,
 };

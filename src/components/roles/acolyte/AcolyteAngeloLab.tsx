@@ -14,8 +14,8 @@ import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-
 const AcolyteAngeloLab = ({ route }: any) => {
   const navigation = useNavigation();
   const { tabBarStyle } = route.params;
-  const { user, setUser }: any = useContext(UserContext);
-  const isInside = user.isInside;
+  const { user, setUser } = useContext(UserContext)!;
+  const isInside = user!.isInside;
   const [showQR, setShowQR] = useState<boolean>(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const AcolyteAngeloLab = ({ route }: any) => {
     const userData = listenForAcolyteInsideOutsideLab(
       UserRole.ACOLYTE,
       undefined,
-      user,
+      user!,
       setUser,
     );
     return userData;
@@ -55,10 +55,10 @@ const AcolyteAngeloLab = ({ route }: any) => {
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
 
-          {showQR && QRToScan(user.email, user.isInside)}
+          {showQR && QRToScan(user!.email, user!.isInside)}
         </>
       ) : (
-        <>{QRToScan(user.email, user.isInside)}</>
+        <>{QRToScan(user!.email, user!.isInside)}</>
       )}
     </ScreenContainer>
   );
