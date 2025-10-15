@@ -7,6 +7,8 @@ import { socket } from '../socket';
 function listenForAcolyteInsideOutsideLab(
   recipientRole: string,
   setGeneralModalMessage?: SetGeneralModalMessage,
+  user?: any,
+  setUser?: any,
 ) {
   socket.on(
     SocketServerToClientEvents.ACOLYTE_INSIDE_OUTSIDE_LAB,
@@ -15,6 +17,8 @@ function listenForAcolyteInsideOutsideLab(
         recipientRole,
         acolyteData,
         setGeneralModalMessage,
+        user,
+        setUser,
       );
     },
   );

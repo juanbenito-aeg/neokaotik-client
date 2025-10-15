@@ -6,29 +6,37 @@ import { UserContext } from '../../../contexts/UserContext';
 import {
   ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
+  UserRole,
 } from '../../../constants';
 import Button from '../../Button';
+import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 
-const AcolyteAngeloLab = () => {
-  const { user }: any = useContext(UserContext);
+const AcolyteAngeloLab = ({ route }: any) => {
   const navigation = useNavigation();
+  const { tabBarStyle } = route.params;
+  const { user, setUser }: any = useContext(UserContext);
+  const isInside = user.isInside;
   const [showQR, setShowQR] = useState<boolean>(false);
-  const isInside = false;
 
   useEffect(() => {
     navigation.setOptions({
-      tabBarStyle: isInside
-        ? { display: 'none' }
-        : {
-            backgroundColor: '#0a171e',
-            borderColor: '#333',
-          },
+      tabBarStyle: isInside ? { display: 'none' } : tabBarStyle,
     });
   }, [navigation, isInside]);
 
-  const QRToScan = (email: string) => (
+  useEffect(() => {
+    const userData = listenForAcolyteInsideOutsideLab(
+      UserRole.ACOLYTE,
+      undefined,
+      user,
+      setUser,
+    );
+    return userData;
+  }, []);
+
+  const QRToScan = (email: string, isInside: boolean) => (
     <QRCode
-      value={email}
+      value={`email=${email}&isInside=${isInside}`}
       size={250}
       color="rgba(87, 175, 216)"
       backgroundColor="black"
@@ -47,10 +55,10 @@ const AcolyteAngeloLab = () => {
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
 
-          {showQR && QRToScan(user.email)}
+          {showQR && QRToScan(user.email, user.isInside)}
         </>
       ) : (
-        <>{QRToScan(user.email)}</>
+        <>{QRToScan(user.email, user.isInside)}</>
       )}
     </ScreenContainer>
   );
