@@ -4,7 +4,8 @@ import { UserContext } from '../contexts/UserContext';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import Button from './Button';
-import { ButtonBackgroundImgSrc } from '../constants';
+import { ButtonBackgroundImgSrc, PERSISTENCE_KEY } from '../constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.View`
   flex: 1;
@@ -13,10 +14,11 @@ const Container = styled.View`
 `;
 
 const Logout = () => {
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext)!;
   const setGeneralModalMessage = useContext(ModalContext)!;
 
   async function logOut() {
+    await AsyncStorage.removeItem(PERSISTENCE_KEY);
     await GoogleAuth.signOut();
     setUser(null);
     setGeneralModalMessage('The gate closes behind you.\nSession over.');

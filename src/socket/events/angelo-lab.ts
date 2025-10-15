@@ -7,6 +7,7 @@ import {
   handleAcolyteInsideOutsideLab,
   updateAcolytes,
 } from '../handlers/angelo-lab';
+import { SetUser } from '../../interfaces/UserContext';
 import { socket } from '../socket';
 
 function listenForAcolyteInsideOutsideLab(
@@ -14,6 +15,8 @@ function listenForAcolyteInsideOutsideLab(
   setGeneralModalMessage?: SetGeneralModalMessage,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
+  user?: KaotikaUser,
+  setUser?: SetUser,
 ) {
   socket.on(
     SocketServerToClientEvents.ACOLYTE_INSIDE_OUTSIDE_LAB,
@@ -24,6 +27,8 @@ function listenForAcolyteInsideOutsideLab(
         setGeneralModalMessage,
         acolytes,
         setAcolytes,
+        user,
+        setUser,
       );
     },
   );

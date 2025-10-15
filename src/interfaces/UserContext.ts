@@ -2,7 +2,9 @@ import KaotikaUser from './KaotikaUser';
 
 interface UserContextInterface {
   user: KaotikaUser | null;
-  setUser(user: KaotikaUser | null): void;
+  setUser: SetUser;
 }
 
-export type { UserContextInterface };
+type SetUser = (user: KaotikaUser | null) => void;
+
+export type { UserContextInterface, SetUser };
