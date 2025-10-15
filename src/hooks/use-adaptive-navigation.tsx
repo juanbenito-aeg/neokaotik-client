@@ -65,7 +65,7 @@ function createNavigatorAdaptedToUserRole(
         tabBarBackground: () => {
           return (
             <BlurView
-              blurAmount={1}
+              blurAmount={2}
               overlayColor={adaptiveNavigatorData.thematicColor}
               style={{ height: '100%' }}
             />
@@ -121,8 +121,8 @@ function useAdaptiveNavigation() {
       adaptiveNavigatorData.screens.Home = MortimerHome;
       adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
       adaptiveNavigatorData.screens.Settings = MortimerSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-      adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+      adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.1)';
+      adaptiveNavigatorData.thematicColorInDeg = '136deg';
       break;
 
     case UserRole.VILLAIN:
