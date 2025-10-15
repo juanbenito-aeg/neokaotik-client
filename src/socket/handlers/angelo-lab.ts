@@ -1,16 +1,15 @@
-import { useContext } from 'react';
 import { UserRole } from '../../constants';
-import { UserContext } from '../../contexts/UserContext';
 import { SetGeneralModalMessage } from '../../interfaces/GeneralModal';
+import KaotikaUser from '../../interfaces/KaotikaUser';
 import type { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
-import { UserContextInterface } from '../../interfaces/UserContext';
+import { SetUser, UserContextInterface } from '../../interfaces/UserContext';
 
 function handleAcolyteInsideOutsideLab(
   recipientRole: string,
   acolyteData: AcolyteDataAfterAccessExitLab,
   setGeneralModalMessage?: SetGeneralModalMessage,
-  user?: any,
-  setUser?: any,
+  user?: KaotikaUser,
+  setUser?: SetUser,
 ) {
   switch (recipientRole) {
     case UserRole.ISTVAN:
@@ -20,8 +19,9 @@ function handleAcolyteInsideOutsideLab(
         acolyteData.isInside,
       );
       break;
+
     case UserRole.ACOLYTE:
-      displayTheLabEntryOrExit(acolyteData.isInside, user, setUser);
+      enterOrExitLab(acolyteData.isInside, user!, setUser!);
       break;
   }
 }
@@ -38,15 +38,11 @@ function displayAcolyteEnteredExitedModal(
   setGeneralModalMessage(message);
 }
 
-function displayTheLabEntryOrExit(
+function enterOrExitLab(
   isAcolyteInsideLab: boolean,
-  user: any,
-  setUser: any,
+  user: KaotikaUser,
+  setUser: SetUser,
 ) {
-  console.log(user);
-  console.log('-----');
-  console.log(isAcolyteInsideLab);
-
   setUser({ ...user, isInside: isAcolyteInsideLab });
 }
 

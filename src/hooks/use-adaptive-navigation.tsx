@@ -16,11 +16,9 @@ import MortimerAngeloLab from '../components/roles/mortimer/MortimerAngeloLab';
 import VillainHome from '../components/roles/villain/VillainHome';
 import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
-import { Tab, UserRole } from '../constants';
+import { Tab, UserRole, PERSISTENCE_KEY } from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform, Linking } from 'react-native';
-
-const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
+import AcolytesContext from '../contexts/AcolytesContext';
 
 const TabIcon = styled.Image`
   width: 25px;
@@ -34,6 +32,24 @@ function createNavigatorAdaptedToUserRole(
   adaptiveNavigatorData: AdaptiveNavigatorData,
 ) {
   const Navigator = createBottomTabNavigator({
+    screenListeners: {
+      state: async state => {
+        if (!state) {
+          return;
+        }
+
+        const currentRoute = state.routes[state.index];
+        const currentTabName = currentRoute.name;
+
+        const saved = await AsyncStorage.getItem(PERSISTENCE_KEY);
+        const parsed = saved ? JSON.parse(saved) : null;
+        const previousTab = parsed?.routes?.[parsed.index]?.name;
+
+        if (previousTab !== currentTabName) {
+          await AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
+        }
+      },
+    },
     screenOptions: ({ route }) => ({
       tabBarShowLabel: false,
       tabBarIcon: ({ focused }) => {
@@ -77,12 +93,23 @@ function createNavigatorAdaptedToUserRole(
 }
 
 export default function useAdaptiveNavigation() {
-  const {
-    user: { rol },
-  } = useContext(UserContext);
+  const { user } = useContext(UserContext)!;
+  const { acolytes } = useContext(AcolytesContext)!;
 
-  const [isReady, setIsReady] = useState(Platform.OS === 'web');
-  const [initialState, setInitialState] = useState(undefined);
+  const [initialState, setInitialState] = useState();
+
+  useEffect(() => {
+    const restoreState = async () => {
+      const savedState = await AsyncStorage.getItem(PERSISTENCE_KEY);
+      const state = savedState ? JSON.parse(savedState) : undefined;
+
+      if (state !== undefined) {
+        setInitialState(state);
+      }
+    };
+
+    restoreState();
+  }, [user, acolytes]);
 
   const NavigationComponent = useMemo(() => {
     const adaptiveNavigatorData: AdaptiveNavigatorData = {
@@ -96,12 +123,13 @@ export default function useAdaptiveNavigation() {
       },
     };
 
-    switch (rol) {
+    switch (user?.rol) {
       case UserRole.ACOLYTE:
         adaptiveNavigatorData.screens.Home = AcolyteHome;
         adaptiveNavigatorData.screens.AngeloLab = {
           screen: AcolyteAngeloLab,
           initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
+          options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = AcolyteSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
@@ -135,44 +163,9 @@ export default function useAdaptiveNavigation() {
     adaptiveNavigatorData.tabBarStyle.boxShadow = `0 -11.5px 5px ${adaptiveNavigatorData.thematicColor}`;
 
     const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);
+
     return createStaticNavigation(Navigator);
-  }, [rol]);
+  }, [user?.rol]);
 
-  useEffect(() => {
-    const restoreState = async () => {
-      try {
-        const savedState = await AsyncStorage.getItem(PERSISTENCE_KEY);
-        if (savedState && !initialState) {
-          setInitialState(JSON.parse(savedState));
-        }
-      } finally {
-        setIsReady(true);
-      }
-    };
-
-    if (!isReady) restoreState();
-  }, [rol]);
-
-  if (!isReady) return () => null;
-
-  return function PersistentNavigation() {
-    return (
-      <NavigationComponent
-        initialState={initialState}
-        onStateChange={async state => {
-          if (!state) return;
-          const currentRoute = state.routes[state.index];
-          const currentTabName = currentRoute.name;
-
-          const saved = await AsyncStorage.getItem(PERSISTENCE_KEY);
-          const parsed = saved ? JSON.parse(saved) : null;
-          const previousTab = parsed?.routes?.[parsed.index]?.name;
-
-          if (previousTab !== currentTabName) {
-            await AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
-          }
-        }}
-      />
-    );
-  };
+  return NavigationComponent;
 }
