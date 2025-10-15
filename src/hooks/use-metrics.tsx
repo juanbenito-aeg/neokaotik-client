@@ -6,24 +6,24 @@ function useMetrics() {
   const guidelineBaseWidth: number = 375;
   const guidelineBaseHeight: number = 812;
 
-  // Usage: width, marginLeft, marginRight, marginHorizontal, paddingLeft, paddingRight, paddingHorizontal
-  const horizontalScale = (size: number): number =>
+  // horizontalScale - Usage: width, marginLeft, marginRight, marginHorizontal, paddingLeft, paddingRight, paddingHorizontal
+  const hs = (size: number): number =>
     (windowWidth / guidelineBaseWidth) * size;
 
-  // Usage: height, marginTop, marginBottom, marginVertical, lineHeight, paddingTop, paddingBottom, paddingVertical
-  const verticalScale = (size: number): number =>
+  // verticalScale - Usage: height, marginTop, marginBottom, marginVertical, lineHeight, paddingTop, paddingBottom, paddingVertical
+  const vs = (size: number): number =>
     (windowHeight / guidelineBaseHeight) * size;
 
-  // Usage: fontSize, borderRadius
-  const moderateScale = (size: number, factor: number = 0.5): number =>
-    size + (horizontalScale(size) - size) * factor;
+  // moderateScale - Usage: fontSize, borderRadius
+  const ms = (size: number, factor: number = 0.5): number =>
+    size + (hs(size) - size) * factor;
 
   return {
     windowWidth,
     windowHeight,
-    horizontalScale,
-    verticalScale,
-    moderateScale,
+    hs,
+    vs,
+    ms,
   };
 }
 

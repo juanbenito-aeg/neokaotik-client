@@ -1,7 +1,10 @@
-type HorizontalScale = (size: number) => number;
+// HorizontalScale
+type HS = (size: number) => number;
 
-type VerticalScale = (size: number) => number;
+// VerticalScale
+type VS = (size: number) => number;
 
-type ModerateScale = (size: number, factor: number) => number;
+// ModerateScale
+type MS = (size: number, factor: number) => number;
 
-export type { HorizontalScale, VerticalScale, ModerateScale };
+export type { HS, VS, MS };

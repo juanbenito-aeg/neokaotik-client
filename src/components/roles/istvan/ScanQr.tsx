@@ -51,18 +51,18 @@ const ScanQr = ({ route }) => {
   const { tabBarStyle } = route.params;
 
   // Styling for the button used to close the camera
-  const { moderateScale } = useMetrics();
+  const { ms } = useMetrics();
   const buttonFixedSize: number = 60;
   const scaleFactor: number = 0.2;
   const buttonCustomStyleObj = {
-    width: moderateScale(buttonFixedSize, scaleFactor),
-    height: moderateScale(buttonFixedSize, scaleFactor),
+    width: ms(buttonFixedSize, scaleFactor),
+    height: ms(buttonFixedSize, scaleFactor),
     position: 'absolute',
     bottom: '5%',
     borderRadius: '50%',
     overflow: 'hidden',
     outlineColor: '#ffffff',
-    outlineWidth: moderateScale(3.5, scaleFactor - 0.1),
+    outlineWidth: ms(3.5, scaleFactor - 0.1),
   };
 
   async function handlePress() {

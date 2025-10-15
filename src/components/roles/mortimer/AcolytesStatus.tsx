@@ -7,11 +7,11 @@ import { ScrollView } from 'react-native';
 const AcolytesStatus = () => {
   const { acolytes } = useContext(AcolytesContext)!;
 
-  const { moderateScale } = useMetrics();
+  const { ms } = useMetrics();
 
   return (
     <ScrollView
-      contentContainerStyle={{ padding: moderateScale(25, 0.25) }}
+      contentContainerStyle={{ padding: ms(25, 0.25) }}
       showsVerticalScrollIndicator={false}
     >
       {acolytes.map(acolyte => {

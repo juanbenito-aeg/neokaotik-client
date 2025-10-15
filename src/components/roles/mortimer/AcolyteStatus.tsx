@@ -1,39 +1,36 @@
 import styled from 'styled-components/native';
 import Text from '../../Text';
 import useMetrics from '../../../hooks/use-metrics';
-import type { ModerateScale } from '../../../interfaces/Metrics';
+import type { MS } from '../../../interfaces/Metrics';
 import type { AcolyteStatusProps } from '../../../interfaces/AcolyteStatus';
 
-const Container = styled.View<{ $moderateScale: ModerateScale }>`
-  margin-bottom: ${({ $moderateScale }) => $moderateScale(25, 0.25)}px;
-`;
-
-const Row = styled.View<{ $moderateScale: ModerateScale }>`
-  height: ${({ $moderateScale }) => $moderateScale(50, 0.25)}px;
-  flex-direction: row;
-  column-gap: ${({ $moderateScale }) => $moderateScale(25, 0.25)}px;
-`;
-
-const Avatar = styled.Image<{
-  $moderateScale: ModerateScale;
-  $isInside: boolean;
-}>`
-  width: ${({ $moderateScale }) => $moderateScale(50, 0.25)}px;
-  height: ${({ $moderateScale }) => $moderateScale(50, 0.25)}px;
-  border-radius: ${({ $moderateScale }) => $moderateScale(25, 0.25)}px;
+const Container = styled.View<{ $ms: MS; $isInside: boolean }>`
+  margin-bottom: ${({ $ms }) => $ms(25, 0.25)}px;
   filter: brightness(${({ $isInside }) => ($isInside ? 100 : 50)}%);
 `;
 
+const Row = styled.View<{ $ms: MS }>`
+  height: ${({ $ms }) => $ms(50, 0.25)}px;
+  flex-direction: row;
+  column-gap: ${({ $ms }) => $ms(25, 0.25)}px;
+`;
+
+const Avatar = styled.Image<{
+  $ms: MS;
+}>`
+  width: ${({ $ms }) => $ms(50, 0.25)}px;
+  height: ${({ $ms }) => $ms(50, 0.25)}px;
+  border-radius: ${({ $ms }) => $ms(25, 0.25)}px;
+`;
+
 const NicknameContainer = styled.View<{
-  $moderateScale: ModerateScale;
-  $isInside: boolean;
+  $ms: MS;
 }>`
   height: 100%;
   justify-content: center;
   border: 1px solid #fff;
-  border-radius: ${({ $moderateScale }) => $moderateScale(25, 0.25)}px;
-  padding: 0 ${({ $moderateScale }) => $moderateScale(25, 0.25)}px;
-  filter: brightness(${({ $isInside }) => ($isInside ? 100 : 50)}%);
+  border-radius: ${({ $ms }) => $ms(25, 0.25)}px;
+  padding: 0 ${({ $ms }) => $ms(25, 0.25)}px;
 `;
 
 const Nickname = styled(Text)`
@@ -41,18 +38,14 @@ const Nickname = styled(Text)`
 `;
 
 const AcolyteStatus = ({ avatar, nickname, isInside }: AcolyteStatusProps) => {
-  const { moderateScale } = useMetrics();
+  const { ms } = useMetrics();
 
   return (
-    <Container $moderateScale={moderateScale}>
-      <Row $moderateScale={moderateScale}>
-        <Avatar
-          source={{ uri: avatar }}
-          $moderateScale={moderateScale}
-          $isInside={isInside}
-        />
+    <Container $ms={ms} $isInside={isInside}>
+      <Row $ms={ms}>
+        <Avatar source={{ uri: avatar }} $ms={ms} />
 
-        <NicknameContainer $moderateScale={moderateScale} $isInside={isInside}>
+        <NicknameContainer $ms={ms}>
           <Nickname>{nickname}</Nickname>
         </NicknameContainer>
       </Row>
