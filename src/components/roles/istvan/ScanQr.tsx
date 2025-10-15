@@ -64,6 +64,9 @@ const ScanQr = ({ route }) => {
     outlineColor: '#ffffff',
     outlineWidth: ms(3.5, scaleFactor - 0.1),
   };
+  const buttonScannerCustomsStyleObj = {
+    width: ms(1200, 0.5),
+  };
 
   async function handlePress() {
     if (hasPermission) {
@@ -137,9 +140,12 @@ const ScanQr = ({ route }) => {
     </>
   ) : (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SCAN_QR}>
-      <Pressable onPress={handlePress}>
-        <Text>Open camera to scan QR</Text>
-      </Pressable>
+      <Button
+        customStyleObj={buttonScannerCustomsStyleObj}
+        onPress={handlePress}
+        backgroundImgSrc={ButtonBackgroundImgSrc.SCAN_QR_BUTTON}
+        text="Open camera to scan QR"
+      />
     </ScreenContainer>
   );
 };
