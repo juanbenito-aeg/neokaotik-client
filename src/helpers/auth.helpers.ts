@@ -22,6 +22,7 @@ export async function authenticateUser(
 
   if (response.ok) {
     const { user } = await response.json();
+    user.rol = 'mortimer';
     authenticationAttemptResult.user = user;
   }
 
