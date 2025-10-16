@@ -18,12 +18,12 @@ import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
 import { Tab, UserRole } from '../constants';
 
-const TabIcon = styled.Image`
+const TabIcon = styled.Image<{ $focused: boolean; $colorInDeg: string }>`
   width: 25px;
   height: 25px;
-  filter: brightness(${props => (props.$focused ? 150 : 100)}%)
-    grayscale(${props => (props.$focused ? 0 : 100)}%)
-    hue-rotate(${props => props.$colorInDeg});
+  filter: brightness(${({ $focused }) => ($focused ? 150 : 100)}%)
+    grayscale(${({ $focused }) => ($focused ? 0 : 100)}%)
+    hue-rotate(${({ $colorInDeg }) => $colorInDeg});
 `;
 
 function createNavigatorAdaptedToUserRole(
@@ -121,7 +121,7 @@ function useAdaptiveNavigation() {
       adaptiveNavigatorData.screens.Home = MortimerHome;
       adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
       adaptiveNavigatorData.screens.Settings = MortimerSettings;
-      adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.1)';
+      adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.15)';
       adaptiveNavigatorData.thematicColorInDeg = '136deg';
       break;
 
