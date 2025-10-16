@@ -1,53 +1,47 @@
 import styled from 'styled-components/native';
 import Text from '../../Text';
 import useMetrics from '../../../hooks/use-metrics';
-import type { MS } from '../../../interfaces/Metrics';
+import type { HS, MS } from '../../../interfaces/Metrics';
 import type { AcolyteStatusProps } from '../../../interfaces/AcolyteStatus';
 
-const Container = styled.View<{ $ms: MS; $isInside: boolean }>`
-  margin-bottom: ${({ $ms }) => $ms(25, 0.25)}px;
-  filter: brightness(${({ $isInside }) => ($isInside ? 100 : 50)}%);
+const Container = styled.View<{ $hs: HS; $ms: MS; $isInside: boolean }>`
+  width: ${({ $hs }) => $hs(300)}px;
+  margin: auto;
+  margin-bottom: ${({ $ms }) => $ms(25, 0.5)}px;
+  border-radius: 9999px;
+  filter: drop-shadow(0 0 5px rgba(191 245 205 / ${({ $isInside }) =>
+    $isInside
+      ? '0.85)) brightness(1) grayscale(0)'
+      : '0.5)) brightness(0.75) grayscale(1)'};
+  background-color: rgba(0 0 0 / 0.85);
 `;
 
 const Row = styled.View<{ $ms: MS }>`
-  height: ${({ $ms }) => $ms(50, 0.25)}px;
+  width: 100%;
+  height: ${({ $ms }) => $ms(60, 0.5)}px;
   flex-direction: row;
-  column-gap: ${({ $ms }) => $ms(25, 0.25)}px;
 `;
 
-const Avatar = styled.Image<{
-  $ms: MS;
-}>`
-  width: ${({ $ms }) => $ms(50, 0.25)}px;
-  height: ${({ $ms }) => $ms(50, 0.25)}px;
-  border-radius: ${({ $ms }) => $ms(25, 0.25)}px;
-`;
-
-const NicknameContainer = styled.View<{
-  $ms: MS;
-}>`
-  height: 100%;
-  justify-content: center;
-  border: 1px solid #fff;
-  border-radius: ${({ $ms }) => $ms(25, 0.25)}px;
-  padding: 0 ${({ $ms }) => $ms(25, 0.25)}px;
+const Avatar = styled.Image<{ $ms: MS }>`
+  width: ${({ $ms }) => $ms(60, 0.5)}px;
+  height: ${({ $ms }) => $ms(60, 0.5)}px;
+  border-radius: 9999px;
 `;
 
 const Nickname = styled(Text)`
-  color: #fff;
+  color: rgb(191 245 205);
+  margin: auto;
 `;
 
 const AcolyteStatus = ({ avatar, nickname, isInside }: AcolyteStatusProps) => {
-  const { ms } = useMetrics();
+  const { hs, ms } = useMetrics();
 
   return (
-    <Container $ms={ms} $isInside={isInside}>
+    <Container $hs={hs} $ms={ms} $isInside={isInside}>
       <Row $ms={ms}>
         <Avatar source={{ uri: avatar }} $ms={ms} />
 
-        <NicknameContainer $ms={ms}>
-          <Nickname>{nickname}</Nickname>
-        </NicknameContainer>
+        <Nickname>{nickname}</Nickname>
       </Row>
     </Container>
   );

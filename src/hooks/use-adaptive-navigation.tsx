@@ -20,12 +20,12 @@ import { Tab, UserRole, PERSISTENCE_KEY } from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AcolytesContext from '../contexts/AcolytesContext';
 
-const TabIcon = styled.Image`
+const TabIcon = styled.Image<{ $focused: boolean; $colorInDeg: string }>`
   width: 25px;
   height: 25px;
-  filter: brightness(${props => (props.$focused ? 150 : 100)}%)
-    grayscale(${props => (props.$focused ? 0 : 100)}%)
-    hue-rotate(${props => props.$colorInDeg});
+  filter: brightness(${({ $focused }) => ($focused ? 150 : 100)}%)
+    grayscale(${({ $focused }) => ($focused ? 0 : 100)}%)
+    hue-rotate(${({ $colorInDeg }) => $colorInDeg});
 `;
 
 function createNavigatorAdaptedToUserRole(
@@ -54,20 +54,25 @@ function createNavigatorAdaptedToUserRole(
       tabBarShowLabel: false,
       tabBarIcon: ({ focused }) => {
         let tabIconSource;
+
         switch (route.name) {
           case Tab.HOME:
             tabIconSource = require('../../public/images/home-icon.png');
             break;
+
           case Tab.ANGELO_LAB:
             tabIconSource = require('../../public/images/angelo-lab-icon.png');
             break;
+
           case Tab.SCAN_QR:
             tabIconSource = require('../../public/images/scan-qr-icon.png');
             break;
+
           case Tab.SETTINGS:
             tabIconSource = require('../../public/images/settings-icon.png');
             break;
         }
+
         return (
           <TabIcon
             source={tabIconSource}
@@ -78,7 +83,7 @@ function createNavigatorAdaptedToUserRole(
       },
       tabBarBackground: () => (
         <BlurView
-          blurAmount={1}
+          blurAmount={2}
           overlayColor={adaptiveNavigatorData.thematicColor}
           style={{ height: '100%' }}
         />
@@ -152,8 +157,8 @@ export default function useAdaptiveNavigation() {
         adaptiveNavigatorData.screens.Home = MortimerHome;
         adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
         adaptiveNavigatorData.screens.Settings = MortimerSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.15)';
+        adaptiveNavigatorData.thematicColorInDeg = '136deg';
         break;
 
       case UserRole.VILLAIN:
@@ -164,8 +169,6 @@ export default function useAdaptiveNavigation() {
         break;
     }
 
-    adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)';
-    adaptiveNavigatorData.thematicColorInDeg = '0deg';
     adaptiveNavigatorData.tabBarStyle.boxShadow = `0 -11.5px 5px ${adaptiveNavigatorData.thematicColor}`;
 
     const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);

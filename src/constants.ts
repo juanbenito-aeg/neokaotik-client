@@ -6,7 +6,7 @@ enum ScreenBackgroundImgSrc {
   SCAN_QR = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   ISTVAN_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   MORTIMER_HOME = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
-  MORTIMER_ANGELO_LAB = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
+  MORTIMER_ANGELO_LAB = require('../public/images/roles/mortimer/angelo-lab.png'),
   MORTIMER_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   VILLAIN_HOME = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   VILLAIN_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
