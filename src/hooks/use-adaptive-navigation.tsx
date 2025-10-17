@@ -137,8 +137,8 @@ export default function useAdaptiveNavigation() {
           options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = AcolyteSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(191 170 132 / 0.15)';
+        adaptiveNavigatorData.thematicColorInDeg = '39deg';
         break;
 
       case UserRole.ISTVAN:
@@ -149,8 +149,8 @@ export default function useAdaptiveNavigation() {
           options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = IstvanSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(38, 37, 35/ 0.5)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '220deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(38, 37, 35/ 0.5)';
+        adaptiveNavigatorData.thematicColorInDeg = '220deg';
         break;
 
       case UserRole.MORTIMER:

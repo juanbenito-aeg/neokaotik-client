@@ -10,6 +10,15 @@ import {
 } from '../../../constants';
 import Button from '../../Button';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
+import styled from 'styled-components/native';
+import useMetrics from '../../../hooks/use-metrics';
+
+const Scannerontainer = styled.View`
+  height: 100%;
+  align-items: left;
+  margin-left: 10%;
+  justify-content: center;
+`;
 
 const AcolyteAngeloLab = ({ route }: any) => {
   const navigation = useNavigation();
@@ -17,6 +26,7 @@ const AcolyteAngeloLab = ({ route }: any) => {
   const { user, setUser } = useContext(UserContext)!;
   const isInside = user!.isInside;
   const [showQR, setShowQR] = useState<boolean>(false);
+  const { ms } = useMetrics();
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,8 +49,8 @@ const AcolyteAngeloLab = ({ route }: any) => {
   const QRToScan = (email: string, isInside: boolean) => (
     <QRCode
       value={`email=${email}&isInside=${isInside}`}
-      size={250}
-      color="rgba(87, 175, 216)"
+      size={ms(150, 1)}
+      color="rgba(191 170 132)"
       backgroundColor="black"
     />
   );
@@ -60,7 +70,9 @@ const AcolyteAngeloLab = ({ route }: any) => {
           {showQR && QRToScan(user!.email, user!.isInside)}
         </>
       ) : (
-        <>{QRToScan(user!.email, user!.isInside)}</>
+        <Scannerontainer>
+          <>{QRToScan(user!.email, user!.isInside)}</>
+        </Scannerontainer>
       )}
     </ScreenContainer>
   );
