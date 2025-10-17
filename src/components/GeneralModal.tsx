@@ -2,6 +2,8 @@ import { Modal } from 'react-native';
 import { GeneralModalProps } from '../interfaces/GeneralModal';
 import Text from './Text';
 import styled from 'styled-components/native';
+import type { HS, MS, VS } from '../interfaces/Metrics';
+import useMetrics from '../hooks/use-metrics';
 
 const Container = styled.View`
   height: 100%;
@@ -9,22 +11,21 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const BackgroundImage = styled.ImageBackground`
-  width: 325px;
-  height: 436px;
+const BackgroundImage = styled.ImageBackground<{ $ms: MS }>`
+  width: ${({ $ms }) => $ms(325, 0.65)}px;
+  height: ${({ $ms }) => $ms(436, 0.65)}px;
 `;
 
-const Content = styled.View`
+const Content = styled.View<{ $vs: VS }>`
   height: 100%;
   justify-content: center;
   align-items: center;
-  row-gap: 18.5px;
-  padding-block-start: 82.5px;
+  row-gap: ${({ $vs }) => $vs(18.5)}px;
+  padding-block-start: ${({ $vs }) => $vs(82.5)}px;
 `;
 
-const Message = styled(Text)`
-  padding-inline: 60px;
-  text-align: center;
+const Message = styled(Text)<{ $hs: HS }>`
+  padding-inline: ${({ $hs }) => $hs(55)}px;
   text-shadow: 0 0 2.5px rgb(0 0 0 / 1);
 `;
 
@@ -41,6 +42,8 @@ const DismissButtonText = styled(Message)`
 `;
 
 const GeneralModal = ({ message, setMessage }: GeneralModalProps) => {
+  const { hs, vs, ms } = useMetrics();
+
   function handlePress(): void {
     setMessage('');
   }
@@ -55,12 +58,13 @@ const GeneralModal = ({ message, setMessage }: GeneralModalProps) => {
         <BackgroundImage
           source={require('../../public/images/general-modal.png')}
           imageStyle={{ resizeMode: 'contain' }}
+          $ms={ms}
         >
-          <Content>
-            <Message>{message}</Message>
+          <Content $vs={vs}>
+            <Message $hs={hs}>{message}</Message>
 
             <DismissButton onPress={handlePress}>
-              <DismissButtonText>Dismiss</DismissButtonText>
+              <DismissButtonText $hs={hs}>Dismiss</DismissButtonText>
             </DismissButton>
           </Content>
         </BackgroundImage>
