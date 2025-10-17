@@ -1,15 +1,15 @@
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
   ACOLYTE_ANGELO_LAB = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
-  ACOLYTE_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
+  ACOLYTE_SETTINGS = require('../public/images/roles/acolyte/settings.png'),
   ISTVAN_HOME = require('../public/images/roles/istvan/home.png'),
   SCAN_QR = require('../public/images/roles/istvan/scan-qr.png'),
-  ISTVAN_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
+  ISTVAN_SETTINGS = require('../public/images/roles/istvan/settings.png'),
   MORTIMER_HOME = require('../public/images/roles/mortimer/home.png'),
   MORTIMER_ANGELO_LAB = require('../public/images/roles/mortimer/angelo-lab.png'),
-  MORTIMER_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
+  MORTIMER_SETTINGS = require('../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../public/images/roles/villain/home.png'),
-  VILLAIN_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
+  VILLAIN_SETTINGS = require('../public/images/roles/villain/settings.png'),
 }
 
 enum ButtonBackgroundImgSrc {
