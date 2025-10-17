@@ -1,8 +1,8 @@
 import styled from 'styled-components/native';
 import type { ButtonProps } from '../interfaces/Button';
 import { useState } from 'react';
-import Animated from 'react-native-reanimated';
-import { Pressable } from 'react-native';
+import Animated, { CSSTransitionProperties } from 'react-native-reanimated';
+import { Pressable, ViewStyle } from 'react-native';
 import Text from './Text';
 
 const ButtonBackgroundImage = styled.ImageBackground`
@@ -26,7 +26,7 @@ const Button = ({
 }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
-  const defaultStyleObj = {
+  const defaultStyleObj: ViewStyle & Partial<CSSTransitionProperties> = {
     width: 235,
     height: 98,
     alignSelf: 'center',
