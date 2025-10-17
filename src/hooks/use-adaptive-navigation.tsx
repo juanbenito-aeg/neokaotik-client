@@ -149,8 +149,8 @@ export default function useAdaptiveNavigation() {
           options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = IstvanSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(38, 37, 35/ 0.5)'; // TODO: Specify unique thematic color
+        adaptiveNavigatorData.thematicColorInDeg = '220deg'; // TODO: Specify unique thematic color in degrees
         break;
 
       case UserRole.MORTIMER:

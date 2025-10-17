@@ -12,8 +12,7 @@ import {
   useCodeScanner,
   Code,
 } from 'react-native-vision-camera';
-import { Pressable, StyleSheet } from 'react-native';
-import Text from '../../Text';
+import { StyleSheet } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { useNavigation } from '@react-navigation/native';
@@ -23,7 +22,7 @@ import { socket } from '../../../socket/socket';
 import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 
-const ScanQr = ({ route }) => {
+const ScanQr = ({ route }: any) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -63,6 +62,9 @@ const ScanQr = ({ route }) => {
     overflow: 'hidden',
     outlineColor: '#ffffff',
     outlineWidth: ms(3.5, scaleFactor - 0.1),
+  };
+  const buttonScannerCustomsStyleObj = {
+    width: ms(300, 0.5),
   };
 
   async function handlePress() {
@@ -137,9 +139,12 @@ const ScanQr = ({ route }) => {
     </>
   ) : (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SCAN_QR}>
-      <Pressable onPress={handlePress}>
-        <Text>Open camera to scan QR</Text>
-      </Pressable>
+      <Button
+        customStyleObj={buttonScannerCustomsStyleObj}
+        onPress={handlePress}
+        backgroundImgSrc={ButtonBackgroundImgSrc.SCAN_QR_BUTTON}
+        text="Open camera to scan QR"
+      />
     </ScreenContainer>
   );
 };
