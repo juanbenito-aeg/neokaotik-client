@@ -1,6 +1,7 @@
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
-  ACOLYTE_ANGELO_LAB = require('../public/images/acolyte/angelo-lab.png') /* TODO: Reference definitive background image */,
+  ACOLYTE_ANGELO_LAB_ENTRANCE = require('../public/images/roles/acolyte/angelo-lab-entrance.png'),
+  ACOLYTE_ANGELO_LAB = require('../public/images/roles/acolyte/angelo-lab.png'),
   ACOLYTE_SETTINGS = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   ISTVAN_HOME = require('../public/images/main-background.png') /* TODO: Reference definitive background image */,
   SCAN_QR = require('../public/images/istvan/scanner-screen.png'),
