@@ -4,6 +4,8 @@ import type { ScreenContainerProps } from '../interfaces/ScreenContainer';
 
 const BackgroundImage = styled.ImageBackground`
   height: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ScreenContainer = ({

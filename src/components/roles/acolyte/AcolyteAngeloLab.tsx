@@ -13,10 +13,10 @@ import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
 
-const Scannerontainer = styled.View`
+const ScannerContainer = styled.View`
   height: 100%;
   align-items: left;
-  margin-left: 10%;
+  margin-right: 40%;
   justify-content: center;
 `;
 
@@ -56,25 +56,28 @@ const AcolyteAngeloLab = ({ route }: any) => {
   );
 
   return (
-    <ScreenContainer
-      backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB}
-    >
+    <>
       {isInside ? (
-        <>
+        <ScreenContainer
+          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB}
+        >
           <Button
             onPress={() => setShowQR(!showQR)}
             backgroundImgSrc={ButtonBackgroundImgSrc.ACOLYTE_THEMED}
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
-
           {showQR && QRToScan(user!.email, user!.isInside)}
-        </>
+        </ScreenContainer>
       ) : (
-        <Scannerontainer>
-          <>{QRToScan(user!.email, user!.isInside)}</>
-        </Scannerontainer>
+        <ScreenContainer
+          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB_ENTRANCE}
+        >
+          <ScannerContainer>
+            <>{QRToScan(user!.email, user!.isInside)}</>
+          </ScannerContainer>
+        </ScreenContainer>
       )}
-    </ScreenContainer>
+    </>
   );
 };
 
