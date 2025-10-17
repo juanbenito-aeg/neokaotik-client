@@ -15,6 +15,7 @@ const ButtonBackgroundImage = styled.ImageBackground`
 
 const ButtonText = styled(Text)`
   text-align: center;
+  text-shadow: 0 0 2.5px rgb(0 0 0);
 `;
 
 const Button = ({

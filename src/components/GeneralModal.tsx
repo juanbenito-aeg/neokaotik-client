@@ -26,7 +26,7 @@ const Content = styled.View<{ $vs: VS }>`
 
 const Message = styled(Text)<{ $hs: HS }>`
   padding-inline: ${({ $hs }) => $hs(55)}px;
-  text-shadow: 0 0 2.5px rgb(0 0 0 / 1);
+  text-shadow: 0 0 2.5px rgb(0 0 0);
 `;
 
 const DismissButton = styled.Pressable`
