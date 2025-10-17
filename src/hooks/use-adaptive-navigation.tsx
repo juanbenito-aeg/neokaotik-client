@@ -19,10 +19,15 @@ import { AdaptiveNavigatorData } from '../interfaces/Navigation';
 import { Tab, UserRole, PERSISTENCE_KEY } from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AcolytesContext from '../contexts/AcolytesContext';
+import useMetrics from './use-metrics';
 
-const TabIcon = styled.Image<{ $focused: boolean; $colorInDeg: string }>`
-  width: 25px;
-  height: 25px;
+const TabIcon = styled.Image<{
+  $widthHeight: number;
+  $focused: boolean;
+  $colorInDeg: string;
+}>`
+  width: ${({ $widthHeight }) => $widthHeight}px;
+  height: ${({ $widthHeight }) => $widthHeight}px;
   filter: brightness(${({ $focused }) => ($focused ? 150 : 100)}%)
     grayscale(${({ $focused }) => ($focused ? 0 : 100)}%)
     hue-rotate(${({ $colorInDeg }) => $colorInDeg});
@@ -76,6 +81,7 @@ function createNavigatorAdaptedToUserRole(
         return (
           <TabIcon
             source={tabIconSource}
+            $widthHeight={adaptiveNavigatorData.tabBarIconWidthHeight}
             $focused={focused}
             $colorInDeg={adaptiveNavigatorData.thematicColorInDeg}
           />
@@ -83,11 +89,12 @@ function createNavigatorAdaptedToUserRole(
       },
       tabBarBackground: () => (
         <BlurView
-          blurAmount={2}
+          blurAmount={6}
           overlayColor={adaptiveNavigatorData.thematicColor}
           style={{ height: '100%' }}
         />
       ),
+      tabBarItemStyle: { flexDirection: 'row', alignItems: 'center' },
       tabBarStyle: adaptiveNavigatorData.tabBarStyle,
       headerShown: false,
     }),
@@ -116,12 +123,16 @@ export default function useAdaptiveNavigation() {
     restoreState();
   }, [user, acolytes]);
 
+  const { ms } = useMetrics();
+
   const NavigationComponent = useMemo(() => {
     const adaptiveNavigatorData: AdaptiveNavigatorData = {
       screens: {},
       thematicColor: '',
       thematicColorInDeg: '',
+      tabBarIconWidthHeight: ms(25, 0.6),
       tabBarStyle: {
+        height: ms(50, 0.6),
         position: 'absolute',
         overflow: 'hidden',
         borderTopWidth: 0,
@@ -137,8 +148,8 @@ export default function useAdaptiveNavigation() {
           options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = AcolyteSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(191 170 132 / 0.15)';
+        adaptiveNavigatorData.thematicColorInDeg = '39deg';
         break;
 
       case UserRole.ISTVAN:
@@ -149,8 +160,8 @@ export default function useAdaptiveNavigation() {
           options: { unmountOnBlur: false },
         };
         adaptiveNavigatorData.screens.Settings = IstvanSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(38, 37, 35/ 0.5)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '220deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(38 37 35 / 0.5)';
+        adaptiveNavigatorData.thematicColorInDeg = '220deg';
         break;
 
       case UserRole.MORTIMER:
@@ -164,12 +175,10 @@ export default function useAdaptiveNavigation() {
       case UserRole.VILLAIN:
         adaptiveNavigatorData.screens.Home = VillainHome;
         adaptiveNavigatorData.screens.Settings = VillainSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(57 89 68 / 0.25)';
+        adaptiveNavigatorData.thematicColorInDeg = '141deg';
         break;
     }
-
-    adaptiveNavigatorData.tabBarStyle.boxShadow = `0 -11.5px 5px ${adaptiveNavigatorData.thematicColor}`;
 
     const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);
 

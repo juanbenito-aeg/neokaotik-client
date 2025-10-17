@@ -142,7 +142,7 @@ const ScanQr = ({ route }: any) => {
       <Button
         customStyleObj={buttonScannerCustomsStyleObj}
         onPress={handlePress}
-        backgroundImgSrc={ButtonBackgroundImgSrc.SCAN_QR_BUTTON}
+        backgroundImgSrc={ButtonBackgroundImgSrc.ISTVAN_THEMED}
         text="Open camera to scan QR"
       />
     </ScreenContainer>
