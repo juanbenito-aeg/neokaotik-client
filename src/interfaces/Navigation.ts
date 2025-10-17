@@ -4,6 +4,7 @@ interface AdaptiveNavigatorData {
   screens: Screens;
   thematicColor: string;
   thematicColorInDeg: string;
+  tabBarIconWidthHeight: number;
   tabBarStyle: ViewStyle;
 }
 
