@@ -175,8 +175,8 @@ export default function useAdaptiveNavigation() {
       case UserRole.VILLAIN:
         adaptiveNavigatorData.screens.Home = VillainHome;
         adaptiveNavigatorData.screens.Settings = VillainSettings;
-        adaptiveNavigatorData.thematicColor = 'rgba(218 205 176 / 0.1)'; // TODO: Specify unique thematic color
-        adaptiveNavigatorData.thematicColorInDeg = '0deg'; // TODO: Specify unique thematic color in degrees
+        adaptiveNavigatorData.thematicColor = 'rgba(57 89 68 / 0.25)';
+        adaptiveNavigatorData.thematicColorInDeg = '141deg';
         break;
     }
 
