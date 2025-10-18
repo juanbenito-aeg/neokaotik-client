@@ -15,8 +15,9 @@ enum ScreenBackgroundImgSrc {
 
 enum ButtonBackgroundImgSrc {
   CLOSE_CAMERA = require('../public/images/close-camera.png'),
-  ACOLYTE_THEMED = require('../public/images/acolyte-themed-button.png'),
+  DEFAULT_THEMED = require('../public/images/themed-button.png'),
   ISTVAN_THEMED = require('../public/images/roles/istvan/button.png'),
+  MORTIMER_THEMED = require('../public/images/roles/mortimer/button.png'),
 }
 
 enum UserRole {

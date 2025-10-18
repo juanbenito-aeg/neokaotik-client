@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Animated, { CSSTransitionProperties } from 'react-native-reanimated';
 import { Pressable, ViewStyle } from 'react-native';
 import Text from './Text';
+import useMetrics from '../hooks/use-metrics';
 
 const ButtonBackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -25,10 +26,11 @@ const Button = ({
   text,
 }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
+  const { ms } = useMetrics();
 
-  const defaultStyleObj: ViewStyle & Partial<CSSTransitionProperties> = {
-    width: 235,
-    height: 98,
+  const defaultStyleObj: Object = {
+    width: ms(235, 0.75),
+    height: ms(98, 0.75),
     alignSelf: 'center',
     opacity: isPressed ? 0.75 : 1,
     transitionProperty: 'opacity',

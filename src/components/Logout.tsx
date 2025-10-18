@@ -28,7 +28,7 @@ const Logout = () => {
     <Container>
       <Button
         onPress={logOut}
-        backgroundImgSrc={ButtonBackgroundImgSrc.ACOLYTE_THEMED}
+        backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
         text={'Log out'}
       />
     </Container>

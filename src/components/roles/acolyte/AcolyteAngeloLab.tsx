@@ -68,7 +68,7 @@ const AcolyteAngeloLab = ({ route }: any) => {
         >
           <Button
             onPress={() => setShowQR(!showQR)}
-            backgroundImgSrc={ButtonBackgroundImgSrc.ACOLYTE_THEMED}
+            backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
           <QRWrapper>
