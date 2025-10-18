@@ -59,7 +59,7 @@ const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
     >
       <Button
         onPress={logIn}
-        backgroundImgSrc={ButtonBackgroundImgSrc.ACOLYTE_THEMED}
+        backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
         text={'Log in with Google'}
       />
     </BackgroundImage>
