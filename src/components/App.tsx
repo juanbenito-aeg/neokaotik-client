@@ -1,5 +1,5 @@
 import { User, GoogleAuth, GoogleAuthScopes } from 'react-native-google-auth';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Login from './Login';
 import SplashScreen from './SplashScreen';
 import { authenticateUser } from '../helpers/auth.helpers';
@@ -25,6 +25,7 @@ const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
+  const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
 
   useEffect(() => {
@@ -32,6 +33,10 @@ const App = () => {
       configureGoogleAuth();
     }, 3000);
   }, []);
+
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -48,7 +53,11 @@ const App = () => {
       initSocket(user.email);
 
       return () => {
-        performSocketCleanUp(...mortimerEventListenersCleaners);
+        setTimeout(() => {
+          if (!userRef.current) {
+            performSocketCleanUp(...mortimerEventListenersCleaners);
+          }
+        }, 0);
       };
     }
   }, [user]);
