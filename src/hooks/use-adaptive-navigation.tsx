@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import AcolyteHome from '../components/roles/acolyte/AcolyteHome';
 import AcolyteSettings from '../components/roles/acolyte/AcolyteSettings';
@@ -16,9 +16,7 @@ import MortimerAngeloLab from '../components/roles/mortimer/MortimerAngeloLab';
 import VillainHome from '../components/roles/villain/VillainHome';
 import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
-import { Tab, UserRole, PERSISTENCE_KEY } from '../constants';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AcolytesContext from '../contexts/AcolytesContext';
+import { Tab, UserRole } from '../constants';
 import useMetrics from './use-metrics';
 
 const TabIcon = styled.Image<{
@@ -37,24 +35,6 @@ function createNavigatorAdaptedToUserRole(
   adaptiveNavigatorData: AdaptiveNavigatorData,
 ) {
   const Navigator = createBottomTabNavigator({
-    screenListeners: {
-      state: async state => {
-        if (!state) {
-          return;
-        }
-
-        const currentRoute = state.routes[state.index];
-        const currentTabName = currentRoute.name;
-
-        const saved = await AsyncStorage.getItem(PERSISTENCE_KEY);
-        const parsed = saved ? JSON.parse(saved) : null;
-        const previousTab = parsed?.routes?.[parsed.index]?.name;
-
-        if (previousTab !== currentTabName) {
-          await AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state));
-        }
-      },
-    },
     screenOptions: ({ route }) => ({
       tabBarShowLabel: false,
       tabBarIcon: ({ focused }) => {
@@ -106,26 +86,10 @@ function createNavigatorAdaptedToUserRole(
 
 export default function useAdaptiveNavigation() {
   const { user } = useContext(UserContext)!;
-  const { acolytes } = useContext(AcolytesContext)!;
-
-  const [initialState, setInitialState] = useState();
-
-  useEffect(() => {
-    const restoreState = async () => {
-      const savedState = await AsyncStorage.getItem(PERSISTENCE_KEY);
-      const state = savedState ? JSON.parse(savedState) : undefined;
-
-      if (state !== undefined) {
-        setInitialState(state);
-      }
-    };
-
-    restoreState();
-  }, [user, acolytes]);
 
   const { ms } = useMetrics();
 
-  const NavigationComponent = useMemo(() => {
+  const Navigation = useMemo(() => {
     const adaptiveNavigatorData: AdaptiveNavigatorData = {
       screens: {},
       thematicColor: '',
@@ -182,8 +146,10 @@ export default function useAdaptiveNavigation() {
 
     const Navigator = createNavigatorAdaptedToUserRole(adaptiveNavigatorData);
 
-    return createStaticNavigation(Navigator);
-  }, [user?.rol]);
+    const Navigation = createStaticNavigation(Navigator);
 
-  return NavigationComponent;
+    return Navigation;
+  }, []);
+
+  return Navigation;
 }
