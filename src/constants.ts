@@ -33,6 +33,7 @@ enum Tab {
   ANGELO_LAB = 'AngeloLab',
   SCAN_QR = 'ScanQr',
   SETTINGS = 'Settings',
+  MAP = 'Map',
 }
 
 enum SocketGeneralEvents {
