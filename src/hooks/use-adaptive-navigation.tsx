@@ -16,6 +16,7 @@ import MortimerAngeloLab from '../components/roles/mortimer/MortimerAngeloLab';
 import VillainHome from '../components/roles/villain/VillainHome';
 import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
+import Map from '../components/maps/Map';
 import { Tab, UserRole } from '../constants';
 import useMetrics from './use-metrics';
 
@@ -55,6 +56,10 @@ function createNavigatorAdaptedToUserRole(
 
           case Tab.SETTINGS:
             tabIconSource = require('../../public/images/settings-icon.png');
+            break;
+
+          case Tab.MAP:
+            tabIconSource = require('../../public/images/map-icon.png');
             break;
         }
 
@@ -106,6 +111,7 @@ export default function useAdaptiveNavigation() {
     switch (user?.rol) {
       case UserRole.ACOLYTE:
         adaptiveNavigatorData.screens.Home = AcolyteHome;
+        adaptiveNavigatorData.screens.Map = Map;
         adaptiveNavigatorData.screens.AngeloLab = {
           screen: AcolyteAngeloLab,
           initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
@@ -118,6 +124,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.ISTVAN:
         adaptiveNavigatorData.screens.Home = IstvanHome;
+        adaptiveNavigatorData.screens.Map = Map;
         adaptiveNavigatorData.screens.ScanQr = {
           screen: ScanQr,
           initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
@@ -130,6 +137,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.MORTIMER:
         adaptiveNavigatorData.screens.Home = MortimerHome;
+        adaptiveNavigatorData.screens.Map = Map;
         adaptiveNavigatorData.screens.AngeloLab = MortimerAngeloLab;
         adaptiveNavigatorData.screens.Settings = MortimerSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.15)';
@@ -138,6 +146,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.VILLAIN:
         adaptiveNavigatorData.screens.Home = VillainHome;
+        adaptiveNavigatorData.screens.Map = Map;
         adaptiveNavigatorData.screens.Settings = VillainSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(57 89 68 / 0.25)';
         adaptiveNavigatorData.thematicColorInDeg = '141deg';

@@ -13,6 +13,7 @@ interface Screens {
   Settings?: Element;
   AngeloLab?: Element;
   ScanQr?: Element;
+  Map?: Element;
 }
 
 export type { AdaptiveNavigatorData };
