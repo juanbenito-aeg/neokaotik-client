@@ -22,6 +22,7 @@ enum ButtonBackgroundImgSrc {
   MORTIMER_THEMED = require('../public/images/roles/mortimer/button.png'),
   VILLAIN_THEMED = require('../public/images/roles/villain/button.png'),
   OLD_SCHOOL_THEMED = require('../public/images/old-school-icon.png'),
+  GO_BACK = require('../public/images/go-back.png'),
 }
 
 enum UserRole {

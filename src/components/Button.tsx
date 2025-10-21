@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import type { ButtonProps } from '../interfaces/Button';
 import { useState } from 'react';
-import Animated, { CSSTransitionProperties } from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { Pressable, ViewStyle } from 'react-native';
 import Text from './Text';
 import useMetrics from '../hooks/use-metrics';
