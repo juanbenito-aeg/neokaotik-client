@@ -9,9 +9,10 @@ import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
 import { useState } from 'react';
+import { MapNavigationContext } from '../../contexts/MapContext';
 
 const Map = () => {
-  const [mapNavigation, setMapNavigation] = useState<number>(MapNavigation.MAP);
+  const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
   const scaleFactor: number = 1;
@@ -24,8 +25,8 @@ const Map = () => {
   };
 
   const handlerPress = () => {
-    setMapNavigation(prevState =>
-      prevState === MapNavigation.MAP
+    setMapNavigation(
+      mapNavigation === MapNavigation.MAP
         ? MapNavigation.OLD_SCHOOL_MAP
         : MapNavigation.MAP,
     );
@@ -49,7 +50,11 @@ const Map = () => {
     }
   };
 
-  return <>{changeScreen(mapNavigation)}</>;
+  return (
+    <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
+      {changeScreen(mapNavigation)}
+    </MapNavigationContext.Provider>
+  );
 };
 
 export default Map;

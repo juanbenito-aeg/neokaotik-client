@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import type { ButtonProps } from '../interfaces/Button';
 import { useState } from 'react';
-import Animated from 'react-native-reanimated';
+import Animated, { CSSTransitionProperties } from 'react-native-reanimated';
 import { Pressable, ViewStyle } from 'react-native';
 import Text from './Text';
 import useMetrics from '../hooks/use-metrics';
@@ -28,7 +28,7 @@ const Button = ({
   const [isPressed, setIsPressed] = useState(false);
   const { ms } = useMetrics();
 
-  const defaultStyleObj: Object = {
+  const defaultStyleObj: ViewStyle & Partial<CSSTransitionProperties> = {
     width: ms(235, 0.75),
     height: ms(98, 0.75),
     alignSelf: 'center',
