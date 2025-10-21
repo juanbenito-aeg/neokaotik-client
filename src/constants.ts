@@ -11,6 +11,8 @@ enum ScreenBackgroundImgSrc {
   MORTIMER_SETTINGS = require('../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../public/images/roles/villain/home.png'),
   VILLAIN_SETTINGS = require('../public/images/roles/villain/settings.png'),
+  MAP = require('../public/images/map.png'),
+  OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -19,6 +21,7 @@ enum ButtonBackgroundImgSrc {
   ISTVAN_THEMED = require('../public/images/roles/istvan/button.png'),
   MORTIMER_THEMED = require('../public/images/roles/mortimer/button.png'),
   VILLAIN_THEMED = require('../public/images/roles/villain/button.png'),
+  OLD_SCHOOL_THEMED = require('../public/images/old-school-icon.png'),
 }
 
 enum UserRole {
@@ -50,6 +53,11 @@ enum SocketClientToServerEvents {
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
 }
 
+enum MapNavigation {
+  MAP = 0,
+  OLD_SCHOOL_MAP = 1,
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -58,4 +66,5 @@ export {
   SocketGeneralEvents,
   SocketServerToClientEvents,
   SocketClientToServerEvents,
+  MapNavigation,
 };
