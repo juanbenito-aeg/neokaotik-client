@@ -8,10 +8,12 @@ import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapNavigationContext } from '../../contexts/MapContext';
+import { useNavigation } from '@react-navigation/native';
 
 const Map = () => {
+  const navigation = useNavigation();
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
@@ -49,6 +51,20 @@ const Map = () => {
         return <OldSchoolMap />;
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', e => {
+      if (mapNavigation !== MapNavigation.MAP) {
+        setMapNavigation(MapNavigation.MAP);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Map' }],
+        });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, mapNavigation]);
 
   return (
     <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
