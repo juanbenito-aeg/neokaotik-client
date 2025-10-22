@@ -23,6 +23,7 @@ enum ButtonBackgroundImgSrc {
   VILLAIN_THEMED = require('../public/images/roles/villain/button.png'),
   OLD_SCHOOL_THEMED = require('../public/images/old-school-icon.png'),
   GO_BACK = require('../public/images/go-back.png'),
+  ANGELO_LAB = require('../public/images/angelo-lab-icon-2.png'),
 }
 
 enum UserRole {
@@ -59,6 +60,11 @@ enum MapNavigation {
   OLD_SCHOOL_MAP = 1,
 }
 
+enum OldSchoolLocation {
+  MAP,
+  ANGELO_LAB,
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -68,4 +74,5 @@ export {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
   MapNavigation,
+  OldSchoolLocation,
 };
