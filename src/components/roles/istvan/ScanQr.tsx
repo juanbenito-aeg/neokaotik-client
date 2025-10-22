@@ -21,8 +21,9 @@ import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
 import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
+import { TabBarStyleContext } from '../../../contexts/MapContext';
 
-const ScanQr = ({ route }: any) => {
+const ScanQr = () => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const ScanQr = ({ route }: any) => {
   });
 
   const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+  const tabBarStyle = useContext(TabBarStyleContext);
 
   // Styling for the button used to close the camera
   const { ms } = useMetrics();

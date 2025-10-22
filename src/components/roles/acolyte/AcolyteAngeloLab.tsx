@@ -12,6 +12,7 @@ import Button from '../../Button';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
+import { TabBarStyleContext } from '../../../contexts/MapContext';
 
 const ScannerContainer = styled.View`
   height: 100%;
@@ -25,19 +26,21 @@ const QRWrapper = styled.View`
   align-items: center;
 `;
 
-const AcolyteAngeloLab = ({ route }: any) => {
-  const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+const AcolyteAngeloLab = () => {
   const { user, setUser } = useContext(UserContext)!;
   const isInside = user!.isInside;
-  const [showQR, setShowQR] = useState<boolean>(false);
-  const { ms } = useMetrics();
 
+  const navigation = useNavigation();
+  const tabBarStyle = useContext(TabBarStyleContext);
   useEffect(() => {
     navigation.setOptions({
       tabBarStyle: isInside ? { display: 'none' } : tabBarStyle,
     });
   }, [navigation, isInside]);
+
+  const [showQR, setShowQR] = useState<boolean>(false);
+
+  const { ms } = useMetrics();
 
   useEffect(() => {
     const userData = listenForAcolyteInsideOutsideLab(

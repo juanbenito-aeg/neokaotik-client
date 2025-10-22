@@ -10,13 +10,17 @@ import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
 import { useState, useEffect } from 'react';
-import { MapNavigationContext } from '../../contexts/MapContext';
+import {
+  MapNavigationContext,
+  TabBarStyleContext,
+} from '../../contexts/MapContext';
 import { useNavigation } from '@react-navigation/native';
 
-const Map = () => {
+const Map = ({ route }) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
 
   const navigation = useNavigation();
+  const { tabBarStyle } = route.params;
 
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
@@ -73,7 +77,9 @@ const Map = () => {
 
   return (
     <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
-      {changeScreen(mapNavigation)}
+      <TabBarStyleContext value={tabBarStyle}>
+        {changeScreen(mapNavigation)}
+      </TabBarStyleContext>
     </MapNavigationContext.Provider>
   );
 };
