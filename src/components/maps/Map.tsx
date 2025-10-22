@@ -2,6 +2,7 @@ import {
   MapNavigation,
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
+  Tab,
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
@@ -13,8 +14,10 @@ import { MapNavigationContext } from '../../contexts/MapContext';
 import { useNavigation } from '@react-navigation/native';
 
 const Map = () => {
-  const navigation = useNavigation();
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
+
+  const navigation = useNavigation();
+
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
   const scaleFactor: number = 1;
@@ -26,7 +29,7 @@ const Map = () => {
     borderRadius: '50%',
   };
 
-  const handlerPress = () => {
+  const handlePress = () => {
     setMapNavigation(
       mapNavigation === MapNavigation.MAP
         ? MapNavigation.OLD_SCHOOL_MAP
@@ -41,12 +44,13 @@ const Map = () => {
           <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.MAP}>
             <Button
               customStyleObj={buttonCustomStyleObj}
-              onPress={handlerPress}
+              onPress={handlePress}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL_THEMED}
               text=""
             />
           </ScreenContainer>
         );
+
       case MapNavigation.OLD_SCHOOL_MAP:
         return <OldSchoolMap />;
     }
@@ -54,17 +58,18 @@ const Map = () => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('tabPress', e => {
-      if (mapNavigation !== MapNavigation.MAP) {
+      const navigationState = navigation.getState()!;
+
+      const isMapScreenFocused =
+        navigationState.routes[navigationState.index!].name === Tab.MAP;
+
+      if (isMapScreenFocused && mapNavigation !== MapNavigation.MAP) {
         setMapNavigation(MapNavigation.MAP);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Map' }],
-        });
       }
     });
 
     return unsubscribe;
-  }, [navigation, mapNavigation]);
+  }, [mapNavigation]);
 
   return (
     <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
