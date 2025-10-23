@@ -9,7 +9,7 @@ import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import React, { useContext, useState } from 'react';
 import { MapNavigationContext } from '../../contexts/MapContext';
-import type { MapNavigationContextInterface } from '../../interfaces/MapContext';
+import type { MapNavigationContextInterface } from '../../interfaces/Map';
 import { ViewStyle } from 'react-native';
 import useMetrics from '../../hooks/use-metrics';
 import { UserContext } from '../../contexts/UserContext';

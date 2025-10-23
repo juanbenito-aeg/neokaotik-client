@@ -15,8 +15,9 @@ import {
   TabBarStyleContext,
 } from '../../contexts/MapContext';
 import { useNavigation } from '@react-navigation/native';
+import { MapProps } from '../../interfaces/Map';
 
-const Map = ({ route }) => {
+const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
 
   const navigation = useNavigation();

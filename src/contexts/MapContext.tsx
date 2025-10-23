@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { MapNavigationContextInterface } from '../interfaces/MapContext';
+import { MapNavigationContextInterface } from '../interfaces/Map';
 import { MapNavigation } from '../constants';
 import { ViewStyle } from 'react-native';
 
