@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import type { ButtonProps } from '../interfaces/Button';
+import type { ButtonProps } from '../interfaces/buttons';
 import { useState } from 'react';
 import Animated, { CSSTransitionProperties } from 'react-native-reanimated';
 import { Pressable, ViewStyle } from 'react-native';

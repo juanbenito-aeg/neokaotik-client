@@ -16,21 +16,11 @@ import { UserContext } from '../../contexts/UserContext';
 import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
 import MortimerAngeloLab from '../roles/mortimer/MortimerAngeloLab';
+import GoBackButton from '../GoBackButton';
 
 const OldSchoolMap = () => {
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
     useState<OldSchoolLocation>(OldSchoolLocation.MAP);
-
-  const { ms } = useMetrics();
-  const buttonFixedSize: number = 100;
-  const scaleFactor: number = 1;
-  const buttonCustomStyleObj: ViewStyle = {
-    width: ms(buttonFixedSize, scaleFactor),
-    height: ms(buttonFixedSize, scaleFactor),
-    position: 'absolute',
-    top: '-2.5%',
-    left: '5%',
-  };
 
   const { setMapNavigation } =
     useContext<MapNavigationContextInterface>(MapNavigationContext);
@@ -44,6 +34,8 @@ const OldSchoolMap = () => {
   };
 
   const { user } = useContext(UserContext)!;
+
+  const { ms } = useMetrics();
 
   const getAngeloLabButton = () => {
     if (user!.rol === UserRole.VILLAIN) return null;
@@ -78,13 +70,10 @@ const OldSchoolMap = () => {
           <ScreenContainer
             backgroundImgSrc={ScreenBackgroundImgSrc.OLD_SCHOOL_MAP}
           >
-            <Button
-              customStyleObj={buttonCustomStyleObj}
+            <GoBackButton
               onPress={() => {
                 handlePress(MapNavigation.MAP);
               }}
-              backgroundImgSrc={ButtonBackgroundImgSrc.GO_BACK}
-              text=""
             />
 
             {getAngeloLabButton()}
