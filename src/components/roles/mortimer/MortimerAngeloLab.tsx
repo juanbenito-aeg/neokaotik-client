@@ -4,15 +4,25 @@ import ScreenContainer from '../../ScreenContainer';
 import { ScreenBackgroundImgSrc } from '../../../constants';
 import AcolytesStatus from './AcolytesStatus';
 import CircleSpinner from '../../Spinner';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
-const MortimerAngeloLab = () => {
+const MortimerAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { isLoading } = useContext(IsLoadingContext)!;
 
   return (
     <ScreenContainer
       backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_ANGELO_LAB}
     >
-      {isLoading ? <CircleSpinner /> : <AcolytesStatus />}
+      {isLoading ? (
+        <CircleSpinner />
+      ) : (
+        <>
+          <AcolytesStatus />
+
+          <GoBackButton onPress={onPressGoBackButton} />
+        </>
+      )}
     </ScreenContainer>
   );
 };

@@ -83,14 +83,19 @@ const OldSchoolMap = () => {
       }
 
       case OldSchoolLocation.ANGELO_LAB: {
+        const onPressGoBackButton = () => {
+          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
+        };
+
         content =
           user!.rol === UserRole.ACOLYTE ? (
-            <AcolyteAngeloLab />
+            <AcolyteAngeloLab onPressGoBackButton={onPressGoBackButton} />
           ) : user!.rol === UserRole.ISTVAN ? (
-            <ScanQr />
+            <ScanQr onPressGoBackButton={onPressGoBackButton} />
           ) : (
-            <MortimerAngeloLab />
+            <MortimerAngeloLab onPressGoBackButton={onPressGoBackButton} />
           );
+
         break;
       }
     }

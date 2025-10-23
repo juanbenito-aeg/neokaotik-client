@@ -22,8 +22,10 @@ import { socket } from '../../../socket/socket';
 import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import { TabBarStyleContext } from '../../../contexts/MapContext';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
-const ScanQr = () => {
+const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -146,6 +148,8 @@ const ScanQr = () => {
         backgroundImgSrc={ButtonBackgroundImgSrc.ISTVAN_THEMED}
         text="Open camera to scan QR"
       />
+
+      <GoBackButton onPress={onPressGoBackButton} />
     </ScreenContainer>
   );
 };

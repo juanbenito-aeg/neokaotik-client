@@ -13,6 +13,8 @@ import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
 import { TabBarStyleContext } from '../../../contexts/MapContext';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
 const ScannerContainer = styled.View`
   height: 100%;
@@ -26,7 +28,7 @@ const QRWrapper = styled.View`
   align-items: center;
 `;
 
-const AcolyteAngeloLab = () => {
+const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { user, setUser } = useContext(UserContext)!;
   const isInside = user!.isInside;
 
@@ -74,6 +76,7 @@ const AcolyteAngeloLab = () => {
             backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
+
           <QRWrapper>
             {showQR && QRToScan(user!.email, user!.isInside)}
           </QRWrapper>
@@ -85,6 +88,8 @@ const AcolyteAngeloLab = () => {
           <ScannerContainer>
             <>{QRToScan(user!.email, user!.isInside)}</>
           </ScannerContainer>
+
+          <GoBackButton onPress={onPressGoBackButton} />
         </ScreenContainer>
       )}
     </>

@@ -20,7 +20,10 @@ const AcolytesStatus = () => {
 
   return (
     <ScrollView
-      contentContainerStyle={{ padding: ms(30, 0.5) }}
+      contentContainerStyle={{
+        padding: ms(30, 0.5),
+        paddingBlockStart: ms(62.5, 0.9),
+      }}
       showsVerticalScrollIndicator={false}
     >
       <Header $ms={ms}>Angelo's Laboratory Access Log</Header>
