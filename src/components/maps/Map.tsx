@@ -35,26 +35,23 @@ const Map = ({ route }: MapProps) => {
     height: ms(buttonFixedSize, scaleFactor),
     position: 'absolute',
     top: '25%',
-    borderRadius: '50%',
   };
 
-  const handlePress = () => {
-    setMapNavigation(
-      mapNavigation === MapNavigation.MAP
-        ? MapNavigation.OLD_SCHOOL_MAP
-        : MapNavigation.MAP,
-    );
+  const handlePress = (newMapNavigation: MapNavigation) => {
+    setMapNavigation(newMapNavigation);
   };
 
-  const changeScreen = (currentScreen: number) => {
+  const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
       case MapNavigation.MAP:
         return (
           <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.MAP}>
             <Button
               customStyleObj={buttonCustomStyleObj}
-              onPress={handlePress}
-              backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL_THEMED}
+              onPress={() => {
+                handlePress(MapNavigation.OLD_SCHOOL_MAP);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
               text=""
             />
           </ScreenContainer>

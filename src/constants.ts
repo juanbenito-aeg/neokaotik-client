@@ -21,7 +21,7 @@ enum ButtonBackgroundImgSrc {
   ISTVAN_THEMED = require('../public/images/roles/istvan/button.png'),
   MORTIMER_THEMED = require('../public/images/roles/mortimer/button.png'),
   VILLAIN_THEMED = require('../public/images/roles/villain/button.png'),
-  OLD_SCHOOL_THEMED = require('../public/images/old-school-icon.png'),
+  OLD_SCHOOL = require('../public/images/old-school-icon.png'),
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
 }
@@ -56,8 +56,8 @@ enum SocketClientToServerEvents {
 }
 
 enum MapNavigation {
-  MAP = 0,
-  OLD_SCHOOL_MAP = 1,
+  MAP,
+  OLD_SCHOOL_MAP,
 }
 
 enum OldSchoolLocation {
