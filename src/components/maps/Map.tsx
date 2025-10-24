@@ -14,7 +14,11 @@ import {
   MapNavigationContext,
   TabBarStyleContext,
 } from '../../contexts/MapContext';
-import { useNavigation } from '@react-navigation/native';
+import {
+  EventMapCore,
+  NavigationState,
+  useNavigation,
+} from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
 
 const Map = ({ route }: MapProps) => {
@@ -62,16 +66,19 @@ const Map = ({ route }: MapProps) => {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('tabPress', e => {
-      const navigationState = navigation.getState()!;
+    const unsubscribe = navigation.addListener(
+      'tabPress' as keyof EventMapCore<Readonly<NavigationState>>,
+      e => {
+        const navigationState = navigation.getState()!;
 
-      const isMapScreenFocused =
-        navigationState.routes[navigationState.index!].name === Tab.MAP;
+        const isMapScreenFocused =
+          navigationState.routes[navigationState.index!].name === Tab.MAP;
 
-      if (isMapScreenFocused && mapNavigation !== MapNavigation.MAP) {
-        setMapNavigation(MapNavigation.MAP);
-      }
-    });
+        if (isMapScreenFocused && mapNavigation !== MapNavigation.MAP) {
+          setMapNavigation(MapNavigation.MAP);
+        }
+      },
+    );
 
     return unsubscribe;
   }, [mapNavigation]);

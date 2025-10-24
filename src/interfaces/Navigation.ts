@@ -9,6 +9,7 @@ interface AdaptiveNavigatorData {
 }
 
 interface Screens {
+  [key: string]: any;
   Home?: Element;
   Settings?: Element;
   AngeloLab?: Element;
