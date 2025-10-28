@@ -15,6 +15,7 @@ import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
+import { EventListenersCleaners } from '../interfaces/App';
 import {
   listenForAcolyteDisconnected,
   listenForAcolyteInsideOutsideLab,
@@ -40,7 +41,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      let mortimerEventListenersCleaners = [];
+      let mortimerEventListenersCleaners: EventListenersCleaners = [];
 
       if (user.rol === UserRole.MORTIMER) {
         (async () => {
@@ -107,7 +108,9 @@ const App = () => {
     return idToken;
   }
 
-  async function setMortimerUp(mortimerEventListenersCleaners) {
+  async function setMortimerUp(
+    mortimerEventListenersCleaners: EventListenersCleaners,
+  ) {
     setIsLoading(true);
 
     const acolytesArray = await getAcolytes();

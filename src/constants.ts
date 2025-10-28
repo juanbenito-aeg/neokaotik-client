@@ -11,6 +11,8 @@ enum ScreenBackgroundImgSrc {
   MORTIMER_SETTINGS = require('../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../public/images/roles/villain/home.png'),
   VILLAIN_SETTINGS = require('../public/images/roles/villain/settings.png'),
+  MAP = require('../public/images/map.png'),
+  OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -18,6 +20,10 @@ enum ButtonBackgroundImgSrc {
   DEFAULT_THEMED = require('../public/images/themed-button.png'),
   ISTVAN_THEMED = require('../public/images/roles/istvan/button.png'),
   MORTIMER_THEMED = require('../public/images/roles/mortimer/button.png'),
+  VILLAIN_THEMED = require('../public/images/roles/villain/button.png'),
+  OLD_SCHOOL = require('../public/images/old-school-icon.png'),
+  GO_BACK = require('../public/images/go-back.png'),
+  ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
 }
 
 enum UserRole {
@@ -32,6 +38,7 @@ enum Tab {
   ANGELO_LAB = 'AngeloLab',
   SCAN_QR = 'ScanQr',
   SETTINGS = 'Settings',
+  MAP = 'Map',
 }
 
 enum SocketGeneralEvents {
@@ -48,7 +55,15 @@ enum SocketClientToServerEvents {
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
 }
 
-const PERSISTENCE_KEY = 'NAVIGATION_STATE_V1';
+enum MapNavigation {
+  MAP,
+  OLD_SCHOOL_MAP,
+}
+
+enum OldSchoolLocation {
+  MAP,
+  ANGELO_LAB,
+}
 
 export {
   ScreenBackgroundImgSrc,
@@ -58,5 +73,6 @@ export {
   SocketGeneralEvents,
   SocketServerToClientEvents,
   SocketClientToServerEvents,
-  PERSISTENCE_KEY,
+  MapNavigation,
+  OldSchoolLocation,
 };

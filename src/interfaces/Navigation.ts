@@ -9,10 +9,12 @@ interface AdaptiveNavigatorData {
 }
 
 interface Screens {
+  [key: string]: any;
   Home?: Element;
   Settings?: Element;
   AngeloLab?: Element;
   ScanQr?: Element;
+  Map?: Element;
 }
 
 export type { AdaptiveNavigatorData };

@@ -1,11 +1,16 @@
 import { ViewStyle } from 'react-native';
 import { ButtonBackgroundImgSrc } from '../constants';
+import { VoidFunction } from './generics';
 
 interface ButtonProps {
   customStyleObj?: ViewStyle;
-  onPress: () => void;
+  onPress: VoidFunction;
   backgroundImgSrc: ButtonBackgroundImgSrc;
   text: string;
 }
 
-export type { ButtonProps };
+interface GoBackButtonProps {
+  onPress: VoidFunction;
+}
+
+export type { ButtonProps, GoBackButtonProps };

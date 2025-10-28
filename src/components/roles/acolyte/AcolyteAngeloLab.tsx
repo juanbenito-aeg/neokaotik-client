@@ -12,6 +12,9 @@ import Button from '../../Button';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
+import { TabBarStyleContext } from '../../../contexts/MapContext';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
 const ScannerContainer = styled.View`
   height: 100%;
@@ -25,19 +28,21 @@ const QRWrapper = styled.View`
   align-items: center;
 `;
 
-const AcolyteAngeloLab = ({ route }: any) => {
-  const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { user, setUser } = useContext(UserContext)!;
   const isInside = user!.isInside;
-  const [showQR, setShowQR] = useState<boolean>(false);
-  const { ms } = useMetrics();
 
+  const navigation = useNavigation();
+  const tabBarStyle = useContext(TabBarStyleContext);
   useEffect(() => {
     navigation.setOptions({
       tabBarStyle: isInside ? { display: 'none' } : tabBarStyle,
     });
   }, [navigation, isInside]);
+
+  const [showQR, setShowQR] = useState<boolean>(false);
+
+  const { ms } = useMetrics();
 
   useEffect(() => {
     const userData = listenForAcolyteInsideOutsideLab(
@@ -71,6 +76,7 @@ const AcolyteAngeloLab = ({ route }: any) => {
             backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
+
           <QRWrapper>
             {showQR && QRToScan(user!.email, user!.isInside)}
           </QRWrapper>
@@ -82,6 +88,8 @@ const AcolyteAngeloLab = ({ route }: any) => {
           <ScannerContainer>
             <>{QRToScan(user!.email, user!.isInside)}</>
           </ScannerContainer>
+
+          <GoBackButton onPress={onPressGoBackButton} />
         </ScreenContainer>
       )}
     </>

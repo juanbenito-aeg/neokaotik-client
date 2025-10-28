@@ -3,6 +3,7 @@ import type {
   ServerToClientEvents,
   ClientToServerEvents,
 } from '../interfaces/socket';
+import type { EventListenersCleaners } from '../interfaces/App';
 import { SocketGeneralEvents } from '../constants';
 import { handleConnection } from './handlers/connection';
 
@@ -21,7 +22,9 @@ function initSocket(userEmail: string) {
   socket.connect();
 }
 
-function performSocketCleanUp(...eventListenersCleaners) {
+function performSocketCleanUp(
+  ...eventListenersCleaners: EventListenersCleaners
+) {
   eventListenersCleaners.forEach(eventListenersCleaner => {
     if (eventListenersCleaner) {
       eventListenersCleaner();

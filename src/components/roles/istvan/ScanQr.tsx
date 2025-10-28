@@ -12,8 +12,8 @@ import {
   useCodeScanner,
   Code,
 } from 'react-native-vision-camera';
-import { StyleSheet } from 'react-native';
-import { useContext, useEffect, useState } from 'react';
+import { StyleSheet, ViewStyle } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import { ModalContext } from '../../../contexts/ModalContext';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../../Button';
@@ -21,8 +21,11 @@ import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
 import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
+import { TabBarStyleContext } from '../../../contexts/MapContext';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
-const ScanQr = ({ route }: any) => {
+const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -47,13 +50,13 @@ const ScanQr = ({ route }: any) => {
   });
 
   const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+  const tabBarStyle = useContext(TabBarStyleContext);
 
   // Styling for the button used to close the camera
   const { ms } = useMetrics();
   const buttonFixedSize: number = 60;
   const scaleFactor: number = 0.2;
-  const buttonCustomStyleObj = {
+  const buttonCustomStyleObj: ViewStyle = {
     width: ms(buttonFixedSize, scaleFactor),
     height: ms(buttonFixedSize, scaleFactor),
     position: 'absolute',
@@ -63,7 +66,7 @@ const ScanQr = ({ route }: any) => {
     outlineColor: '#ffffff',
     outlineWidth: ms(3.5, scaleFactor - 0.1),
   };
-  const buttonScannerCustomsStyleObj = {
+  const buttonScannerCustomsStyleObj: ViewStyle = {
     width: ms(300, 0.5),
   };
 
@@ -124,7 +127,7 @@ const ScanQr = ({ route }: any) => {
   return isCameraOpen ? (
     <>
       <Camera
-        device={device}
+        device={device!}
         isActive={true}
         style={StyleSheet.absoluteFill}
         codeScanner={codeScanner}
@@ -145,6 +148,8 @@ const ScanQr = ({ route }: any) => {
         backgroundImgSrc={ButtonBackgroundImgSrc.ISTVAN_THEMED}
         text="Open camera to scan QR"
       />
+
+      <GoBackButton onPress={onPressGoBackButton} />
     </ScreenContainer>
   );
 };
