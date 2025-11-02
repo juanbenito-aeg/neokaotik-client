@@ -35,10 +35,8 @@ enum UserRole {
 
 enum Tab {
   HOME = 'Home',
-  ANGELO_LAB = 'AngeloLab',
-  SCAN_QR = 'ScanQr',
-  SETTINGS = 'Settings',
   MAP = 'Map',
+  SETTINGS = 'Settings',
 }
 
 enum SocketGeneralEvents {

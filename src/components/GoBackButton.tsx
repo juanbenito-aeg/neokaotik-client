@@ -21,7 +21,6 @@ const GoBackButton = ({ onPress }: GoBackButtonProps) => {
       customStyleObj={buttonCustomStyleObj}
       onPress={onPress}
       backgroundImgSrc={ButtonBackgroundImgSrc.GO_BACK}
-      text=""
     />
   );
 };

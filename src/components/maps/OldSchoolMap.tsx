@@ -56,7 +56,6 @@ const OldSchoolMap = () => {
           handlePress(OldSchoolLocation.ANGELO_LAB);
         }}
         backgroundImgSrc={ButtonBackgroundImgSrc.ANGELO_LAB}
-        text=""
       />
     );
   };

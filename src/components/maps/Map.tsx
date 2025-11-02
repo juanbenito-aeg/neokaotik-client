@@ -52,7 +52,6 @@ const Map = ({ route }: MapProps) => {
                 handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
-              text=""
             />
           </ScreenContainer>
         );

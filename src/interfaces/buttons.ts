@@ -6,7 +6,7 @@ interface ButtonProps {
   customStyleObj?: ViewStyle;
   onPress: VoidFunction;
   backgroundImgSrc: ButtonBackgroundImgSrc;
-  text: string;
+  text?: string;
 }
 
 interface GoBackButtonProps {
