@@ -20,6 +20,7 @@ import {
   listenForAcolyteDisconnected,
   listenForAcolyteInsideOutsideLab,
 } from '../socket/events/angelo-lab';
+import { getDeviceToken } from '../fcm/deviceToken';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -75,9 +76,10 @@ const App = () => {
 
     if (currentUser) {
       const idToken: string = await getIdToken();
+      const fcmToken: string = await getDeviceToken();
 
       const authenticationAttemptResult: AuthenticateUserReturnValue =
-        await authenticateUser('access-logged-in', idToken);
+        await authenticateUser('access-logged-in', idToken, fcmToken);
 
       if (authenticationAttemptResult.statusCode === 200) {
         setUser(authenticationAttemptResult.user);
