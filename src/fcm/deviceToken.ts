@@ -19,9 +19,9 @@ export async function getDeviceToken() {
   }
 }
 
-export function deviceTokenToRefresh(user: KaotikaUser | null) {
+export function deviceTokenToRefresh(userEmail: string) {
   messaging().onTokenRefresh(fcmToken => {
     console.log('Automatically refreshed FCM token:', fcmToken);
-    updateFcmToken(user!.email, fcmToken);
+    updateFcmToken(userEmail, fcmToken);
   });
 }
