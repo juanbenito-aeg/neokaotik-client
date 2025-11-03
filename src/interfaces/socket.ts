@@ -12,7 +12,7 @@ interface ServerToClientEvents {
     acolyteEmail: string,
   ) => void;
   [SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS]: (
-    acolyteIsInsideTower: boolean,
+    acolyteData: AcolyteDataToAccessOrExitTower,
   ) => void;
 }
 
@@ -21,6 +21,11 @@ interface AcolyteDataAfterAccessExitLab {
   isInside: boolean;
   nickname: string;
   avatar: string;
+}
+
+interface AcolyteDataToAccessOrExitTower {
+  is_in_tower_entrance: boolean;
+  is_inside_tower: boolean;
 }
 
 // Declaration of the events used when sending events to the server
@@ -38,5 +43,6 @@ interface ClientToServerEvents {
 export type {
   ServerToClientEvents,
   AcolyteDataAfterAccessExitLab,
+  AcolyteDataToAccessOrExitTower,
   ClientToServerEvents,
 };

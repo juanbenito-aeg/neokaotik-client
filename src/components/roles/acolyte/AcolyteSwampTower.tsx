@@ -11,6 +11,7 @@ import {
 import GoBackButton from '../../GoBackButton';
 import { useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
+import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
 
 const AcolyteSwampTower = () => {
   const { user, setUser } = useContext(UserContext)!;
@@ -20,6 +21,11 @@ const AcolyteSwampTower = () => {
   const isInTowerEntrance = user!.is_in_tower_entrance;
   const { setMapNavigation } =
     useContext<MapNavigationContextInterface>(MapNavigationContext);
+
+  useEffect(() => {
+    const cleanup = listenForAcolyteAccess(user, setUser);
+    return cleanup;
+  }, [user, setUser]);
 
   useEffect(() => {
     const updatedUser = { ...user!, is_in_tower_entrance: true };
