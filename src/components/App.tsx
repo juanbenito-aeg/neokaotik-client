@@ -21,6 +21,8 @@ import {
   listenForAcolyteInsideOutsideLab,
 } from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
+import messaging from '@react-native-firebase/messaging';
+import Toast from 'react-native-toast-message';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -61,6 +63,19 @@ const App = () => {
           }
         }, 0);
       };
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        Toast.show({
+          text1: remoteMessage.notification?.title,
+          text2: remoteMessage.notification?.body,
+        });
+      });
+
+      return unsubscribe;
     }
   }, [user]);
 
