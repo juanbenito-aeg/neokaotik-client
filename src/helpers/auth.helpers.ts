@@ -3,12 +3,13 @@ import type { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 export async function authenticateUser(
   endpoint: string,
   idToken: string,
+  fcmToken: string,
 ): Promise<AuthenticateUserReturnValue> {
   const response = await fetch(
     `https://neokaotik-server.onrender.com/user/${endpoint}`,
     {
       method: 'POST',
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify({ idToken, fcmToken }),
       headers: {
         'Content-Type': 'application/json',
       },
