@@ -4,6 +4,7 @@ import {
   ErrorToast,
   InfoToast,
 } from 'react-native-toast-message';
+import messaging from '@react-native-firebase/messaging';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -40,4 +41,10 @@ function getToastConfig() {
   return toastConfig;
 }
 
-export { updateFcmToken, getToastConfig };
+function setBackgroundMessageHandler() {
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+  });
+}
+
+export { updateFcmToken, getToastConfig, setBackgroundMessageHandler };
