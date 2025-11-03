@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import Toast from 'react-native-toast-message';
 import { getToastConfig } from '../helpers/fcm.helpers';
+import { navigationRef } from '../RootNavigation';
 
 const Container = styled.View`
   height: 100%;
@@ -20,7 +21,7 @@ const Main = () => {
 
   return (
     <Container>
-      <Navigation />
+      <Navigation ref={navigationRef} />
       <Toast config={toastConfig} />
     </Container>
   );
