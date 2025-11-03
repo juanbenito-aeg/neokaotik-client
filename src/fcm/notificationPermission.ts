@@ -1,23 +1,29 @@
-import messaging from '@react-native-firebase/messaging';
 import { getDeviceToken } from './deviceToken';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
+import { PermissionsAndroid } from 'react-native';
 
 export async function handleNotificationPermission() {
-  const currentPermission = await messaging().hasPermission();
-  const newStatus = await messaging().requestPermission();
   const setGeneralModalMessage = useContext(ModalContext)!;
+  const fcmToken = await getDeviceToken();
+  const hasPermission = await PermissionsAndroid.check(
+    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+  );
 
-  if (currentPermission === messaging.AuthorizationStatus.AUTHORIZED) {
-    await getDeviceToken();
-    return;
+  if (hasPermission) {
+    return fcmToken;
   }
 
-  if (newStatus === messaging.AuthorizationStatus.AUTHORIZED) {
-    await getDeviceToken();
+  const result = await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+  );
+
+  if (result === PermissionsAndroid.RESULTS.GRANTED) {
+    return fcmToken;
   } else {
     setGeneralModalMessage(
-      'Mortimer, you have to enable notifications from system settings to receive alerts',
+      'You have to enable notifications from system settings to receive alerts.',
     );
+    return '';
   }
 }
