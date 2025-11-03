@@ -22,7 +22,7 @@ import {
 } from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
 import messaging from '@react-native-firebase/messaging';
-import Toast from 'react-native-toast-message';
+import Toast, { ToastType } from 'react-native-toast-message';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -70,6 +70,7 @@ const App = () => {
     if (user) {
       const unsubscribe = messaging().onMessage(async remoteMessage => {
         Toast.show({
+          type: (remoteMessage.data?.type || 'info') as ToastType,
           text1: remoteMessage.notification?.title,
           text2: remoteMessage.notification?.body,
         });

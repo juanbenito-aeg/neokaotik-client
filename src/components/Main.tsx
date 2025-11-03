@@ -4,6 +4,7 @@ import { handleNotificationPermission } from '../fcm/notificationPermission';
 import { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 import Toast from 'react-native-toast-message';
+import { getToastConfig } from '../helpers/fcm.helpers';
 
 const Container = styled.View`
   height: 100%;
@@ -15,10 +16,12 @@ const Main = () => {
   const { user } = useContext(UserContext)!;
   handleNotificationPermission(user!.email);
 
+  const toastConfig = getToastConfig();
+
   return (
     <Container>
       <Navigation />
-      <Toast />
+      <Toast config={toastConfig} />
     </Container>
   );
 };
