@@ -5,7 +5,9 @@ import Toast, {
   InfoToast,
   ToastType,
 } from 'react-native-toast-message';
-import messaging from '@react-native-firebase/messaging';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
 import { MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
@@ -39,18 +41,7 @@ function setNotificationHandlers() {
         text2: remoteMessage.notification?.body,
       });
     }),
-    messaging().onNotificationOpenedApp(remoteMessage => {
-      if (
-        (remoteMessage.data?.destination as unknown as MapNavigation) ===
-        MapNavigation.SWAMP_TOWER
-      ) {
-        navigate(Tab.MAP, {
-          screenChangingNotificationData: {
-            destination: MapNavigation.SWAMP_TOWER,
-          },
-        });
-      }
-    }),
+    messaging().onNotificationOpenedApp(moveUserToNotificationDestination),
   );
 
   return () => {
@@ -58,6 +49,21 @@ function setNotificationHandlers() {
       unsubscribeFunction();
     });
   };
+}
+
+function moveUserToNotificationDestination(
+  remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
+) {
+  if (
+    (remoteMessage?.data?.destination as unknown as MapNavigation) ===
+    MapNavigation.SWAMP_TOWER
+  ) {
+    navigate(Tab.MAP, {
+      screenChangingNotificationData: {
+        destination: MapNavigation.SWAMP_TOWER,
+      },
+    });
+  }
 }
 
 function getToastConfig() {
@@ -86,6 +92,7 @@ function setBackgroundMessageHandler() {
 export {
   updateFcmToken,
   setNotificationHandlers,
+  moveUserToNotificationDestination,
   getToastConfig,
   setBackgroundMessageHandler,
 };

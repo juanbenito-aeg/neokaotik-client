@@ -21,7 +21,11 @@ import {
   listenForAcolyteInsideOutsideLab,
 } from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
-import { setNotificationHandlers } from '../helpers/fcm.helpers';
+import {
+  moveUserToNotificationDestination,
+  setNotificationHandlers,
+} from '../helpers/fcm.helpers';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -68,6 +72,11 @@ const App = () => {
   useEffect(() => {
     if (user) {
       const unsubscribe = setNotificationHandlers();
+
+      messaging()
+        .getInitialNotification()
+        .then(moveUserToNotificationDestination);
+
       return unsubscribe;
     }
   }, [user]);
