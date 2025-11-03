@@ -31,7 +31,13 @@ const Map = ({ route }: MapProps) => {
   const { user } = useContext(UserContext)!;
 
   const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+  const { screenChangingNotificationData, tabBarStyle } = route.params;
+
+  useEffect(() => {
+    if (screenChangingNotificationData?.destination) {
+      setMapNavigation(screenChangingNotificationData.destination);
+    }
+  }, [screenChangingNotificationData]);
 
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
