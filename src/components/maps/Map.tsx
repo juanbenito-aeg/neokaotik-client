@@ -3,13 +3,14 @@ import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   Tab,
+  UserRole,
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   MapNavigationContext,
   TabBarStyleContext,
@@ -20,9 +21,14 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
+import { UserContext } from '../../contexts/UserContext';
+import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
+import MortimerSwampTower from '../roles/mortimer/MortimerSwampTower';
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
+
+  const { user } = useContext(UserContext)!;
 
   const navigation = useNavigation();
   const { tabBarStyle } = route.params;
@@ -52,13 +58,30 @@ const Map = ({ route }: MapProps) => {
                 handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
-              text=""
             />
+
+            {(user!.rol === UserRole.ACOLYTE ||
+              user!.rol === UserRole.MORTIMER) && (
+              <Button
+                customStyleObj={{ ...buttonCustomStyleObj, top: '60%' }}
+                onPress={() => {
+                  handlePress(MapNavigation.SWAMP_TOWER);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP_TOWER}
+              />
+            )}
           </ScreenContainer>
         );
 
       case MapNavigation.OLD_SCHOOL_MAP:
         return <OldSchoolMap />;
+
+      case MapNavigation.SWAMP_TOWER:
+        return user!.rol === UserRole.ACOLYTE ? (
+          <AcolyteSwampTower />
+        ) : (
+          <MortimerSwampTower />
+        );
     }
   };
 
