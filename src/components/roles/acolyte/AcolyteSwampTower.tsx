@@ -10,18 +10,22 @@ import {
 } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { useNavigation } from '@react-navigation/native';
+import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
 
 const AcolyteSwampTower = () => {
+  const { user, setUser } = useContext(UserContext)!;
   const navigation = useNavigation();
   const tabBarStyle = useContext(TabBarStyleContext);
-  const { user } = useContext(UserContext)!;
   const isInsideTower = user!.is_inside_tower;
+  const isInTowerEntrance = user!.is_in_tower_entrance;
   const { setMapNavigation } =
     useContext<MapNavigationContextInterface>(MapNavigationContext);
 
-  const handlePress = () => {
-    setMapNavigation(MapNavigation.MAP);
-  };
+  useEffect(() => {
+    const updatedUser = { ...user!, is_in_tower_entrance: true };
+    setUser(updatedUser);
+    updateAcolyteTowerEntranceStatus(!user!.is_in_tower_entrance);
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,9 +33,16 @@ const AcolyteSwampTower = () => {
     });
   }, [navigation, isInsideTower]);
 
+  const handlePress = () => {
+    const updatedUser = { ...user!, is_in_tower_entrance: false };
+    setUser(updatedUser);
+    updateAcolyteTowerEntranceStatus(!user!.is_in_tower_entrance);
+    setMapNavigation(MapNavigation.MAP);
+  };
+
   return (
     <>
-      {isInsideTower ? (
+      {isInsideTower && !isInTowerEntrance && (
         <ScreenContainer
           backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_INTERIOR}
         >
@@ -40,7 +51,8 @@ const AcolyteSwampTower = () => {
             credentials, {user?.nickname}, and the Tower will let you pass
           </Text>
         </ScreenContainer>
-      ) : (
+      )}
+      {isInTowerEntrance && !isInsideTower && (
         <ScreenContainer
           backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_ENTRANCE}
         >
@@ -49,7 +61,6 @@ const AcolyteSwampTower = () => {
             Unveil your credentials, and the gates of the Tower shall recognize
             your worth
           </Text>
-          {/* TODO: Fill with the corresponding content */}
         </ScreenContainer>
       )}
     </>
