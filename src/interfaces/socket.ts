@@ -11,6 +11,9 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ACOLYTE_DISCONNECTED]: (
     acolyteEmail: string,
   ) => void;
+  [SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS]: (
+    acolyteIsInsideTower: boolean,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
@@ -26,6 +29,9 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.ACCESS_TO_EXIT_FROM_LAB]: (
     acolyteEmail: string,
     isInside: boolean,
+  ) => void;
+  [SocketClientToServerEvents.INSIDE_OUTSIDE_TOWER_ENTRANCE]: (
+    AcolyteisInTowerEntrance: boolean,
   ) => void;
 }
 

@@ -9,8 +9,8 @@ interface CommonAttributesAndModifiers {
 
 interface KaotikaUser {
   _id: string;
-  is_in_tower_entrance: Boolean;
-  is_inside_tower: Boolean;
+  is_in_tower_entrance: boolean;
+  is_inside_tower: boolean;
   active: boolean;
   rol: string;
   socketId: string;

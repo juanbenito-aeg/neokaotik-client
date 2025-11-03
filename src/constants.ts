@@ -50,11 +50,13 @@ enum SocketGeneralEvents {
 enum SocketServerToClientEvents {
   ACOLYTE_INSIDE_OUTSIDE_LAB = 'acolyte inside/outside lab',
   ACOLYTE_DISCONNECTED = 'acolyte disconnected',
+  ACOLYTE_TOWER_ACCESS = 'acolyte tower access',
 }
 
 enum SocketClientToServerEvents {
   CONNECTION_OPEN = 'connection open',
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
+  INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
 }
 
 enum MapNavigation {
