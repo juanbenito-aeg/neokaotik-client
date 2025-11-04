@@ -8,6 +8,10 @@ import Text from '../../Text';
 import { MS } from '../../../interfaces/Metrics';
 import KaotikaUser from '../../../interfaces/KaotikaUser';
 import { AcolytesListProps } from '../../../interfaces/AcolytesList';
+import IsLoadingContext from '../../../contexts/IsLoadingContext';
+import ScreenContainer from '../../ScreenContainer';
+import CircleSpinner from '../../Spinner';
+import GoBackButton from '../../GoBackButton';
 
 const Header = styled(Text)<{ $ms: MS }>`
   margin-bottom: ${({ $ms }) => $ms(30, 0.5)}px;
@@ -16,33 +20,46 @@ const Header = styled(Text)<{ $ms: MS }>`
 `;
 
 const AcolytesList = ({
+  onPressGoBackButton,
+  backgroundImgSrc,
   headerText,
   fieldToFilterAcolytesBy,
 }: AcolytesListProps) => {
+  const { isLoading } = useContext(IsLoadingContext)!;
   const { acolytes } = useContext(AcolytesContext)!;
 
   const { ms } = useMetrics();
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        padding: ms(30, 0.5),
-        paddingBlockStart: ms(62.5, 0.9),
-      }}
-      showsVerticalScrollIndicator={false}
-    >
-      <Header $ms={ms}>{headerText}</Header>
+    <ScreenContainer backgroundImgSrc={backgroundImgSrc}>
+      <ScrollView
+        contentContainerStyle={{
+          padding: ms(30, 0.5),
+          paddingBlockStart: ms(62.5, 0.9),
+        }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Header $ms={ms}>{headerText}</Header>
 
-      {acolytes.map(acolyte => {
-        return acolyte[fieldToFilterAcolytesBy as keyof KaotikaUser] ? (
-          <AcolytesListItem
-            key={acolyte._id}
-            avatar={acolyte.avatar}
-            nickname={acolyte.nickname}
-          />
-        ) : null;
-      })}
-    </ScrollView>
+        {isLoading ? (
+          <CircleSpinner />
+        ) : (
+          acolytes.map(acolyte => {
+            return (
+              acolyte[fieldToFilterAcolytesBy as keyof KaotikaUser] && (
+                <AcolytesListItem
+                  key={acolyte._id}
+                  avatar={acolyte.avatar}
+                  nickname={acolyte.nickname}
+                />
+              )
+            );
+          })
+        )}
+      </ScrollView>
+
+      <GoBackButton onPress={onPressGoBackButton} />
+    </ScreenContainer>
   );
 };
 

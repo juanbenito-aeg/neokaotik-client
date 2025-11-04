@@ -15,7 +15,7 @@ import useMetrics from '../../hooks/use-metrics';
 import { UserContext } from '../../contexts/UserContext';
 import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
-import MortimerAngeloLab from '../roles/mortimer/MortimerAngeloLab';
+import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 
 const OldSchoolMap = () => {
@@ -92,7 +92,12 @@ const OldSchoolMap = () => {
           ) : user!.rol === UserRole.ISTVAN ? (
             <ScanQr onPressGoBackButton={onPressGoBackButton} />
           ) : (
-            <MortimerAngeloLab onPressGoBackButton={onPressGoBackButton} />
+            <AcolytesList
+              onPressGoBackButton={onPressGoBackButton}
+              backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_ANGELO_LAB}
+              headerText="Angelo's Laboratory Access Log"
+              fieldToFilterAcolytesBy="isInside"
+            />
           );
 
         break;

@@ -23,7 +23,7 @@ import {
 import { MapProps } from '../../interfaces/Map';
 import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
-import MortimerSwampTower from '../roles/mortimer/MortimerSwampTower';
+import AcolytesList from '../roles/mortimer/AcolytesList';
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
@@ -86,10 +86,13 @@ const Map = ({ route }: MapProps) => {
         return user!.rol === UserRole.ACOLYTE ? (
           <AcolyteSwampTower />
         ) : (
-          <MortimerSwampTower
+          <AcolytesList
             onPressGoBackButton={() => {
               handlePress(MapNavigation.MAP);
             }}
+            backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_SWAMP_TOWER}
+            headerText="Swamp Tower Access Log"
+            fieldToFilterAcolytesBy="is_inside_tower"
           />
         );
     }
