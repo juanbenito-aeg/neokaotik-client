@@ -25,14 +25,12 @@ const AcolyteSwampTower = () => {
   useEffect(() => {
     const cleanup = listenForAcolyteAccess(user, setUser);
     return cleanup;
-  }, [user]);
+  }, []);
 
   useEffect(() => {
-    if (!user!.is_in_tower_entrance) {
-      const updatedUser = { ...user!, is_in_tower_entrance: true };
-      setUser(updatedUser);
-      updateAcolyteTowerEntranceStatus(!user!.is_in_tower_entrance);
-    }
+    const updatedUser = { ...user!, is_in_tower_entrance: true };
+    setUser(updatedUser);
+    updateAcolyteTowerEntranceStatus(true);
   }, []);
 
   useEffect(() => {
