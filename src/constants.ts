@@ -60,9 +60,9 @@ enum SocketClientToServerEvents {
 }
 
 enum MapNavigation {
-  MAP,
-  OLD_SCHOOL_MAP,
-  SWAMP_TOWER,
+  MAP = 'Map',
+  OLD_SCHOOL_MAP = 'Old School Map',
+  SWAMP_TOWER = 'Swamp Tower',
 }
 
 enum OldSchoolLocation {
