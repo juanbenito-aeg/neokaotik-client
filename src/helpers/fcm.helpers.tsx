@@ -11,6 +11,7 @@ import messaging, {
 import { VoidFunction } from '../interfaces/generics';
 import { MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -51,12 +52,16 @@ function setNotificationHandlers() {
   };
 }
 
-function moveUserToNotificationDestination(
+async function moveUserToNotificationDestination(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
 ) {
+  // Check if the message/notification has been opened before
+  const lastRemoteMessageId = await AsyncStorage.getItem('lastRemoteMessageId');
+
   if (
+    lastRemoteMessageId !== remoteMessage?.messageId &&
     (remoteMessage?.data?.destination as unknown as MapNavigation) ===
-    MapNavigation.SWAMP_TOWER
+      MapNavigation.SWAMP_TOWER
   ) {
     navigate(Tab.MAP, {
       screenChangingNotificationData: {
@@ -64,6 +69,8 @@ function moveUserToNotificationDestination(
       },
     });
   }
+
+  AsyncStorage.setItem('lastRemoteMessageId', remoteMessage?.messageId!);
 }
 
 function getToastConfig() {
