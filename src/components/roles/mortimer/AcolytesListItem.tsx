@@ -2,17 +2,14 @@ import styled from 'styled-components/native';
 import Text from '../../Text';
 import useMetrics from '../../../hooks/use-metrics';
 import type { HS, MS } from '../../../interfaces/Metrics';
-import type { AcolyteStatusProps } from '../../../interfaces/AcolyteStatus';
+import type { AcolytesListItemProps } from '../../../interfaces/AcolytesList';
 
-const Container = styled.View<{ $hs: HS; $ms: MS; $isInside: boolean }>`
+const Container = styled.View<{ $hs: HS; $ms: MS }>`
   width: ${({ $hs }) => $hs(300)}px;
   margin: auto;
   margin-bottom: ${({ $ms }) => $ms(25, 0.5)}px;
+  border: 1px solid rgb(191 245 205);
   border-radius: 9999px;
-  filter: drop-shadow(0 0 5px rgba(191 245 205 / ${({ $isInside }) =>
-    $isInside
-      ? '0.85)) brightness(1) grayscale(0)'
-      : '0.5)) brightness(0.75) grayscale(1)'};
   background-color: rgba(0 0 0 / 0.85);
 `;
 
@@ -29,22 +26,21 @@ const Avatar = styled.Image<{ $ms: MS }>`
 `;
 
 const Nickname = styled(Text)`
-  color: rgb(191 245 205);
   margin: auto;
+  color: rgb(191 245 205);
 `;
 
-const AcolyteStatus = ({ avatar, nickname, isInside }: AcolyteStatusProps) => {
+const AcolytesListItem = ({ avatar, nickname }: AcolytesListItemProps) => {
   const { hs, ms } = useMetrics();
 
   return (
-    <Container $hs={hs} $ms={ms} $isInside={isInside}>
+    <Container $hs={hs} $ms={ms}>
       <Row $ms={ms}>
         <Avatar source={{ uri: avatar }} $ms={ms} />
-
         <Nickname>{nickname}</Nickname>
       </Row>
     </Container>
   );
 };
 
-export default AcolyteStatus;
+export default AcolytesListItem;

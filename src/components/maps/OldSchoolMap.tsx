@@ -40,13 +40,13 @@ const OldSchoolMap = () => {
   const getAngeloLabButton = () => {
     if (user!.rol === UserRole.VILLAIN) return null;
 
-    const buttonFixedSize: number = 110;
-    const scaleFactor: number = 0.5;
+    const buttonFixedSize: number = 70;
+    const scaleFactor: number = 1;
     const buttonCustomStyleObj: ViewStyle = {
       width: ms(buttonFixedSize, scaleFactor),
       height: ms(buttonFixedSize, scaleFactor),
       position: 'absolute',
-      top: '21.25%',
+      top: '22.05%',
     };
 
     return (
