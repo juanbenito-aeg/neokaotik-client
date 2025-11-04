@@ -12,6 +12,9 @@ import { VoidFunction } from '../interfaces/generics';
 import { MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useContext } from 'react';
+import AcolytesContext from '../contexts/AcolytesContext';
+import KaotikaUser from '../interfaces/KaotikaUser';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -36,6 +39,13 @@ function setNotificationHandlers() {
 
   unsubscribeFunctions.push(
     messaging().onMessage(async remoteMessage => {
+      const { email, is_inside_tower } = remoteMessage.data || {};
+
+      if (typeof email === 'string' && typeof is_inside_tower === 'string') {
+        const isInsideTowerBoolean = is_inside_tower === 'true';
+        updateAcolytesStatus(email, isInsideTowerBoolean);
+      }
+
       Toast.show({
         type: (remoteMessage.data?.type || 'info') as ToastType,
         text1: remoteMessage.notification?.title,
@@ -50,6 +60,24 @@ function setNotificationHandlers() {
       unsubscribeFunction();
     });
   };
+}
+
+function updateAcolytesStatus(email: string, isInsideTower: boolean) {
+  const { acolytes, setAcolytes } = useContext(AcolytesContext)!;
+
+  const updatedAcolytes = acolytes.reduce(
+    (acc: KaotikaUser[], acolyte: KaotikaUser) => {
+      if (acolyte.email === email) {
+        acc.push({ ...acolyte, is_inside_tower: isInsideTower });
+      } else {
+        acc.push(acolyte);
+      }
+      return acc;
+    },
+    [],
+  );
+
+  setAcolytes(updatedAcolytes);
 }
 
 async function moveUserToNotificationDestination(

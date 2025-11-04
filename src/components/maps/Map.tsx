@@ -24,12 +24,11 @@ import { MapProps } from '../../interfaces/Map';
 import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
+import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
-
-  const { user } = useContext(UserContext)!;
-
+  const { user, setUser } = useContext(UserContext)!;
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
 
@@ -52,6 +51,12 @@ const Map = ({ route }: MapProps) => {
   const handlePress = (newMapNavigation: MapNavigation) => {
     setMapNavigation(newMapNavigation);
   };
+
+  useEffect(() => {
+    const updatedUser = { ...user!, is_in_tower_entrance: false };
+    setUser(updatedUser);
+    updateAcolyteTowerEntranceStatus(false);
+  }, []);
 
   const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
