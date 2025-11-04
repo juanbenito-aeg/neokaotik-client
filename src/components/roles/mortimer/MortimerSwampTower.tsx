@@ -1,12 +1,14 @@
 import { ScreenBackgroundImgSrc } from '../../../constants';
 import ScreenContainer from '../../ScreenContainer';
+import GoBackButton from '../../GoBackButton';
+import { NestedScreenProps } from '../../../interfaces/generics';
 
-const MortimerSwampTower = () => {
+const MortimerSwampTower = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
     <ScreenContainer
       backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_SWAMP_TOWER}
     >
-      {/* TODO: Fill with the corresponding content */}
+      <GoBackButton onPress={onPressGoBackButton} />
     </ScreenContainer>
   );
 };

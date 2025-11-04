@@ -86,7 +86,11 @@ const Map = ({ route }: MapProps) => {
         return user!.rol === UserRole.ACOLYTE ? (
           <AcolyteSwampTower />
         ) : (
-          <MortimerSwampTower />
+          <MortimerSwampTower
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
+          />
         );
     }
   };
