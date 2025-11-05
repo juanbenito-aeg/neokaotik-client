@@ -119,10 +119,30 @@ function setBackgroundMessageHandler() {
   });
 }
 
+async function avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn() {
+  const lastRemoteMessageIdAndDeviceState = await AsyncStorage.getItem(
+    AsyncStorageKey.LAST_REMOTE_MSG_ID_AND_DEVICE_STATE,
+  );
+
+  if (lastRemoteMessageIdAndDeviceState?.includes(DeviceState.BACKGROUND)) {
+    const lastRemoteMessageIdAndTweakedDeviceState =
+      lastRemoteMessageIdAndDeviceState.replace(
+        DeviceState.BACKGROUND,
+        DeviceState.QUIT,
+      );
+
+    AsyncStorage.setItem(
+      AsyncStorageKey.LAST_REMOTE_MSG_ID_AND_DEVICE_STATE,
+      lastRemoteMessageIdAndTweakedDeviceState,
+    );
+  }
+}
+
 export {
   updateFcmToken,
   setNotificationHandlers,
   moveUserToNotificationDestination,
   getToastConfig,
   setBackgroundMessageHandler,
+  avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
 };
