@@ -12,7 +12,7 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { UserRole } from '../constants';
+import { DeviceState, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
@@ -89,7 +89,9 @@ const App = () => {
 
       messaging()
         .getInitialNotification()
-        .then(moveUserToNotificationDestination);
+        .then(remoteMessage => {
+          moveUserToNotificationDestination(remoteMessage, DeviceState.QUIT);
+        });
 
       return unsubscribe;
     }

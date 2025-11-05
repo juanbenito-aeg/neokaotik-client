@@ -9,7 +9,7 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import { MapNavigation, Tab } from '../constants';
+import { AsyncStorageKey, DeviceState, MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -51,7 +51,9 @@ function setNotificationHandlers(
         text2: remoteMessage.notification?.body,
       });
     }),
-    messaging().onNotificationOpenedApp(moveUserToNotificationDestination),
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      moveUserToNotificationDestination(remoteMessage, DeviceState.BACKGROUND);
+    }),
   );
 
   return () => {
@@ -63,12 +65,21 @@ function setNotificationHandlers(
 
 async function moveUserToNotificationDestination(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
+  deviceState: DeviceState,
 ) {
-  // Check if the message/notification has been opened before
-  const lastRemoteMessageId = await AsyncStorage.getItem('lastRemoteMessageId');
+  // Check if the message/notification has been opened before, & move the user to another screen if it has not
+
+  const lastRemoteMessageIdAndDeviceState = await AsyncStorage.getItem(
+    AsyncStorageKey.LAST_REMOTE_MSG_ID_AND_DEVICE_STATE,
+  );
+
+  const currentRemoteMessageIdAndDeviceState = remoteMessage
+    ? remoteMessage.messageId! + '-' + deviceState
+    : '';
 
   if (
-    lastRemoteMessageId !== remoteMessage?.messageId &&
+    lastRemoteMessageIdAndDeviceState !==
+      currentRemoteMessageIdAndDeviceState &&
     (remoteMessage?.data?.destination as unknown as MapNavigation) ===
       MapNavigation.SWAMP_TOWER
   ) {
@@ -79,7 +90,10 @@ async function moveUserToNotificationDestination(
     });
   }
 
-  AsyncStorage.setItem('lastRemoteMessageId', remoteMessage?.messageId!);
+  AsyncStorage.setItem(
+    AsyncStorageKey.LAST_REMOTE_MSG_ID_AND_DEVICE_STATE,
+    currentRemoteMessageIdAndDeviceState,
+  );
 }
 
 function getToastConfig() {

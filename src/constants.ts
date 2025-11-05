@@ -70,6 +70,15 @@ enum OldSchoolLocation {
   ANGELO_LAB,
 }
 
+enum DeviceState {
+  BACKGROUND = 'background',
+  QUIT = 'quit',
+}
+
+enum AsyncStorageKey {
+  LAST_REMOTE_MSG_ID_AND_DEVICE_STATE = 'lastRemoteMessageIdAndDeviceState',
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -80,4 +89,6 @@ export {
   SocketClientToServerEvents,
   MapNavigation,
   OldSchoolLocation,
+  DeviceState,
+  AsyncStorageKey,
 };
