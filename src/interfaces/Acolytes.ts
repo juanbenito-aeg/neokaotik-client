@@ -5,6 +5,6 @@ interface AcolytesContextInterface {
   setAcolytes: SetAcolytes;
 }
 
-type SetAcolytes = (acolytes: KaotikaUser[]) => void;
+type SetAcolytes = React.Dispatch<React.SetStateAction<KaotikaUser[]>>;
 
 export type { AcolytesContextInterface, SetAcolytes };

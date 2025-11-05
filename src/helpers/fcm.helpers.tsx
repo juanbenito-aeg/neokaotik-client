@@ -12,6 +12,7 @@ import { VoidFunction } from '../interfaces/generics';
 import { AsyncStorageKey, DeviceState, MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SetAcolytes } from '../interfaces/Acolytes';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -31,19 +32,12 @@ async function updateFcmToken(userEmail: string, fcmToken: string) {
   }
 }
 
-function setNotificationHandlers(
-  updateAcolytesStatus: (email: string, isInsideTower: boolean) => void,
-) {
+function setNotificationHandlers(setAcolytes: SetAcolytes) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
   unsubscribeFunctions.push(
-    messaging().onMessage(async remoteMessage => {
-      const { email, is_inside_tower } = remoteMessage.data || {};
-
-      if (typeof email === 'string' && typeof is_inside_tower === 'string') {
-        const isInsideTowerBoolean = is_inside_tower === 'true';
-        updateAcolytesStatus(email, isInsideTowerBoolean);
-      }
+    messaging().onMessage(remoteMessage => {
+      updateAffectedAcolyte(setAcolytes, remoteMessage);
 
       Toast.show({
         type: (remoteMessage.data?.type || 'info') as ToastType,
@@ -52,6 +46,7 @@ function setNotificationHandlers(
       });
     }),
     messaging().onNotificationOpenedApp(remoteMessage => {
+      updateAffectedAcolyte(setAcolytes, remoteMessage);
       moveUserToNotificationDestination(remoteMessage, DeviceState.BACKGROUND);
     }),
   );
@@ -61,6 +56,27 @@ function setNotificationHandlers(
       unsubscribeFunction();
     });
   };
+}
+
+function updateAffectedAcolyte(
+  setAcolytes: SetAcolytes,
+  remoteMessage: FirebaseMessagingTypes.RemoteMessage,
+) {
+  const { email, is_inside_tower } = remoteMessage.data || {};
+
+  if (email && is_inside_tower) {
+    const isInsideTowerAsBoolean = is_inside_tower === 'true';
+
+    setAcolytes(prevAcolytes => {
+      return prevAcolytes.map(acolyte => {
+        if (acolyte.email === email) {
+          return { ...acolyte, is_inside_tower: isInsideTowerAsBoolean };
+        }
+
+        return acolyte;
+      });
+    });
+  }
 }
 
 async function moveUserToNotificationDestination(
