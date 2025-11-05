@@ -12,9 +12,11 @@ import GoBackButton from '../../GoBackButton';
 import { useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
 import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
+import AcolytesContext from '../../../contexts/AcolytesContext';
 
 const AcolyteSwampTower = () => {
   const { user, setUser } = useContext(UserContext)!;
+  const { acolytes, setAcolytes } = useContext(AcolytesContext)!;
   const navigation = useNavigation();
   const tabBarStyle = useContext(TabBarStyleContext);
   const isInsideTower = user!.is_inside_tower;
@@ -23,7 +25,12 @@ const AcolyteSwampTower = () => {
     useContext<MapNavigationContextInterface>(MapNavigationContext);
 
   useEffect(() => {
-    const cleanup = listenForAcolyteAccess(user, setUser);
+    const cleanup = listenForAcolyteAccess(
+      user,
+      setUser,
+      acolytes,
+      setAcolytes,
+    );
     return cleanup;
   }, []);
 

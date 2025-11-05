@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import AcolytesContext from '../../../contexts/AcolytesContext';
 import AcolytesListItem from './AcolytesListItem';
 import useMetrics from '../../../hooks/use-metrics';
@@ -12,6 +12,8 @@ import IsLoadingContext from '../../../contexts/IsLoadingContext';
 import ScreenContainer from '../../ScreenContainer';
 import CircleSpinner from '../../Spinner';
 import GoBackButton from '../../GoBackButton';
+import { UserContext } from '../../../contexts/UserContext';
+import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
 
 const Header = styled(Text)<{ $ms: MS }>`
   margin-bottom: ${({ $ms }) => $ms(30, 0.5)}px;
@@ -26,9 +28,20 @@ const AcolytesList = ({
   fieldToFilterAcolytesBy,
 }: AcolytesListProps) => {
   const { isLoading } = useContext(IsLoadingContext)!;
-  const { acolytes } = useContext(AcolytesContext)!;
+  const { acolytes, setAcolytes } = useContext(AcolytesContext)!;
+  const { user, setUser } = useContext(UserContext)!;
 
   const { ms } = useMetrics();
+
+  useEffect(() => {
+    const cleanup = listenForAcolyteAccess(
+      user,
+      setUser,
+      acolytes,
+      setAcolytes,
+    );
+    return cleanup;
+  }, []);
 
   return (
     <ScreenContainer backgroundImgSrc={backgroundImgSrc}>
