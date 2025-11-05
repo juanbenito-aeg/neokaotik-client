@@ -1,5 +1,5 @@
 import { User, GoogleAuth, GoogleAuthScopes } from 'react-native-google-auth';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Login from './Login';
 import SplashScreen from './SplashScreen';
 import { authenticateUser } from '../helpers/auth.helpers';
@@ -69,9 +69,23 @@ const App = () => {
     }
   }, [user]);
 
+  const updateAcolytesStatus = useCallback(
+    (email: string, isInsideTower: boolean) => {
+      setAcolytes(prevAcolytes => {
+        return prevAcolytes.map(acolyte => {
+          if (acolyte.email === email) {
+            return { ...acolyte, is_inside_tower: isInsideTower };
+          }
+          return acolyte;
+        });
+      });
+    },
+    [],
+  );
+
   useEffect(() => {
     if (user) {
-      const unsubscribe = setNotificationHandlers();
+      const unsubscribe = setNotificationHandlers(updateAcolytesStatus);
 
       messaging()
         .getInitialNotification()

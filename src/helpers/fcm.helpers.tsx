@@ -34,7 +34,9 @@ async function updateFcmToken(userEmail: string, fcmToken: string) {
   }
 }
 
-function setNotificationHandlers() {
+function setNotificationHandlers(
+  updateAcolytesStatus: (email: string, isInsideTower: boolean) => void,
+) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
   unsubscribeFunctions.push(
@@ -60,24 +62,6 @@ function setNotificationHandlers() {
       unsubscribeFunction();
     });
   };
-}
-
-function updateAcolytesStatus(email: string, isInsideTower: boolean) {
-  const { acolytes, setAcolytes } = useContext(AcolytesContext)!;
-
-  const updatedAcolytes = acolytes.reduce(
-    (acc: KaotikaUser[], acolyte: KaotikaUser) => {
-      if (acolyte.email === email) {
-        acc.push({ ...acolyte, is_inside_tower: isInsideTower });
-      } else {
-        acc.push(acolyte);
-      }
-      return acc;
-    },
-    [],
-  );
-
-  setAcolytes(updatedAcolytes);
 }
 
 async function moveUserToNotificationDestination(
