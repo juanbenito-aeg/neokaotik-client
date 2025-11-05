@@ -32,33 +32,35 @@ const AcolytesList = ({
 
   return (
     <ScreenContainer backgroundImgSrc={backgroundImgSrc}>
-      <ScrollView
-        contentContainerStyle={{
-          padding: ms(30, 0.5),
-          paddingBlockStart: ms(62.5, 0.9),
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <Header $ms={ms}>{headerText}</Header>
+      {isLoading ? (
+        <CircleSpinner />
+      ) : (
+        <>
+          <ScrollView
+            contentContainerStyle={{
+              padding: ms(30, 0.5),
+              paddingBlockStart: ms(62.5, 0.9),
+            }}
+            showsVerticalScrollIndicator={false}
+          >
+            <Header $ms={ms}>{headerText}</Header>
 
-        {isLoading ? (
-          <CircleSpinner />
-        ) : (
-          acolytes.map(acolyte => {
-            return (
-              acolyte[fieldToFilterAcolytesBy as keyof KaotikaUser] && (
-                <AcolytesListItem
-                  key={acolyte._id}
-                  avatar={acolyte.avatar}
-                  nickname={acolyte.nickname}
-                />
-              )
-            );
-          })
-        )}
-      </ScrollView>
+            {acolytes.map(acolyte => {
+              return (
+                acolyte[fieldToFilterAcolytesBy as keyof KaotikaUser] && (
+                  <AcolytesListItem
+                    key={acolyte._id}
+                    avatar={acolyte.avatar}
+                    nickname={acolyte.nickname}
+                  />
+                )
+              );
+            })}
+          </ScrollView>
 
-      <GoBackButton onPress={onPressGoBackButton} />
+          <GoBackButton onPress={onPressGoBackButton} />
+        </>
+      )}
     </ScreenContainer>
   );
 };
