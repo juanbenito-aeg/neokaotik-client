@@ -12,9 +12,6 @@ import { VoidFunction } from '../interfaces/generics';
 import { MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useContext } from 'react';
-import AcolytesContext from '../contexts/AcolytesContext';
-import KaotikaUser from '../interfaces/KaotikaUser';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
