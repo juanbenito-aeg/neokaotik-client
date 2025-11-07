@@ -11,11 +11,26 @@ import GoBackButton from '../../GoBackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
 import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
+import { TextStyle, ViewStyle } from 'react-native';
+import styled from 'styled-components/native';
+
+const TextWrapper = styled.View<{ contentType: string }>`
+  width: 70%;
+  height: 40%;
+  position: relative;
+  justify-content: ${({ contentType }) => contentType};
+  align-items: center;
+  letter-spacing: 2;
+`;
 
 const AcolyteSwampTower = () => {
   const { user, setUser } = useContext(UserContext)!;
   const isInTowerEntrance = user!.is_in_tower_entrance;
   const isInsideTower = user!.is_inside_tower;
+  const textStyle: TextStyle & ViewStyle = {
+    color: 'white',
+    fontSize: 30,
+  };
 
   useEffect(() => {
     const cleanup = listenForAcolyteAccess(user!, setUser);
@@ -60,10 +75,12 @@ const AcolyteSwampTower = () => {
         <ScreenContainer
           backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_INTERIOR}
         >
-          <Text style={{ color: 'white' }}>
-            To leave this place, you must prove your honor. Present your
-            credentials, {user?.nickname}, and the Tower will let you pass
-          </Text>
+          <TextWrapper contentType="center">
+            <Text style={textStyle}>
+              To leave this place, you must prove your honor. Present your
+              credentials, {user?.nickname}, and the Tower will let you pass
+            </Text>
+          </TextWrapper>
         </ScreenContainer>
       )}
 
@@ -72,11 +89,12 @@ const AcolyteSwampTower = () => {
           backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_ENTRANCE}
         >
           <GoBackButton onPress={handlePress} />
-
-          <Text style={{ color: 'white', top: '-10%' }}>
-            Unveil your credentials, and the gates of the Tower shall recognize
-            your worth
-          </Text>
+          <TextWrapper contentType="top">
+            <Text style={textStyle}>
+              Unveil your credentials, and the gates of the Tower shall
+              recognize your worth
+            </Text>
+          </TextWrapper>
         </ScreenContainer>
       )}
     </>

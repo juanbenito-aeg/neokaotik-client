@@ -1,4 +1,4 @@
-import { deviceTokenToRefresh, getDeviceToken } from './deviceToken';
+import { deviceTokenToRefresh } from './deviceToken';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import { PermissionsAndroid } from 'react-native';

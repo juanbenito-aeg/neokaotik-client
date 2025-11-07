@@ -1,6 +1,5 @@
 import messaging from '@react-native-firebase/messaging';
 import { updateFcmToken } from '../helpers/fcm.helpers';
-import KaotikaUser from '../interfaces/KaotikaUser';
 
 export async function getDeviceToken() {
   try {
