@@ -13,6 +13,7 @@ import { AsyncStorageKey, DeviceState, MapNavigation, Tab } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes } from '../interfaces/Acolytes';
+import { MS } from '../interfaces/Metrics';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -112,21 +113,45 @@ async function moveUserToNotificationDestination(
   );
 }
 
-function getToastConfig() {
+function getToastConfig(ms: MS) {
   // Configuration object to adjust the layout of the default toast components
   const toastConfig = {
     success: (props: BaseToastProps) => (
-      <BaseToast {...props} style={{ borderLeftColor: 'green' }} />
+      <BaseToast {...props} {...getToastCustomProps(ms, 'green')} />
     ),
     error: (props: BaseToastProps) => (
-      <ErrorToast {...props} style={{ borderLeftColor: 'red' }} />
+      <ErrorToast {...props} {...getToastCustomProps(ms, 'red')} />
     ),
     info: (props: BaseToastProps) => (
-      <InfoToast {...props} style={{ borderLeftColor: 'gray' }} />
+      <InfoToast {...props} {...getToastCustomProps(ms, 'gray')} />
     ),
   };
 
   return toastConfig;
+}
+
+function getToastCustomProps(ms: MS, borderLeftColor: string) {
+  const toastCustomProps: BaseToastProps = {
+    style: {
+      width: ms(325, 0.7),
+      height: ms(100, 0.6),
+      borderLeftWidth: ms(5, 0.5),
+      borderLeftColor,
+    },
+    text1Style: {
+      fontSize: ms(20, 0.75),
+      fontFamily: 'KochAltschrift',
+      fontWeight: 'normal',
+    },
+    text2Style: {
+      fontSize: ms(18, 0.75),
+      fontFamily: 'KochAltschrift',
+      color: '#5f5f5fff',
+    },
+    text2NumberOfLines: 2,
+  };
+
+  return toastCustomProps;
 }
 
 function setBackgroundMessageHandler() {
