@@ -13,6 +13,7 @@ import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-e
 import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
 import { TextStyle, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
+import useMetrics from '../../../hooks/use-metrics';
 
 const TextWrapper = styled.View<{ contentType: string }>`
   width: 70%;
@@ -24,12 +25,13 @@ const TextWrapper = styled.View<{ contentType: string }>`
 `;
 
 const AcolyteSwampTower = () => {
+  const { ms } = useMetrics();
   const { user, setUser } = useContext(UserContext)!;
   const isInTowerEntrance = user!.is_in_tower_entrance;
   const isInsideTower = user!.is_inside_tower;
   const textStyle: TextStyle & ViewStyle = {
     color: 'white',
-    fontSize: 30,
+    fontSize: ms(30, 1),
   };
 
   useEffect(() => {
