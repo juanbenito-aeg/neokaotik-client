@@ -12,7 +12,7 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { UserRole } from '../constants';
+import { DeviceState, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
@@ -20,6 +20,12 @@ import {
   listenForAcolyteDisconnected,
   listenForAcolyteInsideOutsideLab,
 } from '../socket/events/angelo-lab';
+import { getDeviceToken } from '../fcm/deviceToken';
+import {
+  moveUserToNotificationDestination,
+  setNotificationHandlers,
+} from '../helpers/fcm.helpers';
+import messaging from '@react-native-firebase/messaging';
 
 const App = () => {
   const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
@@ -63,6 +69,20 @@ const App = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = setNotificationHandlers(setAcolytes);
+
+      messaging()
+        .getInitialNotification()
+        .then(remoteMessage => {
+          moveUserToNotificationDestination(remoteMessage, DeviceState.QUIT);
+        });
+
+      return unsubscribe;
+    }
+  }, [user]);
+
   async function configureGoogleAuth() {
     await GoogleAuth.configure({
       webClientId:
@@ -75,9 +95,10 @@ const App = () => {
 
     if (currentUser) {
       const idToken: string = await getIdToken();
+      const fcmToken: string = await getDeviceToken();
 
       const authenticationAttemptResult: AuthenticateUserReturnValue =
-        await authenticateUser('access-logged-in', idToken);
+        await authenticateUser('access-logged-in', idToken, fcmToken);
 
       if (authenticationAttemptResult.statusCode === 200) {
         setUser(authenticationAttemptResult.user);

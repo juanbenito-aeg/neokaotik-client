@@ -5,6 +5,10 @@ import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import Button from './Button';
 import { ButtonBackgroundImgSrc } from '../constants';
+import {
+  avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
+  updateFcmToken,
+} from '../helpers/fcm.helpers';
 
 const Container = styled.View`
   flex: 1;
@@ -13,11 +17,13 @@ const Container = styled.View`
 `;
 
 const Logout = () => {
-  const { setUser } = useContext(UserContext)!;
+  const { user, setUser } = useContext(UserContext)!;
   const setGeneralModalMessage = useContext(ModalContext)!;
 
   async function logOut() {
     await GoogleAuth.signOut();
+    await updateFcmToken(user!.email, '');
+    await avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn();
     setUser(null);
     setGeneralModalMessage('The gate closes behind you.\nSession over.');
   }

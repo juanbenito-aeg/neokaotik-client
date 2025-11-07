@@ -7,6 +7,7 @@ import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { ButtonBackgroundImgSrc } from '../constants';
 import { useContext } from 'react';
 import IsLoadingContext from '../contexts/IsLoadingContext';
+import { getDeviceToken } from '../fcm/deviceToken';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -26,9 +27,10 @@ const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
 
       if (loginAttemptResult.type === 'success') {
         const idToken: string = loginAttemptResult.data.idToken;
+        const fcmToken: string = await getDeviceToken();
 
         const authenticationAttemptResult: AuthenticateUserReturnValue =
-          await authenticateUser('log-in', idToken);
+          await authenticateUser('log-in', idToken, fcmToken);
 
         if (authenticationAttemptResult.statusCode <= 201) {
           setUser(authenticationAttemptResult.user!);

@@ -11,6 +11,9 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ACOLYTE_DISCONNECTED]: (
     acolyteEmail: string,
   ) => void;
+  [SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS]: (
+    acolyteData: AcolyteDataToAccessOrExitTower,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
@@ -20,6 +23,11 @@ interface AcolyteDataAfterAccessExitLab {
   avatar: string;
 }
 
+interface AcolyteDataToAccessOrExitTower {
+  is_in_tower_entrance: boolean;
+  is_inside_tower: boolean;
+}
+
 // Declaration of the events used when sending events to the server
 interface ClientToServerEvents {
   [SocketClientToServerEvents.CONNECTION_OPEN]: (userEmail: string) => void;
@@ -27,10 +35,14 @@ interface ClientToServerEvents {
     acolyteEmail: string,
     isInside: boolean,
   ) => void;
+  [SocketClientToServerEvents.INSIDE_OUTSIDE_TOWER_ENTRANCE]: (
+    AcolyteisInTowerEntrance: boolean,
+  ) => void;
 }
 
 export type {
   ServerToClientEvents,
   AcolyteDataAfterAccessExitLab,
+  AcolyteDataToAccessOrExitTower,
   ClientToServerEvents,
 };

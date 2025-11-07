@@ -57,7 +57,7 @@ const Button = ({
           source={backgroundImgSrc}
           imageStyle={{ resizeMode: 'contain' }}
         >
-          <ButtonText>{text}</ButtonText>
+          <ButtonText>{text || ''}</ButtonText>
         </ButtonBackgroundImage>
       </Pressable>
     </Animated.View>

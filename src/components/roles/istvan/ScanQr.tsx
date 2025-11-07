@@ -137,7 +137,6 @@ const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
         customStyleObj={buttonCustomStyleObj}
         onPress={toggleCameraAndNavigatorStates}
         backgroundImgSrc={ButtonBackgroundImgSrc.CLOSE_CAMERA}
-        text=""
       />
     </>
   ) : (

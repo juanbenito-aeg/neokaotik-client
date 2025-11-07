@@ -3,13 +3,14 @@ import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   Tab,
+  UserRole,
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import {
   MapNavigationContext,
   TabBarStyleContext,
@@ -20,12 +21,22 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
+import { UserContext } from '../../contexts/UserContext';
+import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
+import AcolytesList from '../roles/mortimer/AcolytesList';
+import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
-
+  const { user, setUser } = useContext(UserContext)!;
   const navigation = useNavigation();
-  const { tabBarStyle } = route.params;
+  const { screenChangingNotificationData, tabBarStyle } = route.params;
+
+  useEffect(() => {
+    if (screenChangingNotificationData?.destination) {
+      setMapNavigation(screenChangingNotificationData.destination);
+    }
+  }, [screenChangingNotificationData]);
 
   const { ms } = useMetrics();
   const buttonFixedSize: number = 70;
@@ -41,6 +52,12 @@ const Map = ({ route }: MapProps) => {
     setMapNavigation(newMapNavigation);
   };
 
+  useEffect(() => {
+    const updatedUser = { ...user!, is_in_tower_entrance: false };
+    setUser(updatedUser);
+    updateAcolyteTowerEntranceStatus(false);
+  }, []);
+
   const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
       case MapNavigation.MAP:
@@ -52,13 +69,37 @@ const Map = ({ route }: MapProps) => {
                 handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
-              text=""
             />
+
+            {(user!.rol === UserRole.ACOLYTE ||
+              user!.rol === UserRole.MORTIMER) && (
+              <Button
+                customStyleObj={{ ...buttonCustomStyleObj, top: '60%' }}
+                onPress={() => {
+                  handlePress(MapNavigation.SWAMP_TOWER);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP_TOWER}
+              />
+            )}
           </ScreenContainer>
         );
 
       case MapNavigation.OLD_SCHOOL_MAP:
         return <OldSchoolMap />;
+
+      case MapNavigation.SWAMP_TOWER:
+        return user!.rol === UserRole.ACOLYTE ? (
+          <AcolyteSwampTower />
+        ) : (
+          <AcolytesList
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
+            backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_SWAMP_TOWER}
+            headerText="Swamp Tower Access Log"
+            fieldToFilterAcolytesBy="is_inside_tower"
+          />
+        );
     }
   };
 

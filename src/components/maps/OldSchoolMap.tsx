@@ -15,7 +15,7 @@ import useMetrics from '../../hooks/use-metrics';
 import { UserContext } from '../../contexts/UserContext';
 import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
-import MortimerAngeloLab from '../roles/mortimer/MortimerAngeloLab';
+import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 
 const OldSchoolMap = () => {
@@ -40,13 +40,13 @@ const OldSchoolMap = () => {
   const getAngeloLabButton = () => {
     if (user!.rol === UserRole.VILLAIN) return null;
 
-    const buttonFixedSize: number = 110;
-    const scaleFactor: number = 0.5;
+    const buttonFixedSize: number = 70;
+    const scaleFactor: number = 1;
     const buttonCustomStyleObj: ViewStyle = {
       width: ms(buttonFixedSize, scaleFactor),
       height: ms(buttonFixedSize, scaleFactor),
       position: 'absolute',
-      top: '21.25%',
+      top: '22.05%',
     };
 
     return (
@@ -56,7 +56,6 @@ const OldSchoolMap = () => {
           handlePress(OldSchoolLocation.ANGELO_LAB);
         }}
         backgroundImgSrc={ButtonBackgroundImgSrc.ANGELO_LAB}
-        text=""
       />
     );
   };
@@ -93,7 +92,12 @@ const OldSchoolMap = () => {
           ) : user!.rol === UserRole.ISTVAN ? (
             <ScanQr onPressGoBackButton={onPressGoBackButton} />
           ) : (
-            <MortimerAngeloLab onPressGoBackButton={onPressGoBackButton} />
+            <AcolytesList
+              onPressGoBackButton={onPressGoBackButton}
+              backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_ANGELO_LAB}
+              headerText="Angelo's Laboratory Access Log"
+              fieldToFilterAcolytesBy="isInside"
+            />
           );
 
         break;

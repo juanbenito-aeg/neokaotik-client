@@ -1,5 +1,7 @@
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
+  ACOLYTE_SWAMP_TOWER_ENTRANCE = require('../public/images/roles/acolyte/swamp-tower-entrance.png'),
+  ACOLYTE_SWAMP_TOWER_INTERIOR = require('../public/images/roles/acolyte/swamp-tower-interior.png'),
   ACOLYTE_ANGELO_LAB_ENTRANCE = require('../public/images/roles/acolyte/angelo-lab-entrance.png'),
   ACOLYTE_ANGELO_LAB = require('../public/images/roles/acolyte/angelo-lab.png'),
   ACOLYTE_SETTINGS = require('../public/images/roles/acolyte/settings.png'),
@@ -7,6 +9,7 @@ enum ScreenBackgroundImgSrc {
   SCAN_QR = require('../public/images/roles/istvan/scan-qr.png'),
   ISTVAN_SETTINGS = require('../public/images/roles/istvan/settings.png'),
   MORTIMER_HOME = require('../public/images/roles/mortimer/home.png'),
+  MORTIMER_SWAMP_TOWER = require('../public/images/roles/mortimer/swamp-tower.png'),
   MORTIMER_ANGELO_LAB = require('../public/images/roles/mortimer/angelo-lab.png'),
   MORTIMER_SETTINGS = require('../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../public/images/roles/villain/home.png'),
@@ -24,6 +27,7 @@ enum ButtonBackgroundImgSrc {
   OLD_SCHOOL = require('../public/images/old-school-icon.png'),
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
+  SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
 }
 
 enum UserRole {
@@ -35,10 +39,8 @@ enum UserRole {
 
 enum Tab {
   HOME = 'Home',
-  ANGELO_LAB = 'AngeloLab',
-  SCAN_QR = 'ScanQr',
-  SETTINGS = 'Settings',
   MAP = 'Map',
+  SETTINGS = 'Settings',
 }
 
 enum SocketGeneralEvents {
@@ -48,21 +50,33 @@ enum SocketGeneralEvents {
 enum SocketServerToClientEvents {
   ACOLYTE_INSIDE_OUTSIDE_LAB = 'acolyte inside/outside lab',
   ACOLYTE_DISCONNECTED = 'acolyte disconnected',
+  ACOLYTE_TOWER_ACCESS = 'acolyte tower access',
 }
 
 enum SocketClientToServerEvents {
   CONNECTION_OPEN = 'connection open',
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
+  INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
 }
 
 enum MapNavigation {
-  MAP,
-  OLD_SCHOOL_MAP,
+  MAP = 'Map',
+  OLD_SCHOOL_MAP = 'Old School Map',
+  SWAMP_TOWER = 'Swamp Tower',
 }
 
 enum OldSchoolLocation {
   MAP,
   ANGELO_LAB,
+}
+
+enum DeviceState {
+  BACKGROUND = 'background',
+  QUIT = 'quit',
+}
+
+enum AsyncStorageKey {
+  LAST_REMOTE_MSG_ID_AND_DEVICE_STATE = 'lastRemoteMessageIdAndDeviceState',
 }
 
 export {
@@ -75,4 +89,6 @@ export {
   SocketClientToServerEvents,
   MapNavigation,
   OldSchoolLocation,
+  DeviceState,
+  AsyncStorageKey,
 };
