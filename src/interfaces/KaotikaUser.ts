@@ -33,6 +33,7 @@ interface KaotikaUser {
   isBetrayer: boolean;
   skills: Skill[];
   pushToken: string;
+  card_id: string;
 }
 
 interface CommonEquipmentFields {
