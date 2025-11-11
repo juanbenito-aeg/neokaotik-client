@@ -32,6 +32,7 @@ interface KaotikaUser {
   created_date: string;
   isBetrayer: boolean;
   skills: Skill[];
+  pushToken: string;
 }
 
 interface CommonEquipmentFields {
