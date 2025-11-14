@@ -19,6 +19,6 @@ interface ModalImage {
   height: number;
 }
 
-type SetGeneralModalMessage = (message: string) => void;
+type SetModalData = React.Dispatch<React.SetStateAction<ModalData | null>>;
 
-export type { ModalData, SetGeneralModalMessage };
+export type { ModalData, SetModalData };

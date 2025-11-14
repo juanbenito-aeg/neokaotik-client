@@ -1,6 +1,6 @@
 import { UserRole } from '../../constants';
 import { SetAcolytes } from '../../interfaces/Acolytes';
-import { SetGeneralModalMessage } from '../../interfaces/GeneralModal';
+import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import type { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
 import { SetUser } from '../../interfaces/UserContext';
@@ -8,7 +8,7 @@ import { SetUser } from '../../interfaces/UserContext';
 function handleAcolyteInsideOutsideLab(
   recipientRole: string,
   acolyteData: AcolyteDataAfterAccessExitLab,
-  setGeneralModalMessage?: SetGeneralModalMessage,
+  setModalData?: SetModalData,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
   user?: KaotikaUser,
@@ -17,7 +17,7 @@ function handleAcolyteInsideOutsideLab(
   switch (recipientRole) {
     case UserRole.ISTVAN:
       displayAcolyteEnteredExitedModal(
-        setGeneralModalMessage!,
+        setModalData!,
         acolyteData.nickname,
         acolyteData.isInside,
       );
@@ -39,7 +39,7 @@ function handleAcolyteInsideOutsideLab(
 }
 
 function displayAcolyteEnteredExitedModal(
-  setGeneralModalMessage: SetGeneralModalMessage,
+  setGeneralModalMessage: SetModalData,
   acolyteNickname: string,
   isAcolyteInsideLab: boolean,
 ) {
