@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Login from './Login';
 import SplashScreen from './SplashScreen';
 import { authenticateUser } from '../helpers/auth.helpers';
-import GeneralModal from './GeneralModal';
+import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
 import { UserContext } from '../contexts/UserContext';
@@ -12,7 +12,7 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { DeviceState, UserRole } from '../constants';
+import { DeviceState, ModalActionButtonText, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
@@ -26,9 +26,10 @@ import {
   setNotificationHandlers,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
+import { ModalData } from '../interfaces/Modal';
 
 const App = () => {
-  const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
+  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
@@ -105,9 +106,17 @@ const App = () => {
       } else {
         await GoogleAuth.signOut();
 
-        setGeneralModalMessage(
-          'Whoops! You have been logged out because your identity could not be verified.',
-        );
+        setModalData({
+          fullScreen: false,
+          content: {
+            message:
+              'Whoops! You have been logged out because your identity could not be verified.',
+          },
+          onPressActionButton() {
+            setModalData(null);
+          },
+          actionButtonText: ModalActionButtonText.DISMISS,
+        });
       }
     }
 
@@ -176,9 +185,11 @@ const App = () => {
   return (
     <UserContext value={{ user, setUser }}>
       <SafeAreaView>
-        <GeneralModal
-          message={generalModalMessage}
-          setMessage={setGeneralModalMessage}
+        <Modal
+          fullScreen={modalData?.fullScreen}
+          content={modalData?.content}
+          onPressActionButton={modalData?.onPressActionButton}
+          actionButtonText={modalData?.actionButtonText}
         />
 
         <IsLoadingContext value={{ isLoading, setIsLoading }}>

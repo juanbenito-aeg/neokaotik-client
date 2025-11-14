@@ -84,6 +84,10 @@ enum AsyncStorageKey {
   LAST_REMOTE_MSG_ID_AND_DEVICE_STATE = 'lastRemoteMessageIdAndDeviceState',
 }
 
+enum ModalActionButtonText {
+  DISMISS = 'Dismiss',
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -97,4 +101,5 @@ export {
   OldSchoolLocation,
   DeviceState,
   AsyncStorageKey,
+  ModalActionButtonText,
 };
