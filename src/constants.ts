@@ -30,6 +30,11 @@ enum ButtonBackgroundImgSrc {
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
 }
 
+enum ModalBackgroundImgSrc {
+  FULL_SCREEN = require('../public/images/full-screen-modal.png'),
+  NORMAL = require('../public/images/normal-modal.png'),
+}
+
 enum UserRole {
   ACOLYTE = 'acolyte',
   ISTVAN = 'istvan',
@@ -82,6 +87,7 @@ enum AsyncStorageKey {
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
+  ModalBackgroundImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,
