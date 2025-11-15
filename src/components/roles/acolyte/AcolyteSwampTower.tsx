@@ -34,8 +34,8 @@ const TextWrapper = styled.View`
 const AcolyteSwampTower = () => {
   const { ms } = useMetrics();
   const { user, setUser } = useContext(UserContext)!;
-  const isInTowerEntrance = user!.is_in_tower_entrance;
-  const isInsideTower = user!.is_inside_tower;
+  const isInTowerEntrance = /* user!.is_in_tower_entrance */ false;
+  const isInsideTower = /*  user!.is_inside_tower */ true;
   const [hasClickedScroll, setHasClickedScroll] = useState(false);
   const textStyle: TextStyle & ViewStyle = {
     color: 'white',
@@ -87,6 +87,7 @@ const AcolyteSwampTower = () => {
     position: 'absolute',
     top: '25%',
     transform: [{ translateY: '-50%' }],
+    filter: 'drop-shadow(0 0 30px #ffd736ff)',
   };
 
   const handleScrollClick = () => {
