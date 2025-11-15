@@ -28,6 +28,7 @@ enum ButtonBackgroundImgSrc {
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
+  SCROLL = require('../public/images/roles/acolyte/scroll.png'),
 }
 
 enum UserRole {
