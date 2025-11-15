@@ -20,6 +20,7 @@ import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
 import Button from '../../Button';
 import * as Animatable from 'react-native-animatable';
+import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
 
 const TextWrapper = styled.View`
   width: 70%;
@@ -89,6 +90,7 @@ const AcolyteSwampTower = () => {
   };
 
   const handleScrollClick = () => {
+    handleAcolyteScrollAction(true);
     setHasClickedScroll(true);
   };
 
