@@ -60,6 +60,30 @@ const OldSchoolMap = () => {
     );
   };
 
+  const getHallOfSagesButton = () => {
+    if (user!.rol === UserRole.VILLAIN || !user!.has_been_summoned_to_hos)
+      return null;
+
+    const buttonFixedSize: number = 75;
+    const scaleFactor: number = 1;
+    const buttonCustomStyleObj: ViewStyle = {
+      width: ms(buttonFixedSize, scaleFactor),
+      height: ms(buttonFixedSize, scaleFactor),
+      position: 'absolute',
+      top: '42.05%',
+    };
+
+    return (
+      <Button
+        customStyleObj={buttonCustomStyleObj}
+        onPress={() => {
+          handlePress(OldSchoolLocation.HALL_OF_SAGES);
+        }}
+        backgroundImgSrc={ButtonBackgroundImgSrc.HALL_OF_SAGES}
+      />
+    );
+  };
+
   const getContent = () => {
     let content;
 
@@ -76,6 +100,7 @@ const OldSchoolMap = () => {
             />
 
             {getAngeloLabButton()}
+            {getHallOfSagesButton()}
           </ScreenContainer>
         );
         break;
