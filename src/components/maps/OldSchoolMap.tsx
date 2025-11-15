@@ -17,6 +17,7 @@ import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
+import HallOfSages from '../HallOfSages';
 
 const OldSchoolMap = () => {
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
@@ -124,6 +125,15 @@ const OldSchoolMap = () => {
               fieldToFilterAcolytesBy="isInside"
             />
           );
+
+        break;
+      }
+      case OldSchoolLocation.HALL_OF_SAGES: {
+        const onPressGoBackButton = () => {
+          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
+        };
+
+        content = <HallOfSages onPressGoBackButton={onPressGoBackButton} />;
 
         break;
       }
