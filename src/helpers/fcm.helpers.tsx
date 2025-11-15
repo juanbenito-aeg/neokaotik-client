@@ -9,11 +9,19 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import { AsyncStorageKey, DeviceState, MapNavigation, Tab } from '../constants';
+import {
+  AsyncStorageKey,
+  ButtonBackgroundImgSrc,
+  DeviceState,
+  MapNavigation,
+  NotificationTitle,
+  Tab,
+} from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes } from '../interfaces/Acolytes';
 import { MS } from '../interfaces/Metrics';
+import { ModalData, SetModalData } from '../interfaces/Modal';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -33,22 +41,30 @@ async function updateFcmToken(userEmail: string, fcmToken: string) {
   }
 }
 
-function setNotificationHandlers(setAcolytes: SetAcolytes) {
+function setNotificationHandlers(
+  setAcolytes: SetAcolytes,
+  setModalData: SetModalData,
+  ms: MS,
+) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
   unsubscribeFunctions.push(
     messaging().onMessage(remoteMessage => {
-      updateAffectedAcolyte(setAcolytes, remoteMessage);
-
-      Toast.show({
-        type: (remoteMessage.data?.type || 'info') as ToastType,
-        text1: remoteMessage.notification?.title,
-        text2: remoteMessage.notification?.body,
-      });
+      handleForegroundNotification(
+        setAcolytes,
+        setModalData,
+        ms,
+        remoteMessage,
+      );
     }),
     messaging().onNotificationOpenedApp(remoteMessage => {
-      updateAffectedAcolyte(setAcolytes, remoteMessage);
-      moveUserToNotificationDestination(remoteMessage, DeviceState.BACKGROUND);
+      handleBackgroundOrQuitNotification(
+        setModalData,
+        ms,
+        remoteMessage,
+        DeviceState.BACKGROUND,
+        setAcolytes,
+      );
     }),
   );
 
@@ -59,7 +75,58 @@ function setNotificationHandlers(setAcolytes: SetAcolytes) {
   };
 }
 
-function updateAffectedAcolyte(
+function handleForegroundNotification(
+  setAcolytes: SetAcolytes,
+  setModalData: SetModalData,
+  ms: MS,
+  remoteMessage: FirebaseMessagingTypes.RemoteMessage,
+) {
+  const notificationTitle = remoteMessage.notification!.title;
+
+  switch (notificationTitle) {
+    case NotificationTitle.SWAMP_TOWER: {
+      updateAcolyteEnteringOrExitingSwampTower(setAcolytes, remoteMessage);
+      break;
+    }
+
+    case NotificationTitle.ACOLYTE_DISCOVERY: {
+      const modalData = getNotificationModalData(notificationTitle, ms);
+      return setModalData(modalData);
+    }
+  }
+
+  Toast.show({
+    type: (remoteMessage.data?.type || 'info') as ToastType,
+    text1: remoteMessage.notification?.title,
+    text2: remoteMessage.notification?.body,
+  });
+}
+
+function handleBackgroundOrQuitNotification(
+  setModalData: SetModalData,
+  ms: MS,
+  remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
+  deviceState: DeviceState,
+  setAcolytes?: SetAcolytes,
+) {
+  const notificationTitle = remoteMessage?.notification!.title;
+
+  if (notificationTitle === NotificationTitle.ACOLYTE_DISCOVERY) {
+    const modalData = getNotificationModalData(notificationTitle, ms);
+    setModalData(modalData);
+  } else {
+    if (
+      notificationTitle === NotificationTitle.SWAMP_TOWER &&
+      deviceState === DeviceState.BACKGROUND
+    ) {
+      updateAcolyteEnteringOrExitingSwampTower(setAcolytes!, remoteMessage!);
+    }
+
+    moveUserToNotificationDestination(remoteMessage, deviceState);
+  }
+}
+
+function updateAcolyteEnteringOrExitingSwampTower(
   setAcolytes: SetAcolytes,
   remoteMessage: FirebaseMessagingTypes.RemoteMessage,
 ) {
@@ -111,6 +178,32 @@ async function moveUserToNotificationDestination(
     AsyncStorageKey.LAST_REMOTE_MSG_ID_AND_DEVICE_STATE,
     currentRemoteMessageIdAndDeviceState,
   );
+}
+
+function getNotificationModalData(
+  notificationTitle: NotificationTitle,
+  ms: MS,
+): ModalData {
+  let modalData;
+
+  switch (notificationTitle) {
+    case NotificationTitle.ACOLYTE_DISCOVERY: {
+      modalData = {
+        fullScreen: true,
+        content: {
+          image: {
+            source: ButtonBackgroundImgSrc.SCROLL,
+            width: ms(200, 1),
+            height: ms(200, 1),
+          },
+        },
+        actionButtonText: 'Remove spell',
+      };
+      break;
+    }
+  }
+
+  return modalData!;
 }
 
 function getToastConfig(ms: MS) {
@@ -182,7 +275,7 @@ async function avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn() {
 export {
   updateFcmToken,
   setNotificationHandlers,
-  moveUserToNotificationDestination,
+  handleBackgroundOrQuitNotification,
   getToastConfig,
   setBackgroundMessageHandler,
   avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
