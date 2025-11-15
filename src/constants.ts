@@ -31,6 +31,7 @@ enum ButtonBackgroundImgSrc {
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
   SCROLL = require('../public/images/roles/acolyte/scroll.png'),
+  HALL_OF_SAGES = require('../public/images/the-hall-of-sages-icon.png'),
 }
 
 enum ModalBackgroundImgSrc {
@@ -77,6 +78,7 @@ enum MapNavigation {
 enum OldSchoolLocation {
   MAP,
   ANGELO_LAB,
+  HALL_OF_SAGES,
 }
 
 enum DeviceState {
