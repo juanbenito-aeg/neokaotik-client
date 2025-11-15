@@ -204,8 +204,8 @@ function getNotificationModalData(
         content: {
           image: {
             source: ButtonBackgroundImgSrc.SCROLL,
-            width: ms(200, 1),
-            height: ms(200, 1),
+            width: ms(350, 1),
+            height: ms(350, 1),
           },
         },
         onPressActionButton() {
