@@ -22,11 +22,12 @@ import {
 } from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
-  moveUserToNotificationDestination,
   setNotificationHandlers,
+  handleBackgroundOrQuitNotification,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
 import { ModalData } from '../interfaces/Modal';
+import useMetrics from '../hooks/use-metrics';
 
 const App = () => {
   const [modalData, setModalData] = useState<ModalData | null>(null);
@@ -35,6 +36,8 @@ const App = () => {
   const [user, setUser] = useState<KaotikaUser | null>(null);
   const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButton = () => {
     setModalData(null);
@@ -76,12 +79,21 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      const unsubscribe = setNotificationHandlers(setAcolytes);
+      const unsubscribe = setNotificationHandlers(
+        setAcolytes,
+        setModalData,
+        ms,
+      );
 
       messaging()
         .getInitialNotification()
         .then(remoteMessage => {
-          moveUserToNotificationDestination(remoteMessage, DeviceState.QUIT);
+          handleBackgroundOrQuitNotification(
+            setModalData,
+            ms,
+            remoteMessage,
+            DeviceState.QUIT,
+          );
         });
 
       return unsubscribe;
