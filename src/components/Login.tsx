@@ -4,10 +4,12 @@ import styled from 'styled-components/native';
 import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { ButtonBackgroundImgSrc } from '../constants';
+import { ButtonBackgroundImgSrc, ModalActionButtonText } from '../constants';
 import { useContext } from 'react';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { getDeviceToken } from '../fcm/deviceToken';
+import { ModalContext } from '../contexts/ModalContext';
+import { ModalData } from '../interfaces/Modal';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -16,10 +18,20 @@ const BackgroundImage = styled.ImageBackground`
   align-items: center;
 `;
 
-const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
+const Login = ({ setUser }: LoginProps) => {
+  const setModalData = useContext(ModalContext)!;
   const { setIsLoading } = useContext(IsLoadingContext)!;
 
   async function logIn() {
+    const modalData: ModalData = {
+      fullScreen: false,
+      content: { message: '' },
+      onPressActionButton() {
+        setModalData(null);
+      },
+      actionButtonText: ModalActionButtonText.DISMISS,
+    };
+
     try {
       setIsLoading(true);
 
@@ -38,18 +50,19 @@ const Login = ({ setUser, setGeneralModalMessage }: LoginProps) => {
           await GoogleAuth.signOut();
 
           if (authenticationAttemptResult.statusCode === 500) {
-            setGeneralModalMessage(
-              'Alas! Your identity could not be verified.',
-            );
+            modalData.content!.message =
+              'Alas! Your identity could not be verified.';
           } else {
-            setGeneralModalMessage('Get out of here! You are not worthy.');
+            modalData.content!.message = 'Get out of here! You are not worthy.';
           }
+
+          setModalData(modalData);
         }
       }
-    } catch {
-      setGeneralModalMessage(
-        'Oh no! The authentication process with your Google account failed.',
-      );
+    } catch (err) {
+      modalData.content!.message =
+        'Oh no! The authentication process with your Google account failed.';
+      setModalData(modalData);
     } finally {
       setIsLoading(false);
     }

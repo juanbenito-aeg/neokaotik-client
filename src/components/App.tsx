@@ -192,28 +192,25 @@ const App = () => {
           actionButtonText={modalData?.actionButtonText}
         />
 
-        <IsLoadingContext value={{ isLoading, setIsLoading }}>
-          {isConfigured ? (
-            !user ? (
-              <>
-                <Login
-                  setUser={setUser}
-                  setGeneralModalMessage={setGeneralModalMessage}
-                />
+        <ModalContext value={setModalData}>
+          <IsLoadingContext value={{ isLoading, setIsLoading }}>
+            {isConfigured ? (
+              !user ? (
+                <>
+                  <Login setUser={setUser} />
 
-                {isLoading && <CircleSpinner />}
-              </>
-            ) : (
-              <AcolytesContext value={{ acolytes, setAcolytes }}>
-                <ModalContext value={setGeneralModalMessage}>
+                  {isLoading && <CircleSpinner />}
+                </>
+              ) : (
+                <AcolytesContext value={{ acolytes, setAcolytes }}>
                   <Main />
-                </ModalContext>
-              </AcolytesContext>
-            )
-          ) : (
-            <SplashScreen />
-          )}
-        </IsLoadingContext>
+                </AcolytesContext>
+              )
+            ) : (
+              <SplashScreen />
+            )}
+          </IsLoadingContext>
+        </ModalContext>
       </SafeAreaView>
     </UserContext>
   );
