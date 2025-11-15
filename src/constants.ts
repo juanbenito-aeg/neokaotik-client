@@ -94,6 +94,11 @@ const DEFAULT_MODAL_DATA: ModalData = {
   actionButtonText: 'Dismiss',
 };
 
+enum NotificationTitle {
+  SWAMP_TOWER = 'Swamp Tower',
+  ACOLYTE_DISCOVERY = 'Acolyte Discovery',
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -108,4 +113,5 @@ export {
   DeviceState,
   AsyncStorageKey,
   DEFAULT_MODAL_DATA,
+  NotificationTitle,
 };
