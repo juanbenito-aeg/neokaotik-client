@@ -1,6 +1,6 @@
 import { SocketServerToClientEvents } from '../../constants';
 import { SetAcolytes } from '../../interfaces/Acolytes';
-import { SetGeneralModalMessage } from '../../interfaces/GeneralModal';
+import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
 import {
@@ -12,7 +12,7 @@ import { socket } from '../socket';
 
 function listenForAcolyteInsideOutsideLab(
   recipientRole: string,
-  setGeneralModalMessage?: SetGeneralModalMessage,
+  setModalData?: SetModalData,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
   user?: KaotikaUser,
@@ -24,7 +24,7 @@ function listenForAcolyteInsideOutsideLab(
       handleAcolyteInsideOutsideLab(
         recipientRole,
         acolyteData,
-        setGeneralModalMessage,
+        setModalData,
         acolytes,
         setAcolytes,
         user,

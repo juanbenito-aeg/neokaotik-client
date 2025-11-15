@@ -1,6 +1,7 @@
 import ScreenContainer from '../../ScreenContainer';
 import {
   ButtonBackgroundImgSrc,
+  DEFAULT_MODAL_DATA,
   ScreenBackgroundImgSrc,
   SocketClientToServerEvents,
   UserRole,
@@ -19,7 +20,6 @@ import { useNavigation } from '@react-navigation/native';
 import Button from '../../Button';
 import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
-import { SetGeneralModalMessage } from '../../../interfaces/GeneralModal';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
@@ -28,17 +28,16 @@ import { NestedScreenProps } from '../../../interfaces/generics';
 const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
+  const setModalData = useContext(ModalContext)!;
+
   useEffect(() => {
     const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
       UserRole.ISTVAN,
-      setGeneralModalMessage,
+      setModalData,
     );
 
     return clearAcolyteInsideOutsideLab;
   }, []);
-
-  const setGeneralModalMessage: SetGeneralModalMessage =
-    useContext(ModalContext)!;
 
   // Elements needed to display the camera
   const device = useCameraDevice('back');
@@ -77,9 +76,13 @@ const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
       const userGavePermission: boolean = await requestPermission();
 
       if (!userGavePermission) {
-        setGeneralModalMessage(
-          'Istvan, you have to give permission to be able to scan QR codes.',
-        );
+        setModalData({
+          ...DEFAULT_MODAL_DATA,
+          content: {
+            message:
+              'Istvan, you have to give permission to be able to scan QR codes.',
+          },
+        });
       } else {
         toggleCameraAndNavigatorStates();
       }

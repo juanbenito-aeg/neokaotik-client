@@ -1,3 +1,5 @@
+import { ModalData } from './interfaces/Modal';
+
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
   ACOLYTE_SWAMP_TOWER_ENTRANCE = require('../public/images/roles/acolyte/swamp-tower-entrance.png'),
@@ -29,6 +31,11 @@ enum ButtonBackgroundImgSrc {
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
   SCROLL = require('../public/images/roles/acolyte/scroll.png'),
+}
+
+enum ModalBackgroundImgSrc {
+  FULL_SCREEN = require('../public/images/full-screen-modal.png'),
+  NORMAL = require('../public/images/normal-modal.png'),
 }
 
 enum UserRole {
@@ -81,9 +88,16 @@ enum AsyncStorageKey {
   LAST_REMOTE_MSG_ID_AND_DEVICE_STATE = 'lastRemoteMessageIdAndDeviceState',
 }
 
+const DEFAULT_MODAL_DATA: ModalData = {
+  fullScreen: false,
+  content: {},
+  actionButtonText: 'Dismiss',
+};
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
+  ModalBackgroundImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,
@@ -93,4 +107,5 @@ export {
   OldSchoolLocation,
   DeviceState,
   AsyncStorageKey,
+  DEFAULT_MODAL_DATA,
 };
