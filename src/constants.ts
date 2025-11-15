@@ -66,6 +66,7 @@ enum SocketClientToServerEvents {
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
   INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
   SCROLL_PRESS = 'scroll press',
+  REMOVE_SPELL_PRESS = 'remove spell press',
 }
 
 enum MapNavigation {

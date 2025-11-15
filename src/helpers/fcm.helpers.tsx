@@ -15,6 +15,7 @@ import {
   DeviceState,
   MapNavigation,
   NotificationTitle,
+  SocketClientToServerEvents,
   Tab,
 } from '../constants';
 import { navigate } from '../RootNavigation';
@@ -22,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes } from '../interfaces/Acolytes';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
+import { socket } from '../socket/socket';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -90,7 +92,11 @@ function handleForegroundNotification(
     }
 
     case NotificationTitle.ACOLYTE_DISCOVERY: {
-      const modalData = getNotificationModalData(notificationTitle, ms);
+      const modalData = getNotificationModalData(
+        notificationTitle,
+        ms,
+        setModalData,
+      );
       return setModalData(modalData);
     }
   }
@@ -112,7 +118,11 @@ function handleBackgroundOrQuitNotification(
   const notificationTitle = remoteMessage?.notification!.title;
 
   if (notificationTitle === NotificationTitle.ACOLYTE_DISCOVERY) {
-    const modalData = getNotificationModalData(notificationTitle, ms);
+    const modalData = getNotificationModalData(
+      notificationTitle,
+      ms,
+      setModalData,
+    );
     setModalData(modalData);
   } else {
     if (
@@ -183,8 +193,9 @@ async function moveUserToNotificationDestination(
 function getNotificationModalData(
   notificationTitle: NotificationTitle,
   ms: MS,
+  setModalData: SetModalData,
 ): ModalData {
-  let modalData;
+  let modalData: ModalData;
 
   switch (notificationTitle) {
     case NotificationTitle.ACOLYTE_DISCOVERY: {
@@ -196,6 +207,10 @@ function getNotificationModalData(
             width: ms(200, 1),
             height: ms(200, 1),
           },
+        },
+        onPressActionButton() {
+          socket.emit(SocketClientToServerEvents.REMOVE_SPELL_PRESS);
+          setModalData(null);
         },
         actionButtonText: 'Remove spell',
       };
