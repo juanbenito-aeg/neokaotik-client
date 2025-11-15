@@ -1,4 +1,4 @@
-import { ModalActionButtonText, UserRole } from '../../constants';
+import { DEFAULT_MODAL_DATA, UserRole } from '../../constants';
 import { SetAcolytes } from '../../interfaces/Acolytes';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
@@ -47,14 +47,7 @@ function displayAcolyteEnteredExitedModal(
     isAcolyteInsideLab ? 'entered' : 'exited'
   } Angelo's laboratory.`;
 
-  setModalData({
-    fullScreen: false,
-    content: { message },
-    onPressActionButton() {
-      setModalData(null);
-    },
-    actionButtonText: ModalActionButtonText.DISMISS,
-  });
+  setModalData({ ...DEFAULT_MODAL_DATA, content: { message } });
 }
 
 function updateAcolytes(

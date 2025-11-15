@@ -12,7 +12,7 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { DeviceState, ModalActionButtonText, UserRole } from '../constants';
+import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
@@ -35,6 +35,10 @@ const App = () => {
   const [user, setUser] = useState<KaotikaUser | null>(null);
   const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  DEFAULT_MODAL_DATA.onPressActionButton = () => {
+    setModalData(null);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -107,15 +111,11 @@ const App = () => {
         await GoogleAuth.signOut();
 
         setModalData({
-          fullScreen: false,
+          ...DEFAULT_MODAL_DATA,
           content: {
             message:
               'Whoops! You have been logged out because your identity could not be verified.',
           },
-          onPressActionButton() {
-            setModalData(null);
-          },
-          actionButtonText: ModalActionButtonText.DISMISS,
         });
       }
     }

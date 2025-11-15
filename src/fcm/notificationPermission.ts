@@ -2,7 +2,7 @@ import { deviceTokenToRefresh } from './deviceToken';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import { PermissionsAndroid } from 'react-native';
-import { ModalActionButtonText } from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants';
 
 export async function handleNotificationPermission(userEmail: string) {
   const setModalData = useContext(ModalContext)!;
@@ -25,15 +25,11 @@ export async function handleNotificationPermission(userEmail: string) {
     return;
   } else if (result === PermissionsAndroid.RESULTS.DENIED) {
     setModalData({
-      fullScreen: false,
+      ...DEFAULT_MODAL_DATA,
       content: {
         message:
           'You have to enable notifications from system settings to receive alerts.',
       },
-      onPressActionButton() {
-        setModalData(null);
-      },
-      actionButtonText: ModalActionButtonText.DISMISS,
     });
   }
 }

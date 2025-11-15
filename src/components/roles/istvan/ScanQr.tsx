@@ -1,7 +1,7 @@
 import ScreenContainer from '../../ScreenContainer';
 import {
   ButtonBackgroundImgSrc,
-  ModalActionButtonText,
+  DEFAULT_MODAL_DATA,
   ScreenBackgroundImgSrc,
   SocketClientToServerEvents,
   UserRole,
@@ -77,15 +77,11 @@ const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
 
       if (!userGavePermission) {
         setModalData({
-          fullScreen: false,
+          ...DEFAULT_MODAL_DATA,
           content: {
             message:
               'Istvan, you have to give permission to be able to scan QR codes.',
           },
-          onPressActionButton() {
-            setModalData(null);
-          },
-          actionButtonText: ModalActionButtonText.DISMISS,
         });
       } else {
         toggleCameraAndNavigatorStates();

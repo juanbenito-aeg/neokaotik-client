@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { ButtonBackgroundImgSrc, ModalActionButtonText } from '../constants';
+import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
 import { useContext } from 'react';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { getDeviceToken } from '../fcm/deviceToken';
@@ -23,14 +23,7 @@ const Login = ({ setUser }: LoginProps) => {
   const { setIsLoading } = useContext(IsLoadingContext)!;
 
   async function logIn() {
-    const modalData: ModalData = {
-      fullScreen: false,
-      content: { message: '' },
-      onPressActionButton() {
-        setModalData(null);
-      },
-      actionButtonText: ModalActionButtonText.DISMISS,
-    };
+    const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
 
     try {
       setIsLoading(true);

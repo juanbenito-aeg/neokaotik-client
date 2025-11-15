@@ -4,7 +4,7 @@ import { UserContext } from '../contexts/UserContext';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import Button from './Button';
-import { ButtonBackgroundImgSrc, ModalActionButtonText } from '../constants';
+import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
 import {
   avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
   updateFcmToken,
@@ -26,12 +26,8 @@ const Logout = () => {
     await avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn();
     setUser(null);
     setModalData({
-      fullScreen: false,
+      ...DEFAULT_MODAL_DATA,
       content: { message: 'The gate closes behind you.\nSession over.' },
-      onPressActionButton() {
-        setModalData(null);
-      },
-      actionButtonText: ModalActionButtonText.DISMISS,
     });
   }
 
