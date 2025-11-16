@@ -39,6 +39,7 @@ const Message = styled(Text)<{ $hs: HS }>`
 const Image = styled.Image<{ $width: number; $height: number }>`
   width: ${({ $width }) => $width}px;
   height: ${({ $height }) => $height}px;
+  filter: drop-shadow(0 0 5px rgb(0 0 0));
 `;
 
 const ActionButton = styled.Pressable`
