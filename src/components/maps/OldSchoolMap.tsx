@@ -41,7 +41,6 @@ const OldSchoolMap = ({
     if (initialLocation) {
       setCurrentOldSchoolLocation(initialLocation);
       setSpecificLocation!(undefined);
-      console.log(user?.has_been_summoned_to_hos);
     }
   }, []);
 
@@ -73,8 +72,8 @@ const OldSchoolMap = ({
   };
 
   const getHallOfSagesButton = () => {
-    console.log(user?.has_been_summoned_to_hos);
-    if (!user?.has_been_summoned_to_hos) return null;
+    if (user?.rol === UserRole.ACOLYTE && !user?.has_been_summoned_to_hos)
+      return null;
 
     const buttonFixedSize: number = 75;
     const scaleFactor: number = 1;
