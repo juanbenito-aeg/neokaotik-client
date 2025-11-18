@@ -31,6 +31,9 @@ const Map = ({ route }: MapProps) => {
   const { user, setUser } = useContext(UserContext)!;
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+  const [specificLocation, setSpecificLocation] = useState(
+    screenChangingNotificationData?.specificLocation,
+  );
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {
@@ -85,7 +88,12 @@ const Map = ({ route }: MapProps) => {
         );
 
       case MapNavigation.OLD_SCHOOL_MAP:
-        return <OldSchoolMap />;
+        return (
+          <OldSchoolMap
+            initialLocation={specificLocation}
+            setSpecificLocation={setSpecificLocation}
+          />
+        );
 
       case MapNavigation.SWAMP_TOWER:
         return user!.rol === UserRole.ACOLYTE ? (
