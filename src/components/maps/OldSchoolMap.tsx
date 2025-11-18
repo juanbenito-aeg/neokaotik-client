@@ -7,7 +7,7 @@ import {
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { MapNavigationContext } from '../../contexts/MapContext';
 import type { MapNavigationContextInterface } from '../../interfaces/Map';
 import { ViewStyle } from 'react-native';
@@ -18,8 +18,12 @@ import ScanQr from '../roles/istvan/ScanQr';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 import HallOfSages from '../HallOfSages';
+import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
 
-const OldSchoolMap = () => {
+const OldSchoolMap = ({
+  initialLocation,
+  setSpecificLocation,
+}: OldSchoolMapProps) => {
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
     useState<OldSchoolLocation>(OldSchoolLocation.MAP);
 
@@ -33,6 +37,13 @@ const OldSchoolMap = () => {
       setCurrentOldSchoolLocation(newLocation as OldSchoolLocation);
     }
   };
+  useEffect(() => {
+    if (initialLocation) {
+      setCurrentOldSchoolLocation(initialLocation);
+      setSpecificLocation!(undefined);
+      console.log(user?.has_been_summoned_to_hos);
+    }
+  }, []);
 
   const { user } = useContext(UserContext)!;
 
@@ -62,8 +73,8 @@ const OldSchoolMap = () => {
   };
 
   const getHallOfSagesButton = () => {
-    if (user!.rol === UserRole.VILLAIN || !user!.has_been_summoned_to_hos)
-      return null;
+    console.log(user?.has_been_summoned_to_hos);
+    if (!user?.has_been_summoned_to_hos) return null;
 
     const buttonFixedSize: number = 75;
     const scaleFactor: number = 1;
