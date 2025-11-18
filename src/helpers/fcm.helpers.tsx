@@ -133,8 +133,9 @@ function handleBackgroundOrQuitNotification(
   user?: KaotikaUser,
   setUser?: SetUser,
 ) {
-  let canMoveUser = false;
   const notificationTitle = remoteMessage?.notification!.title;
+
+  let canMoveUser = false;
 
   if (notificationTitle === NotificationTitle.ACOLYTE_DISCOVERY) {
     const modalData = getNotificationModalData(
@@ -150,20 +151,12 @@ function handleBackgroundOrQuitNotification(
     ) {
       updateAcolyteEnteringOrExitingSwampTower(setAcolytes!, remoteMessage!);
       canMoveUser = true;
-    } else if (
-      notificationTitle === NotificationTitle.SWAMP_TOWER &&
-      deviceState === DeviceState.QUIT
-    ) {
+    } else if (notificationTitle === NotificationTitle.SWAMP_TOWER) {
       canMoveUser = true;
     } else if (notificationTitle === NotificationTitle.SUMMONED_HALL_SAGES) {
       updateAcolyteHasBeenSummonedToHOS(user!, setUser!);
 
-      if (
-        (deviceState === DeviceState.BACKGROUND && user?.isInside) ||
-        user?.is_inside_tower
-      ) {
-        return;
-      } else {
+      if (!user?.isInside && !user?.is_inside_tower) {
         canMoveUser = true;
       }
     }
