@@ -15,7 +15,6 @@ function listenForAcolyteInsideOutsideLab(
   setModalData?: SetModalData,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
-  user?: KaotikaUser,
   setUser?: SetUser,
 ) {
   socket.on(
@@ -27,7 +26,6 @@ function listenForAcolyteInsideOutsideLab(
         setModalData,
         acolytes,
         setAcolytes,
-        user,
         setUser,
       );
     },

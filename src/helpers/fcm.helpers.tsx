@@ -62,7 +62,6 @@ function setNotificationHandlers(
         setModalData,
         ms,
         remoteMessage,
-        user,
         setUser,
       );
     }),
@@ -91,7 +90,6 @@ function handleForegroundNotification(
   setModalData: SetModalData,
   ms: MS,
   remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-  user: KaotikaUser,
   setUser: SetUser,
 ) {
   const notificationTitle = remoteMessage.notification!.title;
@@ -112,7 +110,7 @@ function handleForegroundNotification(
     }
 
     case NotificationTitle.SUMMONED_HALL_SAGES: {
-      updateAcolyteHasBeenSummonedToHOS(user, setUser);
+      updateAcolyteHasBeenSummonedToHOS(setUser);
       break;
     }
   }
@@ -154,7 +152,7 @@ function handleBackgroundOrQuitNotification(
     } else if (notificationTitle === NotificationTitle.SWAMP_TOWER) {
       canMoveUser = true;
     } else if (notificationTitle === NotificationTitle.SUMMONED_HALL_SAGES) {
-      updateAcolyteHasBeenSummonedToHOS(user!, setUser!);
+      updateAcolyteHasBeenSummonedToHOS(setUser!);
 
       if (!user?.isInside && !user?.is_inside_tower) {
         canMoveUser = true;
@@ -167,11 +165,8 @@ function handleBackgroundOrQuitNotification(
   }
 }
 
-function updateAcolyteHasBeenSummonedToHOS(
-  user: KaotikaUser,
-  setUser: SetUser,
-) {
-  setUser({ ...user, has_been_summoned_to_hos: true });
+function updateAcolyteHasBeenSummonedToHOS(setUser: SetUser) {
+  setUser(prevUser => ({ ...prevUser!, has_been_summoned_to_hos: true }));
 }
 
 function updateAcolyteEnteringOrExitingSwampTower(

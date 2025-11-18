@@ -50,7 +50,6 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
       undefined,
       undefined,
       undefined,
-      user!,
       setUser,
     );
     return userData;
