@@ -1,8 +1,10 @@
 import { OldSchoolLocation } from '../constants';
 
 interface OldSchoolMapProps {
-  initialLocation?: OldSchoolLocation;
-  setSpecificLocation?: (initalLocation: OldSchoolLocation | undefined) => void;
+  initialLocation: OldSchoolLocation | null;
+  setSpecificLocation: React.Dispatch<
+    React.SetStateAction<OldSchoolLocation | null>
+  >;
 }
 
 export type { OldSchoolMapProps };

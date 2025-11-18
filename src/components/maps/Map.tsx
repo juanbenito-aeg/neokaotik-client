@@ -4,6 +4,7 @@ import {
   ButtonBackgroundImgSrc,
   Tab,
   UserRole,
+  OldSchoolLocation,
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
@@ -28,16 +29,21 @@ import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entr
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
+  const [specificLocation, setSpecificLocation] =
+    useState<OldSchoolLocation | null>(null);
+
   const { user, setUser } = useContext(UserContext)!;
+
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
-  const [specificLocation, setSpecificLocation] = useState(
-    screenChangingNotificationData?.specificLocation,
-  );
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {
       setMapNavigation(screenChangingNotificationData.destination);
+    }
+
+    if (screenChangingNotificationData?.specificLocation) {
+      setSpecificLocation(screenChangingNotificationData.specificLocation);
     }
   }, [screenChangingNotificationData]);
 

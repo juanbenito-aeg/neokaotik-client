@@ -9,7 +9,6 @@ import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import React, { useContext, useEffect, useState } from 'react';
 import { MapNavigationContext } from '../../contexts/MapContext';
-import type { MapNavigationContextInterface } from '../../interfaces/Map';
 import { ViewStyle } from 'react-native';
 import useMetrics from '../../hooks/use-metrics';
 import { UserContext } from '../../contexts/UserContext';
@@ -25,10 +24,9 @@ const OldSchoolMap = ({
   setSpecificLocation,
 }: OldSchoolMapProps) => {
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
-    useState<OldSchoolLocation>(OldSchoolLocation.MAP);
+    useState<OldSchoolLocation>(initialLocation || OldSchoolLocation.MAP);
 
-  const { setMapNavigation } =
-    useContext<MapNavigationContextInterface>(MapNavigationContext);
+  const { setMapNavigation } = useContext(MapNavigationContext);
 
   const handlePress = (newLocation: MapNavigation | OldSchoolLocation) => {
     if (newLocation === MapNavigation.MAP) {
@@ -37,12 +35,13 @@ const OldSchoolMap = ({
       setCurrentOldSchoolLocation(newLocation as OldSchoolLocation);
     }
   };
+
   useEffect(() => {
     if (initialLocation) {
       setCurrentOldSchoolLocation(initialLocation);
-      setSpecificLocation!(undefined);
+      setSpecificLocation(null);
     }
-  }, []);
+  }, [initialLocation]);
 
   const { user } = useContext(UserContext)!;
 
