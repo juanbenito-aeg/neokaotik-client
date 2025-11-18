@@ -15,6 +15,7 @@ import {
   DeviceState,
   MapNavigation,
   NotificationTitle,
+  OldSchoolLocation,
   SocketClientToServerEvents,
   Tab,
 } from '../constants';
@@ -24,6 +25,8 @@ import { SetAcolytes } from '../interfaces/Acolytes';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
 import { socket } from '../socket/socket';
+import KaotikaUser from '../interfaces/KaotikaUser';
+import { SetUser } from '../interfaces/UserContext';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -47,6 +50,8 @@ function setNotificationHandlers(
   setAcolytes: SetAcolytes,
   setModalData: SetModalData,
   ms: MS,
+  user: KaotikaUser,
+  setUser: SetUser,
 ) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
@@ -57,6 +62,8 @@ function setNotificationHandlers(
         setModalData,
         ms,
         remoteMessage,
+        user,
+        setUser,
       );
     }),
     messaging().onNotificationOpenedApp(remoteMessage => {
@@ -66,6 +73,8 @@ function setNotificationHandlers(
         remoteMessage,
         DeviceState.BACKGROUND,
         setAcolytes,
+        user,
+        setUser,
       );
     }),
   );
@@ -82,6 +91,8 @@ function handleForegroundNotification(
   setModalData: SetModalData,
   ms: MS,
   remoteMessage: FirebaseMessagingTypes.RemoteMessage,
+  user: KaotikaUser,
+  setUser: SetUser,
 ) {
   const notificationTitle = remoteMessage.notification!.title;
 
@@ -99,6 +110,11 @@ function handleForegroundNotification(
       );
       return setModalData(modalData);
     }
+
+    case NotificationTitle.SUMMONED_HALL_SAGES: {
+      updateAcolyteHasBeenSummonedToHOS(user, setUser);
+      break;
+    }
   }
 
   Toast.show({
@@ -114,7 +130,10 @@ function handleBackgroundOrQuitNotification(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
   deviceState: DeviceState,
   setAcolytes?: SetAcolytes,
+  user?: KaotikaUser,
+  setUser?: SetUser,
 ) {
+  let canMoveUser = false;
   const notificationTitle = remoteMessage?.notification!.title;
 
   if (notificationTitle === NotificationTitle.ACOLYTE_DISCOVERY) {
@@ -130,10 +149,36 @@ function handleBackgroundOrQuitNotification(
       deviceState === DeviceState.BACKGROUND
     ) {
       updateAcolyteEnteringOrExitingSwampTower(setAcolytes!, remoteMessage!);
+      canMoveUser = true;
+    } else if (
+      notificationTitle === NotificationTitle.SWAMP_TOWER &&
+      deviceState === DeviceState.QUIT
+    ) {
+      canMoveUser = true;
+    } else if (notificationTitle === NotificationTitle.SUMMONED_HALL_SAGES) {
+      updateAcolyteHasBeenSummonedToHOS(user!, setUser!);
+
+      if (
+        (deviceState === DeviceState.BACKGROUND && user?.isInside) ||
+        user?.is_inside_tower
+      ) {
+        return;
+      } else {
+        canMoveUser = true;
+      }
     }
 
-    moveUserToNotificationDestination(remoteMessage, deviceState);
+    if (canMoveUser) {
+      moveUserToNotificationDestination(remoteMessage, deviceState);
+    }
   }
+}
+
+function updateAcolyteHasBeenSummonedToHOS(
+  user: KaotikaUser,
+  setUser: SetUser,
+) {
+  setUser({ ...user, has_been_summoned_to_hos: true });
 }
 
 function updateAcolyteEnteringOrExitingSwampTower(
@@ -172,16 +217,28 @@ async function moveUserToNotificationDestination(
     : '';
 
   if (
-    lastRemoteMessageIdAndDeviceState !==
-      currentRemoteMessageIdAndDeviceState &&
-    (remoteMessage?.data?.destination as unknown as MapNavigation) ===
-      MapNavigation.SWAMP_TOWER
+    lastRemoteMessageIdAndDeviceState !== currentRemoteMessageIdAndDeviceState
   ) {
-    navigate(Tab.MAP, {
-      screenChangingNotificationData: {
-        destination: MapNavigation.SWAMP_TOWER,
-      },
-    });
+    if (
+      (remoteMessage?.data?.destination as unknown as MapNavigation) ===
+      MapNavigation.SWAMP_TOWER
+    ) {
+      navigate(Tab.MAP, {
+        screenChangingNotificationData: {
+          destination: MapNavigation.SWAMP_TOWER,
+        },
+      });
+    } else if (
+      (remoteMessage?.data?.destination as unknown as OldSchoolLocation) ===
+      OldSchoolLocation.HALL_OF_SAGES
+    ) {
+      navigate(Tab.MAP, {
+        screenChangingNotificationData: {
+          destination: MapNavigation.OLD_SCHOOL_MAP,
+          specificLocation: OldSchoolLocation.HALL_OF_SAGES,
+        },
+      });
+    }
   }
 
   AsyncStorage.setItem(
