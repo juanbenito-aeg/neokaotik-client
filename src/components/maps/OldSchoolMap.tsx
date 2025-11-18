@@ -7,9 +7,8 @@ import {
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { MapNavigationContext } from '../../contexts/MapContext';
-import type { MapNavigationContextInterface } from '../../interfaces/Map';
 import { ViewStyle } from 'react-native';
 import useMetrics from '../../hooks/use-metrics';
 import { UserContext } from '../../contexts/UserContext';
@@ -18,13 +17,16 @@ import ScanQr from '../roles/istvan/ScanQr';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 import HallOfSages from '../HallOfSages';
+import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
 
-const OldSchoolMap = () => {
+const OldSchoolMap = ({
+  initialLocation,
+  setSpecificLocation,
+}: OldSchoolMapProps) => {
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
-    useState<OldSchoolLocation>(OldSchoolLocation.MAP);
+    useState<OldSchoolLocation>(initialLocation || OldSchoolLocation.MAP);
 
-  const { setMapNavigation } =
-    useContext<MapNavigationContextInterface>(MapNavigationContext);
+  const { setMapNavigation } = useContext(MapNavigationContext);
 
   const handlePress = (newLocation: MapNavigation | OldSchoolLocation) => {
     if (newLocation === MapNavigation.MAP) {
@@ -33,6 +35,13 @@ const OldSchoolMap = () => {
       setCurrentOldSchoolLocation(newLocation as OldSchoolLocation);
     }
   };
+
+  useEffect(() => {
+    if (initialLocation) {
+      setCurrentOldSchoolLocation(initialLocation);
+      setSpecificLocation(null);
+    }
+  }, [initialLocation]);
 
   const { user } = useContext(UserContext)!;
 
@@ -62,7 +71,7 @@ const OldSchoolMap = () => {
   };
 
   const getHallOfSagesButton = () => {
-    if (user!.rol === UserRole.VILLAIN || !user!.has_been_summoned_to_hos)
+    if (user?.rol === UserRole.ACOLYTE && !user?.has_been_summoned_to_hos)
       return null;
 
     const buttonFixedSize: number = 75;

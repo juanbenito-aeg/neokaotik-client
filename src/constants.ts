@@ -78,9 +78,9 @@ enum MapNavigation {
 }
 
 enum OldSchoolLocation {
-  MAP,
-  ANGELO_LAB,
-  HALL_OF_SAGES,
+  MAP = 'Map',
+  ANGELO_LAB = 'Angelo Lab',
+  HALL_OF_SAGES = 'The Hall of Sages',
 }
 
 enum DeviceState {
@@ -101,6 +101,7 @@ const DEFAULT_MODAL_DATA: ModalData = {
 enum NotificationTitle {
   SWAMP_TOWER = 'Swamp Tower',
   ACOLYTE_DISCOVERY = 'Acolyte Discovery',
+  SUMMONED_HALL_SAGES = 'Summoned to The Hall of Sages',
 }
 
 export {

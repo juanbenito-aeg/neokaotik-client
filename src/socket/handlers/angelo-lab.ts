@@ -11,7 +11,6 @@ function handleAcolyteInsideOutsideLab(
   setModalData?: SetModalData,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
-  user?: KaotikaUser,
   setUser?: SetUser,
 ) {
   switch (recipientRole) {
@@ -33,7 +32,7 @@ function handleAcolyteInsideOutsideLab(
       break;
 
     case UserRole.ACOLYTE:
-      enterOrExitLab(acolyteData.isInside, user!, setUser!);
+      enterOrExitLab(acolyteData.isInside, setUser!);
       break;
   }
 }
@@ -67,12 +66,8 @@ function updateAcolytes(
   setAcolytes(updatedAcolytes);
 }
 
-function enterOrExitLab(
-  isAcolyteInsideLab: boolean,
-  user: KaotikaUser,
-  setUser: SetUser,
-) {
-  setUser({ ...user, isInside: isAcolyteInsideLab });
+function enterOrExitLab(isAcolyteInsideLab: boolean, setUser: SetUser) {
+  setUser(prevUser => ({ ...prevUser!, isInside: isAcolyteInsideLab }));
 }
 
 export { handleAcolyteInsideOutsideLab, updateAcolytes };

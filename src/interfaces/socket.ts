@@ -39,6 +39,7 @@ interface ClientToServerEvents {
     AcolyteisInTowerEntrance: boolean,
   ) => void;
   [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: () => void;
+  [SocketClientToServerEvents.SCROLL_PRESS]: (isPressed: boolean) => void;
 }
 
 export type {

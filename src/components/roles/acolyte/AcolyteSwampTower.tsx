@@ -43,7 +43,7 @@ const AcolyteSwampTower = () => {
   };
 
   useEffect(() => {
-    const cleanup = listenForAcolyteAccess(user!, setUser);
+    const cleanup = listenForAcolyteAccess(setUser);
     return cleanup;
   }, []);
 
@@ -53,7 +53,10 @@ const AcolyteSwampTower = () => {
     useCallback(() => {
       if (mapNavigation === MapNavigation.SWAMP_TOWER) {
         function updateLocalAndDbUser(updatedIsInTowerEntrance: boolean) {
-          setUser({ ...user!, is_in_tower_entrance: updatedIsInTowerEntrance });
+          setUser(prevUser => ({
+            ...prevUser!,
+            is_in_tower_entrance: updatedIsInTowerEntrance,
+          }));
           updateAcolyteTowerEntranceStatus(updatedIsInTowerEntrance);
         }
 

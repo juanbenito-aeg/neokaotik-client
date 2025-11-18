@@ -83,6 +83,8 @@ const App = () => {
         setAcolytes,
         setModalData,
         ms,
+        user,
+        setUser,
       );
 
       messaging()
@@ -93,6 +95,9 @@ const App = () => {
             ms,
             remoteMessage,
             DeviceState.QUIT,
+            setAcolytes,
+            user,
+            setUser,
           );
         });
 
