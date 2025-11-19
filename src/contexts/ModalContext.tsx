@@ -1,4 +1,4 @@
 import { createContext } from 'react';
-import { SetGeneralModalMessage } from '../interfaces/GeneralModal';
+import { SetModalData } from '../interfaces/Modal';
 
-export const ModalContext = createContext<SetGeneralModalMessage | null>(null);
+export const ModalContext = createContext<SetModalData | null>(null);

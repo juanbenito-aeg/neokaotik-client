@@ -34,6 +34,7 @@ interface KaotikaUser {
   skills: Skill[];
   pushToken: string;
   card_id: string;
+  has_been_summoned_to_hos?: boolean;
 }
 
 interface CommonEquipmentFields {

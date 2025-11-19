@@ -1,3 +1,5 @@
+import { ModalData } from './interfaces/Modal';
+
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
   ACOLYTE_SWAMP_TOWER_ENTRANCE = require('../public/images/roles/acolyte/swamp-tower-entrance.png'),
@@ -16,6 +18,7 @@ enum ScreenBackgroundImgSrc {
   VILLAIN_SETTINGS = require('../public/images/roles/villain/settings.png'),
   MAP = require('../public/images/map.png'),
   OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
+  HALL_OF_SAGES = require('../public/images/hall-of-sages.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -28,6 +31,13 @@ enum ButtonBackgroundImgSrc {
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
+  SCROLL = require('../public/images/roles/acolyte/scroll.png'),
+  HALL_OF_SAGES = require('../public/images/the-hall-of-sages-icon.png'),
+}
+
+enum ModalBackgroundImgSrc {
+  FULL_SCREEN = require('../public/images/full-screen-modal.png'),
+  NORMAL = require('../public/images/normal-modal.png'),
 }
 
 enum UserRole {
@@ -57,6 +67,8 @@ enum SocketClientToServerEvents {
   CONNECTION_OPEN = 'connection open',
   ACCESS_TO_EXIT_FROM_LAB = 'access to/exit from lab',
   INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
+  SCROLL_PRESS = 'scroll press',
+  REMOVE_SPELL_PRESS = 'remove spell press',
 }
 
 enum MapNavigation {
@@ -66,8 +78,9 @@ enum MapNavigation {
 }
 
 enum OldSchoolLocation {
-  MAP,
-  ANGELO_LAB,
+  MAP = 'Map',
+  ANGELO_LAB = 'Angelo Lab',
+  HALL_OF_SAGES = 'The Hall of Sages',
 }
 
 enum DeviceState {
@@ -79,9 +92,22 @@ enum AsyncStorageKey {
   LAST_REMOTE_MSG_ID_AND_DEVICE_STATE = 'lastRemoteMessageIdAndDeviceState',
 }
 
+const DEFAULT_MODAL_DATA: ModalData = {
+  fullScreen: false,
+  content: {},
+  actionButtonText: 'Dismiss',
+};
+
+enum NotificationTitle {
+  SWAMP_TOWER = 'Swamp Tower',
+  ACOLYTE_DISCOVERY = 'Acolyte Discovery',
+  SUMMONED_HALL_SAGES = 'Summoned to The Hall of Sages',
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
+  ModalBackgroundImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,
@@ -91,4 +117,6 @@ export {
   OldSchoolLocation,
   DeviceState,
   AsyncStorageKey,
+  DEFAULT_MODAL_DATA,
+  NotificationTitle,
 };

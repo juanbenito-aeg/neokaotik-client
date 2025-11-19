@@ -1,6 +1,6 @@
-import { UserRole } from '../../constants';
+import { DEFAULT_MODAL_DATA, UserRole } from '../../constants';
 import { SetAcolytes } from '../../interfaces/Acolytes';
-import { SetGeneralModalMessage } from '../../interfaces/GeneralModal';
+import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import type { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
 import { SetUser } from '../../interfaces/UserContext';
@@ -8,16 +8,15 @@ import { SetUser } from '../../interfaces/UserContext';
 function handleAcolyteInsideOutsideLab(
   recipientRole: string,
   acolyteData: AcolyteDataAfterAccessExitLab,
-  setGeneralModalMessage?: SetGeneralModalMessage,
+  setModalData?: SetModalData,
   acolytes?: KaotikaUser[],
   setAcolytes?: SetAcolytes,
-  user?: KaotikaUser,
   setUser?: SetUser,
 ) {
   switch (recipientRole) {
     case UserRole.ISTVAN:
       displayAcolyteEnteredExitedModal(
-        setGeneralModalMessage!,
+        setModalData!,
         acolyteData.nickname,
         acolyteData.isInside,
       );
@@ -33,13 +32,13 @@ function handleAcolyteInsideOutsideLab(
       break;
 
     case UserRole.ACOLYTE:
-      enterOrExitLab(acolyteData.isInside, user!, setUser!);
+      enterOrExitLab(acolyteData.isInside, setUser!);
       break;
   }
 }
 
 function displayAcolyteEnteredExitedModal(
-  setGeneralModalMessage: SetGeneralModalMessage,
+  setModalData: SetModalData,
   acolyteNickname: string,
   isAcolyteInsideLab: boolean,
 ) {
@@ -47,7 +46,7 @@ function displayAcolyteEnteredExitedModal(
     isAcolyteInsideLab ? 'entered' : 'exited'
   } Angelo's laboratory.`;
 
-  setGeneralModalMessage(message);
+  setModalData({ ...DEFAULT_MODAL_DATA, content: { message } });
 }
 
 function updateAcolytes(
@@ -67,12 +66,8 @@ function updateAcolytes(
   setAcolytes(updatedAcolytes);
 }
 
-function enterOrExitLab(
-  isAcolyteInsideLab: boolean,
-  user: KaotikaUser,
-  setUser: SetUser,
-) {
-  setUser({ ...user, isInside: isAcolyteInsideLab });
+function enterOrExitLab(isAcolyteInsideLab: boolean, setUser: SetUser) {
+  setUser(prevUser => ({ ...prevUser!, isInside: isAcolyteInsideLab }));
 }
 
 export { handleAcolyteInsideOutsideLab, updateAcolytes };

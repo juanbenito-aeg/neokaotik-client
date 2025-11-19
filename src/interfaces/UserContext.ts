@@ -5,6 +5,6 @@ interface UserContextInterface {
   setUser: SetUser;
 }
 
-type SetUser = (user: KaotikaUser | null) => void;
+type SetUser = React.Dispatch<React.SetStateAction<KaotikaUser | null>>;
 
 export type { UserContextInterface, SetUser };

@@ -2,12 +2,15 @@ import { deviceTokenToRefresh } from './deviceToken';
 import { useContext } from 'react';
 import { ModalContext } from '../contexts/ModalContext';
 import { PermissionsAndroid } from 'react-native';
+import { DEFAULT_MODAL_DATA } from '../constants';
 
 export async function handleNotificationPermission(userEmail: string) {
-  const setGeneralModalMessage = useContext(ModalContext)!;
+  const setModalData = useContext(ModalContext)!;
+
   const hasPermission = await PermissionsAndroid.check(
     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
   );
+
   const result = await PermissionsAndroid.request(
     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
   );
@@ -21,8 +24,12 @@ export async function handleNotificationPermission(userEmail: string) {
     deviceTokenToRefresh(userEmail);
     return;
   } else if (result === PermissionsAndroid.RESULTS.DENIED) {
-    setGeneralModalMessage(
-      'You have to enable notifications from system settings to receive alerts.',
-    );
+    setModalData({
+      ...DEFAULT_MODAL_DATA,
+      content: {
+        message:
+          'You have to enable notifications from system settings to receive alerts.',
+      },
+    });
   }
 }

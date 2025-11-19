@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Login from './Login';
 import SplashScreen from './SplashScreen';
 import { authenticateUser } from '../helpers/auth.helpers';
-import GeneralModal from './GeneralModal';
+import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
 import { UserContext } from '../contexts/UserContext';
@@ -12,7 +12,7 @@ import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { DeviceState, UserRole } from '../constants';
+import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
@@ -22,18 +22,26 @@ import {
 } from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
-  moveUserToNotificationDestination,
   setNotificationHandlers,
+  handleBackgroundOrQuitNotification,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
+import { ModalData } from '../interfaces/Modal';
+import useMetrics from '../hooks/use-metrics';
 
 const App = () => {
-  const [generalModalMessage, setGeneralModalMessage] = useState<string>('');
+  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
   const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  const { ms } = useMetrics();
+
+  DEFAULT_MODAL_DATA.onPressActionButton = () => {
+    setModalData(null);
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -71,12 +79,26 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      const unsubscribe = setNotificationHandlers(setAcolytes);
+      const unsubscribe = setNotificationHandlers(
+        setAcolytes,
+        setModalData,
+        ms,
+        user,
+        setUser,
+      );
 
       messaging()
         .getInitialNotification()
         .then(remoteMessage => {
-          moveUserToNotificationDestination(remoteMessage, DeviceState.QUIT);
+          handleBackgroundOrQuitNotification(
+            setModalData,
+            ms,
+            remoteMessage,
+            DeviceState.QUIT,
+            setAcolytes,
+            user,
+            setUser,
+          );
         });
 
       return unsubscribe;
@@ -105,9 +127,13 @@ const App = () => {
       } else {
         await GoogleAuth.signOut();
 
-        setGeneralModalMessage(
-          'Whoops! You have been logged out because your identity could not be verified.',
-        );
+        setModalData({
+          ...DEFAULT_MODAL_DATA,
+          content: {
+            message:
+              'Whoops! You have been logged out because your identity could not be verified.',
+          },
+        });
       }
     }
 
@@ -176,33 +202,32 @@ const App = () => {
   return (
     <UserContext value={{ user, setUser }}>
       <SafeAreaView>
-        <GeneralModal
-          message={generalModalMessage}
-          setMessage={setGeneralModalMessage}
+        <Modal
+          fullScreen={modalData?.fullScreen}
+          content={modalData?.content}
+          onPressActionButton={modalData?.onPressActionButton}
+          actionButtonText={modalData?.actionButtonText}
         />
 
-        <IsLoadingContext value={{ isLoading, setIsLoading }}>
-          {isConfigured ? (
-            !user ? (
-              <>
-                <Login
-                  setUser={setUser}
-                  setGeneralModalMessage={setGeneralModalMessage}
-                />
+        <ModalContext value={setModalData}>
+          <IsLoadingContext value={{ isLoading, setIsLoading }}>
+            {isConfigured ? (
+              !user ? (
+                <>
+                  <Login setUser={setUser} />
 
-                {isLoading && <CircleSpinner />}
-              </>
-            ) : (
-              <AcolytesContext value={{ acolytes, setAcolytes }}>
-                <ModalContext value={setGeneralModalMessage}>
+                  {isLoading && <CircleSpinner />}
+                </>
+              ) : (
+                <AcolytesContext value={{ acolytes, setAcolytes }}>
                   <Main />
-                </ModalContext>
-              </AcolytesContext>
-            )
-          ) : (
-            <SplashScreen />
-          )}
-        </IsLoadingContext>
+                </AcolytesContext>
+              )
+            ) : (
+              <SplashScreen />
+            )}
+          </IsLoadingContext>
+        </ModalContext>
       </SafeAreaView>
     </UserContext>
   );
