@@ -5,6 +5,8 @@ import styled from 'styled-components/native';
 import type { HS, MS, VS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
 import { ModalBackgroundImgSrc } from '../constants';
+import { getToastConfig } from '../helpers/fcm.helpers';
+import Toast from 'react-native-toast-message';
 
 const Container = styled.View`
   height: 100%;
@@ -62,6 +64,8 @@ const Modal = ({
 }: ModalData) => {
   const { hs, vs, ms } = useMetrics();
 
+  const toastConfig = getToastConfig(ms);
+
   return (
     <NativeModal
       animationType="fade"
@@ -98,6 +102,8 @@ const Modal = ({
           </Content>
         </BackgroundImage>
       </Container>
+
+      <Toast config={toastConfig} />
     </NativeModal>
   );
 };
