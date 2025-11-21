@@ -15,6 +15,7 @@ import useMetrics from '../../../hooks/use-metrics';
 import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
+import Header from '../../Header';
 
 const ScannerContainer = styled.View`
   height: 100%;
@@ -31,6 +32,13 @@ const QRWrapper = styled.View`
 const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { user, setUser } = useContext(UserContext)!;
   const isInside = user!.isInside;
+
+  const screenData = {
+    backgroundImgSrc: isInside
+      ? ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB
+      : ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB_ENTRANCE,
+    headerText: `Angelo's Laboratory (${isInside ? 'Interior' : 'Entrance'})`,
+  };
 
   const navigation = useNavigation();
   const tabBarStyle = useContext(TabBarStyleContext);
@@ -65,11 +73,11 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   );
 
   return (
-    <>
+    <ScreenContainer backgroundImgSrc={screenData.backgroundImgSrc}>
+      <Header>{screenData.headerText}</Header>
+
       {isInside ? (
-        <ScreenContainer
-          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB}
-        >
+        <>
           <Button
             onPress={() => setShowQR(!showQR)}
             backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
@@ -79,19 +87,17 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
           <QRWrapper>
             {showQR && QRToScan(user!.email, user!.isInside)}
           </QRWrapper>
-        </ScreenContainer>
+        </>
       ) : (
-        <ScreenContainer
-          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_ANGELO_LAB_ENTRANCE}
-        >
+        <>
           <ScannerContainer>
             <>{QRToScan(user!.email, user!.isInside)}</>
           </ScannerContainer>
 
           <GoBackButton onPress={onPressGoBackButton} />
-        </ScreenContainer>
+        </>
       )}
-    </>
+    </ScreenContainer>
   );
 };
 

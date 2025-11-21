@@ -21,14 +21,14 @@ import useMetrics from '../../../hooks/use-metrics';
 import Button from '../../Button';
 import * as Animatable from 'react-native-animatable';
 import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
+import Header from '../../Header';
+import { MS } from '../../../interfaces/Metrics';
 
-const TextWrapper = styled.View`
+const TextWrapper = styled.View<{ $ms: MS }>`
   width: 70%;
   height: 40%;
-  position: relative;
-  justify-content: top;
-  align-items: center;
-  letter-spacing: 2;
+  position: absolute;
+  top: ${({ $ms }) => $ms(187.5, 0.9)}px;
 `;
 
 const AcolyteSwampTower = () => {
@@ -40,6 +40,16 @@ const AcolyteSwampTower = () => {
   const textStyle: TextStyle & ViewStyle = {
     color: 'white',
     fontSize: ms(30, 1),
+  };
+
+  const screenData = {
+    backgroundImgSrc:
+      isInsideTower && !isInTowerEntrance
+        ? ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_INTERIOR
+        : ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_ENTRANCE,
+    headerText: `Swamp Tower (${
+      isInsideTower && !isInTowerEntrance ? 'Interior' : 'Entrance'
+    })`,
   };
 
   useEffect(() => {
@@ -90,7 +100,7 @@ const AcolyteSwampTower = () => {
     position: 'absolute',
     top: '25%',
     transform: [{ translateY: '-50%' }],
-    filter: 'drop-shadow(0 0 30px #ffd736ff)',
+    filter: 'drop-shadow(0 0 5px rgb(0 0 0))',
   };
 
   const handleScrollClick = () => {
@@ -99,45 +109,42 @@ const AcolyteSwampTower = () => {
   };
 
   return (
-    <>
-      {isInsideTower && !isInTowerEntrance && (
-        <ScreenContainer
-          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_INTERIOR}
-        >
-          {!hasClickedScroll && !user?.has_been_summoned_to_hos && (
-            <Animatable.View
-              animation="pulse"
-              iterationCount="infinite"
-              easing="ease-in-out"
-              duration={1000}
-              style={{
-                transform: [{ scale: 1.1 }],
-              }}
-            >
-              <Button
-                customStyleObj={buttonCustomStyleObj}
-                onPress={handleScrollClick}
-                backgroundImgSrc={ButtonBackgroundImgSrc.SCROLL}
-              />
-            </Animatable.View>
-          )}
-        </ScreenContainer>
-      )}
+    <ScreenContainer backgroundImgSrc={screenData.backgroundImgSrc}>
+      <Header>{screenData.headerText}</Header>
+
+      {isInsideTower &&
+        !isInTowerEntrance &&
+        !hasClickedScroll &&
+        !user?.has_been_summoned_to_hos && (
+          <Animatable.View
+            animation="pulse"
+            iterationCount="infinite"
+            easing="ease-in-out"
+            duration={1000}
+            style={{
+              transform: [{ scale: 1.1 }],
+            }}
+          >
+            <Button
+              customStyleObj={buttonCustomStyleObj}
+              onPress={handleScrollClick}
+              backgroundImgSrc={ButtonBackgroundImgSrc.SCROLL}
+            />
+          </Animatable.View>
+        )}
 
       {isInTowerEntrance && !isInsideTower && (
-        <ScreenContainer
-          backgroundImgSrc={ScreenBackgroundImgSrc.ACOLYTE_SWAMP_TOWER_ENTRANCE}
-        >
+        <>
           <GoBackButton onPress={handlePress} />
-          <TextWrapper>
+          <TextWrapper $ms={ms}>
             <Text style={textStyle}>
-              Unveil your credentials, and the gates of the Tower shall
+              Unveil your credentials, and the gates of the tower shall
               recognize your worth
             </Text>
           </TextWrapper>
-        </ScreenContainer>
+        </>
       )}
-    </>
+    </ScreenContainer>
   );
 };
 
