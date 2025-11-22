@@ -202,13 +202,6 @@ const App = () => {
   return (
     <UserContext value={{ user, setUser }}>
       <SafeAreaView>
-        <Modal
-          fullScreen={modalData?.fullScreen}
-          content={modalData?.content}
-          onPressActionButton={modalData?.onPressActionButton}
-          actionButtonText={modalData?.actionButtonText}
-        />
-
         <ModalContext value={setModalData}>
           <IsLoadingContext value={{ isLoading, setIsLoading }}>
             {isConfigured ? (
@@ -228,6 +221,13 @@ const App = () => {
             )}
           </IsLoadingContext>
         </ModalContext>
+
+        <Modal
+          fullScreen={modalData?.fullScreen}
+          content={modalData?.content}
+          onPressActionButton={modalData?.onPressActionButton}
+          actionButtonText={modalData?.actionButtonText}
+        />
       </SafeAreaView>
     </UserContext>
   );
