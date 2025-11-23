@@ -1,3 +1,5 @@
+import { ArtifactId } from './Artifact';
+
 interface CommonAttributesAndModifiers {
   intelligence: number;
   dexterity: number;
@@ -35,6 +37,9 @@ interface KaotikaUser {
   pushToken: string;
   card_id: string;
   has_been_summoned_to_hos?: boolean;
+  has_completed_artifacts_search?: boolean;
+  is_inside_hs?: boolean;
+  found_artifacts?: ArtifactId[];
 }
 
 interface CommonEquipmentFields {
