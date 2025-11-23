@@ -40,6 +40,12 @@ interface KaotikaUser {
   has_completed_artifacts_search?: boolean;
   is_inside_hs?: boolean;
   found_artifacts?: ArtifactId[];
+  location?: Location;
+}
+
+interface Location {
+  type: string;
+  coordinates: number[];
 }
 
 interface CommonEquipmentFields {
