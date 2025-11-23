@@ -104,6 +104,11 @@ enum NotificationTitle {
   SUMMONED_HALL_SAGES = 'Summoned to The Hall of Sages',
 }
 
+enum ArtifactState {
+  ACTIVE = 'active',
+  COLLECTED = 'collected',
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -119,4 +124,5 @@ export {
   AsyncStorageKey,
   DEFAULT_MODAL_DATA,
   NotificationTitle,
+  ArtifactState,
 };
