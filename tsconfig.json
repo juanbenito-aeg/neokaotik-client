@@ -2,7 +2,10 @@
   "extends": "@react-native/typescript-config",
   "compilerOptions": {
     "strict": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "paths": {
+      "images/*": ["./public/images/*"]
+    }
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["**/node_modules", "**/Pods"]
