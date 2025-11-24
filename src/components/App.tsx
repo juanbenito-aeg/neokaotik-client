@@ -41,6 +41,7 @@ const App = () => {
 
   const userRef = useRef(user);
 
+  const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const { ms } = useMetrics();
@@ -58,6 +59,34 @@ const App = () => {
   useEffect(() => {
     userRef.current = user;
   }, [user]);
+
+  // Make a call to the API to get acolytes & save them locally
+  useEffect(() => {
+    if (user) {
+      (async () => {
+        setIsLoading(true);
+
+        const acolytesArray = await getAcolytes();
+
+        setIsLoading(false);
+
+        setAcolytes(acolytesArray);
+      })();
+    }
+  }, [user]);
+
+  async function getAcolytes(): Promise<KaotikaUser[]> {
+    const url = 'https://neokaotik-server.onrender.com/user/get-acolytes/';
+    const response = await fetch(url);
+
+    let acolytesArray = [];
+
+    if (response.ok) {
+      acolytesArray = await response.json();
+    }
+
+    return acolytesArray;
+  }
 
   useEffect(() => {
     if (user) {
@@ -164,23 +193,15 @@ const App = () => {
   async function setMortimerUp(
     mortimerEventListenersCleaners: EventListenersCleaners,
   ) {
-    setIsLoading(true);
-
-    const acolytesArray = await getAcolytes();
-
-    setIsLoading(false);
-
-    setAcolytes(acolytesArray);
-
     const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
       UserRole.MORTIMER,
       undefined,
-      acolytesArray,
+      acolytes,
       setAcolytes,
     );
 
     const clearAcolyteDisconnected = listenForAcolyteDisconnected(
-      acolytesArray,
+      acolytes,
       setAcolytes,
     );
 
@@ -190,19 +211,6 @@ const App = () => {
     );
 
     return mortimerEventListenersCleaners;
-  }
-
-  async function getAcolytes(): Promise<KaotikaUser[]> {
-    const url = 'https://neokaotik-server.onrender.com/user/get-acolytes/';
-    const response = await fetch(url);
-
-    let acolytesArray = [];
-
-    if (response.ok) {
-      acolytesArray = await response.json();
-    }
-
-    return acolytesArray;
   }
 
   return (
