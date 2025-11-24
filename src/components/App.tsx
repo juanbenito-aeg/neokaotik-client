@@ -6,15 +6,11 @@ import { authenticateUser } from '../helpers/auth.helpers';
 import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
-import { UserContext } from '../contexts/UserContext';
 import CircleSpinner from './Spinner';
-import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
-import AcolytesContext from '../contexts/AcolytesContext';
-import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
 import {
   listenForAcolyteDisconnected,
@@ -26,16 +22,26 @@ import {
   handleBackgroundOrQuitNotification,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
-import { ModalData } from '../interfaces/Modal';
 import useMetrics from '../hooks/use-metrics';
+import usePlayerStore from '../store/usePlayerStore';
+import { useModalStore } from '../store/useModalStore';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const App = () => {
-  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<KaotikaUser | null>(null);
+
+  const modalData = useModalStore(state => state.modalData);
+  const setModalData = useModalStore(state => state.setModalData);
+
+  const isLoading = useIsLoadingStore(state => state.isLoading);
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
   const userRef = useRef(user);
-  const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const { ms } = useMetrics();
 
@@ -200,36 +206,28 @@ const App = () => {
   }
 
   return (
-    <UserContext value={{ user, setUser }}>
-      <SafeAreaView>
-        <Modal
-          fullScreen={modalData?.fullScreen}
-          content={modalData?.content}
-          onPressActionButton={modalData?.onPressActionButton}
-          actionButtonText={modalData?.actionButtonText}
-        />
+    <SafeAreaView>
+      <Modal
+        fullScreen={modalData?.fullScreen}
+        content={modalData?.content}
+        onPressActionButton={modalData?.onPressActionButton}
+        actionButtonText={modalData?.actionButtonText}
+      />
 
-        <ModalContext value={setModalData}>
-          <IsLoadingContext value={{ isLoading, setIsLoading }}>
-            {isConfigured ? (
-              !user ? (
-                <>
-                  <Login setUser={setUser} />
+      {isConfigured ? (
+        !user ? (
+          <>
+            <Login />
 
-                  {isLoading && <CircleSpinner />}
-                </>
-              ) : (
-                <AcolytesContext value={{ acolytes, setAcolytes }}>
-                  <Main />
-                </AcolytesContext>
-              )
-            ) : (
-              <SplashScreen />
-            )}
-          </IsLoadingContext>
-        </ModalContext>
-      </SafeAreaView>
-    </UserContext>
+            {isLoading && <CircleSpinner />}
+          </>
+        ) : (
+          <Main />
+        )
+      ) : (
+        <SplashScreen />
+      )}
+    </SafeAreaView>
   );
 };
 

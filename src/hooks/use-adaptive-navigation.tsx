@@ -1,5 +1,4 @@
-import { useContext, useMemo } from 'react';
-import { UserContext } from '../contexts/UserContext';
+import { useMemo } from 'react';
 import AcolyteHome from '../components/roles/acolyte/AcolyteHome';
 import AcolyteSettings from '../components/roles/acolyte/AcolyteSettings';
 import { createStaticNavigation } from '@react-navigation/native';
@@ -16,6 +15,7 @@ import { AdaptiveNavigatorData } from '../interfaces/Navigation';
 import Map from '../components/maps/Map';
 import { Tab, UserRole } from '../constants';
 import useMetrics from './use-metrics';
+import usePlayerStore from '../store/usePlayerStore';
 
 const TabIcon = styled.Image<{
   $widthHeight: number;
@@ -79,7 +79,7 @@ function createNavigatorAdaptedToUserRole(
 }
 
 export default function useAdaptiveNavigation() {
-  const { user } = useContext(UserContext)!;
+  const user = usePlayerStore(state => state.user);
 
   const { ms } = useMetrics();
 

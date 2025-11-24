@@ -21,12 +21,12 @@ import {
 } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SetAcolytes } from '../interfaces/Acolytes';
+import { SetAcolytes } from '../interfaces/player';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
 import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
-import { SetUser } from '../interfaces/UserContext';
+import { SetUser } from '../interfaces/player';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(

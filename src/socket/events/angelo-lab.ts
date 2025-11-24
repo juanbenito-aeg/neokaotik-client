@@ -1,5 +1,5 @@
 import { SocketServerToClientEvents } from '../../constants';
-import { SetAcolytes } from '../../interfaces/Acolytes';
+import { SetAcolytes } from '../../interfaces/player';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
@@ -7,7 +7,7 @@ import {
   handleAcolyteInsideOutsideLab,
   updateAcolytes,
 } from '../handlers/angelo-lab';
-import { SetUser } from '../../interfaces/UserContext';
+import { SetUser } from '../../interfaces/player';
 import { socket } from '../socket';
 
 function listenForAcolyteInsideOutsideLab(
