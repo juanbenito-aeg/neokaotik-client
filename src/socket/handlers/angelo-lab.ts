@@ -3,7 +3,7 @@ import { SetAcolytes } from '../../interfaces/Acolytes';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import type { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';
-import { SetUser } from '../../interfaces/UserContext';
+import { SetUser } from '../../interfaces/player';
 
 function handleAcolyteInsideOutsideLab(
   recipientRole: string,

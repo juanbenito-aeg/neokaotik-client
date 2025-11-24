@@ -7,7 +7,7 @@ import {
   handleAcolyteInsideOutsideLab,
   updateAcolytes,
 } from '../handlers/angelo-lab';
-import { SetUser } from '../../interfaces/UserContext';
+import { SetUser } from '../../interfaces/player';
 import { socket } from '../socket';
 
 function listenForAcolyteInsideOutsideLab(

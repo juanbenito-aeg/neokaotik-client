@@ -6,7 +6,6 @@ import { authenticateUser } from '../helpers/auth.helpers';
 import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
-import { UserContext } from '../contexts/UserContext';
 import CircleSpinner from './Spinner';
 import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
@@ -28,14 +27,18 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import { ModalData } from '../interfaces/Modal';
 import useMetrics from '../hooks/use-metrics';
+import usePlayerStore from '../store/usePlayerStore';
 
 const App = () => {
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<KaotikaUser | null>(null);
-  const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
+  const userRef = useRef(user);
 
   const { ms } = useMetrics();
 
@@ -200,36 +203,34 @@ const App = () => {
   }
 
   return (
-    <UserContext value={{ user, setUser }}>
-      <SafeAreaView>
-        <Modal
-          fullScreen={modalData?.fullScreen}
-          content={modalData?.content}
-          onPressActionButton={modalData?.onPressActionButton}
-          actionButtonText={modalData?.actionButtonText}
-        />
+    <SafeAreaView>
+      <Modal
+        fullScreen={modalData?.fullScreen}
+        content={modalData?.content}
+        onPressActionButton={modalData?.onPressActionButton}
+        actionButtonText={modalData?.actionButtonText}
+      />
 
-        <ModalContext value={setModalData}>
-          <IsLoadingContext value={{ isLoading, setIsLoading }}>
-            {isConfigured ? (
-              !user ? (
-                <>
-                  <Login setUser={setUser} />
+      <ModalContext value={setModalData}>
+        <IsLoadingContext value={{ isLoading, setIsLoading }}>
+          {isConfigured ? (
+            !user ? (
+              <>
+                <Login />
 
-                  {isLoading && <CircleSpinner />}
-                </>
-              ) : (
-                <AcolytesContext value={{ acolytes, setAcolytes }}>
-                  <Main />
-                </AcolytesContext>
-              )
+                {isLoading && <CircleSpinner />}
+              </>
             ) : (
-              <SplashScreen />
-            )}
-          </IsLoadingContext>
-        </ModalContext>
-      </SafeAreaView>
-    </UserContext>
+              <AcolytesContext value={{ acolytes, setAcolytes }}>
+                <Main />
+              </AcolytesContext>
+            )
+          ) : (
+            <SplashScreen />
+          )}
+        </IsLoadingContext>
+      </ModalContext>
+    </SafeAreaView>
   );
 };
 

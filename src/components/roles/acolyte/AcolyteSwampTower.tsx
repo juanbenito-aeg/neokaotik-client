@@ -5,7 +5,6 @@ import {
   ScreenBackgroundImgSrc,
 } from '../../../constants';
 import ScreenContainer from '../../ScreenContainer';
-import { UserContext } from '../../../contexts/UserContext';
 import Text from '../../Text';
 import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
@@ -21,6 +20,7 @@ import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
 import Header from '../../Header';
 import { MS } from '../../../interfaces/Metrics';
 import { useMapStore } from '../../../store/useMapStore';
+import usePlayerStore from '../../../store/usePlayerStore';
 
 const TextWrapper = styled.View<{ $ms: MS }>`
   width: 70%;
@@ -30,11 +30,16 @@ const TextWrapper = styled.View<{ $ms: MS }>`
 `;
 
 const AcolyteSwampTower = () => {
-  const { ms } = useMetrics();
-  const { user, setUser } = useContext(UserContext)!;
+  const [hasClickedScroll, setHasClickedScroll] = useState(false);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
   const isInTowerEntrance = user!.is_in_tower_entrance;
   const isInsideTower = user!.is_inside_tower;
-  const [hasClickedScroll, setHasClickedScroll] = useState(false);
+
+  const { ms } = useMetrics();
+
   const textStyle: TextStyle & ViewStyle = {
     color: 'white',
     fontSize: ms(30, 1),

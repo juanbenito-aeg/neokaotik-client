@@ -11,18 +11,18 @@ import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import {
   EventMapCore,
   NavigationState,
   useNavigation,
 } from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
-import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 import { useMapStore } from '../../store/useMapStore';
+import usePlayerStore from '../../store/usePlayerStore';
 
 const Map = ({ route }: MapProps) => {
   const mapNavigation = useMapStore(state => state.mapNavigation);
@@ -30,7 +30,8 @@ const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
     useState<OldSchoolLocation | null>(null);
 
-  const { user, setUser } = useContext(UserContext)!;
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
 
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;

@@ -1,7 +1,7 @@
 import { SocketServerToClientEvents } from '../../constants';
 import { AcolyteDataToAccessOrExitTower } from '../../interfaces/socket';
 import { socket } from '../socket';
-import { SetUser } from '../../interfaces/UserContext';
+import { SetUser } from '../../interfaces/player';
 
 function listenForAcolyteAccess(setUser: SetUser) {
   socket.on(

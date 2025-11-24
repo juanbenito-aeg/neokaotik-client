@@ -1,5 +1,4 @@
 import { GoogleAuth } from 'react-native-google-auth';
-import type { LoginProps } from '../interfaces/Login';
 import styled from 'styled-components/native';
 import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
@@ -10,6 +9,7 @@ import IsLoadingContext from '../contexts/IsLoadingContext';
 import { getDeviceToken } from '../fcm/deviceToken';
 import { ModalContext } from '../contexts/ModalContext';
 import { ModalData } from '../interfaces/Modal';
+import usePlayerStore from '../store/usePlayerStore';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -18,9 +18,11 @@ const BackgroundImage = styled.ImageBackground`
   align-items: center;
 `;
 
-const Login = ({ setUser }: LoginProps) => {
+const Login = () => {
   const setModalData = useContext(ModalContext)!;
   const { setIsLoading } = useContext(IsLoadingContext)!;
+
+  const setUser = usePlayerStore(state => state.setUser);
 
   async function logIn() {
     const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
