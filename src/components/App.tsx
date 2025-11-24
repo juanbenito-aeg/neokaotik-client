@@ -12,7 +12,6 @@ import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
-import AcolytesContext from '../contexts/AcolytesContext';
 import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
 import {
@@ -33,12 +32,13 @@ const App = () => {
   const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
 
   const user = usePlayerStore(state => state.user);
   const setUser = usePlayerStore(state => state.setUser);
 
   const userRef = useRef(user);
+
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const { ms } = useMetrics();
 
@@ -221,9 +221,7 @@ const App = () => {
                 {isLoading && <CircleSpinner />}
               </>
             ) : (
-              <AcolytesContext value={{ acolytes, setAcolytes }}>
-                <Main />
-              </AcolytesContext>
+              <Main />
             )
           ) : (
             <SplashScreen />

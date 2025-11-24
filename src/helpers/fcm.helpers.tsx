@@ -21,7 +21,7 @@ import {
 } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SetAcolytes } from '../interfaces/Acolytes';
+import { SetAcolytes } from '../interfaces/player';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
 import { socket } from '../socket/socket';

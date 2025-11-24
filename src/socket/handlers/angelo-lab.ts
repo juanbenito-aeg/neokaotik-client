@@ -1,5 +1,5 @@
 import { DEFAULT_MODAL_DATA, UserRole } from '../../constants';
-import { SetAcolytes } from '../../interfaces/Acolytes';
+import { SetAcolytes } from '../../interfaces/player';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import type { AcolyteDataAfterAccessExitLab } from '../../interfaces/socket';

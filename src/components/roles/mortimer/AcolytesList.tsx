@@ -1,5 +1,4 @@
-import { useContext, useEffect } from 'react';
-import AcolytesContext from '../../../contexts/AcolytesContext';
+import { useContext } from 'react';
 import AcolytesListItem from './AcolytesListItem';
 import { ScrollView } from 'react-native';
 import KaotikaUser from '../../../interfaces/KaotikaUser';
@@ -10,6 +9,7 @@ import CircleSpinner from '../../Spinner';
 import GoBackButton from '../../GoBackButton';
 import Header from '../../Header';
 import useMetrics from '../../../hooks/use-metrics';
+import usePlayerStore from '../../../store/usePlayerStore';
 
 const AcolytesList = ({
   onPressGoBackButton,
@@ -18,7 +18,8 @@ const AcolytesList = ({
   fieldToFilterAcolytesBy,
 }: AcolytesListProps) => {
   const { isLoading } = useContext(IsLoadingContext)!;
-  const { acolytes } = useContext(AcolytesContext)!;
+
+  const acolytes = usePlayerStore(state => state.acolytes);
 
   const { ms } = useMetrics();
 
