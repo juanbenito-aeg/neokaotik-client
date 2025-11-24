@@ -14,8 +14,7 @@ import {
   Code,
 } from 'react-native-vision-camera';
 import { StyleSheet, ViewStyle } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
-import { ModalContext } from '../../../contexts/ModalContext';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../../Button';
 import useMetrics from '../../../hooks/use-metrics';
@@ -24,11 +23,12 @@ import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
 import { useMapStore } from '../../../store/useMapStore';
+import { useModalStore } from '../../../store/useModalStore';
 
 const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
-  const setModalData = useContext(ModalContext)!;
+  const setModalData = useModalStore(state => state.setModalData);
 
   useEffect(() => {
     const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(

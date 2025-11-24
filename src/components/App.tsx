@@ -8,7 +8,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
 import { UserContext } from '../contexts/UserContext';
 import CircleSpinner from './Spinner';
-import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
@@ -26,11 +25,12 @@ import {
   handleBackgroundOrQuitNotification,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
-import { ModalData } from '../interfaces/Modal';
 import useMetrics from '../hooks/use-metrics';
+import { useModalStore } from '../store/useModalStore';
 
 const App = () => {
-  const [modalData, setModalData] = useState<ModalData | null>(null);
+  const modalData = useModalStore(state => state.modalData);
+  const setModalData = useModalStore(state => state.setModalData);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [user, setUser] = useState<KaotikaUser | null>(null);
@@ -209,25 +209,23 @@ const App = () => {
           actionButtonText={modalData?.actionButtonText}
         />
 
-        <ModalContext value={setModalData}>
-          <IsLoadingContext value={{ isLoading, setIsLoading }}>
-            {isConfigured ? (
-              !user ? (
-                <>
-                  <Login setUser={setUser} />
+        <IsLoadingContext value={{ isLoading, setIsLoading }}>
+          {isConfigured ? (
+            !user ? (
+              <>
+                <Login setUser={setUser} />
 
-                  {isLoading && <CircleSpinner />}
-                </>
-              ) : (
-                <AcolytesContext value={{ acolytes, setAcolytes }}>
-                  <Main />
-                </AcolytesContext>
-              )
+                {isLoading && <CircleSpinner />}
+              </>
             ) : (
-              <SplashScreen />
-            )}
-          </IsLoadingContext>
-        </ModalContext>
+              <AcolytesContext value={{ acolytes, setAcolytes }}>
+                <Main />
+              </AcolytesContext>
+            )
+          ) : (
+            <SplashScreen />
+          )}
+        </IsLoadingContext>
       </SafeAreaView>
     </UserContext>
   );
