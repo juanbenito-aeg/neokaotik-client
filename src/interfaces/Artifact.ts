@@ -1,11 +1,5 @@
 import { ArtifactState } from '../constants';
-
-type ArtifactId = string;
-
-interface Location {
-  type: 'Point';
-  coordinates: number[];
-}
+import { Location } from './geolocalization';
 
 interface Artifact {
   _id: ArtifactId;
@@ -15,4 +9,6 @@ interface Artifact {
   location: Location;
 }
 
-export type { ArtifactId, Artifact };
+type ArtifactId = string;
+
+export type { Artifact, ArtifactId };

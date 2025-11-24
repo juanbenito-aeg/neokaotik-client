@@ -1,4 +1,5 @@
 import { ArtifactId } from './Artifact';
+import { Location } from './geolocalization';
 
 interface CommonAttributesAndModifiers {
   intelligence: number;
@@ -41,11 +42,6 @@ interface KaotikaUser {
   is_inside_hs?: boolean;
   found_artifacts?: ArtifactId[];
   location?: Location;
-}
-
-interface Location {
-  type: string;
-  coordinates: number[];
 }
 
 interface CommonEquipmentFields {
