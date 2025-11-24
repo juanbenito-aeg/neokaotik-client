@@ -4,12 +4,12 @@ import AcolytesListItem from './AcolytesListItem';
 import { ScrollView } from 'react-native';
 import KaotikaUser from '../../../interfaces/KaotikaUser';
 import { AcolytesListProps } from '../../../interfaces/AcolytesList';
-import IsLoadingContext from '../../../contexts/IsLoadingContext';
 import ScreenContainer from '../../ScreenContainer';
 import CircleSpinner from '../../Spinner';
 import GoBackButton from '../../GoBackButton';
 import Header from '../../Header';
 import useMetrics from '../../../hooks/use-metrics';
+import { useIsLoadingStore } from '../../../store/useIsLoadingStore';
 
 const AcolytesList = ({
   onPressGoBackButton,
@@ -17,7 +17,7 @@ const AcolytesList = ({
   headerText,
   fieldToFilterAcolytesBy,
 }: AcolytesListProps) => {
-  const { isLoading } = useContext(IsLoadingContext)!;
+  const isLoading = useIsLoadingStore(state => state.isLoading);
   const { acolytes } = useContext(AcolytesContext)!;
 
   const { ms } = useMetrics();

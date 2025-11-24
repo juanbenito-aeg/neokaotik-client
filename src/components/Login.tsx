@@ -6,10 +6,10 @@ import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
 import { useContext } from 'react';
-import IsLoadingContext from '../contexts/IsLoadingContext';
 import { getDeviceToken } from '../fcm/deviceToken';
 import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -20,7 +20,7 @@ const BackgroundImage = styled.ImageBackground`
 
 const Login = ({ setUser }: LoginProps) => {
   const setModalData = useModalStore(state => state.setModalData);
-  const { setIsLoading } = useContext(IsLoadingContext)!;
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
 
   async function logIn() {
     const modalData: ModalData = { ...DEFAULT_MODAL_DATA };

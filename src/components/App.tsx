@@ -13,7 +13,6 @@ import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket, performSocketCleanUp } from '../socket/socket';
 import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
 import AcolytesContext from '../contexts/AcolytesContext';
-import IsLoadingContext from '../contexts/IsLoadingContext';
 import { EventListenersCleaners } from '../interfaces/App';
 import {
   listenForAcolyteDisconnected,
@@ -27,12 +26,14 @@ import {
 import messaging from '@react-native-firebase/messaging';
 import useMetrics from '../hooks/use-metrics';
 import { useModalStore } from '../store/useModalStore';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const App = () => {
   const modalData = useModalStore(state => state.modalData);
   const setModalData = useModalStore(state => state.setModalData);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const isLoading = useIsLoadingStore(state => state.isLoading);
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
   const [user, setUser] = useState<KaotikaUser | null>(null);
   const userRef = useRef(user);
   const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
@@ -209,23 +210,21 @@ const App = () => {
           actionButtonText={modalData?.actionButtonText}
         />
 
-        <IsLoadingContext value={{ isLoading, setIsLoading }}>
-          {isConfigured ? (
-            !user ? (
-              <>
-                <Login setUser={setUser} />
+        {isConfigured ? (
+          !user ? (
+            <>
+              <Login setUser={setUser} />
 
-                {isLoading && <CircleSpinner />}
-              </>
-            ) : (
-              <AcolytesContext value={{ acolytes, setAcolytes }}>
-                <Main />
-              </AcolytesContext>
-            )
+              {isLoading && <CircleSpinner />}
+            </>
           ) : (
-            <SplashScreen />
-          )}
-        </IsLoadingContext>
+            <AcolytesContext value={{ acolytes, setAcolytes }}>
+              <Main />
+            </AcolytesContext>
+          )
+        ) : (
+          <SplashScreen />
+        )}
       </SafeAreaView>
     </UserContext>
   );
