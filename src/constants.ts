@@ -30,6 +30,7 @@ enum ButtonBackgroundImgSrc {
   OLD_SCHOOL = require('../public/images/old-school-icon.png'),
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
+  SWAMP = require('../public/images/swamp-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
   SCROLL = require('../public/images/roles/acolyte/scroll.png'),
   HALL_OF_SAGES = require('../public/images/the-hall-of-sages-icon.png'),
@@ -74,6 +75,7 @@ enum SocketClientToServerEvents {
 enum MapNavigation {
   MAP = 'Map',
   OLD_SCHOOL_MAP = 'Old School Map',
+  SWAMP = 'Swamp',
   SWAMP_TOWER = 'Swamp Tower',
 }
 

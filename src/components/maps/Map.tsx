@@ -26,6 +26,7 @@ import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
+import Swamp from '../Swamp';
 
 const Map = ({ route }: MapProps) => {
   const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
@@ -80,10 +81,26 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
             />
 
+            <Button
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                top: '50%',
+                left: '48%',
+              }}
+              onPress={() => {
+                handlePress(MapNavigation.SWAMP);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP}
+            />
+
             {(user!.rol === UserRole.ACOLYTE ||
               user!.rol === UserRole.MORTIMER) && (
               <Button
-                customStyleObj={{ ...buttonCustomStyleObj, top: '60%' }}
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '67%',
+                  left: '46.5%',
+                }}
                 onPress={() => {
                   handlePress(MapNavigation.SWAMP_TOWER);
                 }}
@@ -98,6 +115,15 @@ const Map = ({ route }: MapProps) => {
           <OldSchoolMap
             initialLocation={specificLocation}
             setSpecificLocation={setSpecificLocation}
+          />
+        );
+
+      case MapNavigation.SWAMP:
+        return (
+          <Swamp
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
           />
         );
 
