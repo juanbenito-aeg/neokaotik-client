@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import { useNavigation } from '@react-navigation/native';
 import ScreenContainer from '../../ScreenContainer';
@@ -11,11 +11,11 @@ import Button from '../../Button';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
-import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
 import Header from '../../Header';
 import usePlayerStore from '../../../store/usePlayerStore';
+import { useMapStore } from '../../../store/useMapStore';
 
 const ScannerContainer = styled.View`
   height: 100%;
@@ -43,7 +43,7 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   };
 
   const navigation = useNavigation();
-  const tabBarStyle = useContext(TabBarStyleContext);
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
   useEffect(() => {
     navigation.setOptions({
       tabBarStyle: isInside ? { display: 'none' } : tabBarStyle,

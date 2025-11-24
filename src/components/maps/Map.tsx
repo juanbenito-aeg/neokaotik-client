@@ -25,16 +25,22 @@ import { useMapStore } from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 
 const Map = ({ route }: MapProps) => {
-  const mapNavigation = useMapStore(state => state.mapNavigation);
-  const setMapNavigation = useMapStore(state => state.setMapNavigation);
   const [specificLocation, setSpecificLocation] =
     useState<OldSchoolLocation | null>(null);
+
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   const user = usePlayerStore(state => state.user);
   const setUser = usePlayerStore(state => state.setUser);
 
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+  const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
+
+  useEffect(() => {
+    setTabBarStyle(tabBarStyle);
+  }, []);
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {

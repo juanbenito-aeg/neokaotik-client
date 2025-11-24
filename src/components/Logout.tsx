@@ -1,7 +1,5 @@
 import { GoogleAuth } from 'react-native-google-auth';
 import styled from 'styled-components/native';
-import { useContext } from 'react';
-import { ModalContext } from '../contexts/ModalContext';
 import Button from './Button';
 import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
 import {
@@ -9,6 +7,7 @@ import {
   updateFcmToken,
 } from '../helpers/fcm.helpers';
 import usePlayerStore from '../store/usePlayerStore';
+import { useModalStore } from '../store/useModalStore';
 
 const Container = styled.View`
   flex: 1;
@@ -17,10 +16,10 @@ const Container = styled.View`
 `;
 
 const Logout = () => {
+  const setModalData = useModalStore(state => state.setModalData);
+
   const user = usePlayerStore(state => state.user);
   const setUser = usePlayerStore(state => state.setUser);
-
-  const setModalData = useContext(ModalContext)!;
 
   async function logOut() {
     await GoogleAuth.signOut();

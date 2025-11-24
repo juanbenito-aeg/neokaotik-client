@@ -4,12 +4,11 @@ import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
-import { useContext } from 'react';
-import IsLoadingContext from '../contexts/IsLoadingContext';
 import { getDeviceToken } from '../fcm/deviceToken';
-import { ModalContext } from '../contexts/ModalContext';
+import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
 import usePlayerStore from '../store/usePlayerStore';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const BackgroundImage = styled.ImageBackground`
   width: 100%;
@@ -19,9 +18,8 @@ const BackgroundImage = styled.ImageBackground`
 `;
 
 const Login = () => {
-  const setModalData = useContext(ModalContext)!;
-  const { setIsLoading } = useContext(IsLoadingContext)!;
-
+  const setModalData = useModalStore(state => state.setModalData);
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
   const setUser = usePlayerStore(state => state.setUser);
 
   async function logIn() {

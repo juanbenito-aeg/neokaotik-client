@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ButtonBackgroundImgSrc,
   MapNavigation,
@@ -6,7 +6,6 @@ import {
 } from '../../../constants';
 import ScreenContainer from '../../ScreenContainer';
 import Text from '../../Text';
-import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
@@ -88,7 +87,7 @@ const AcolyteSwampTower = () => {
   };
 
   const navigation = useNavigation();
-  const tabBarStyle = useContext(TabBarStyleContext);
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
 
   useEffect(() => {
     navigation.setOptions({
