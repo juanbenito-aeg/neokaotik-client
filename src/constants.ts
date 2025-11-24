@@ -19,6 +19,7 @@ enum ScreenBackgroundImgSrc {
   MAP = require('../public/images/map.png'),
   OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
   HALL_OF_SAGES = require('../public/images/hall-of-sages.png'),
+  SWAMP = require('../public/images/swamp.png'),
 }
 
 enum ButtonBackgroundImgSrc {
