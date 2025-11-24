@@ -8,11 +8,14 @@ type MapProps = StaticScreenProps<{
   tabBarStyle: ViewStyle;
 }>;
 
-interface MapInterface {
+interface MapStore {
   mapNavigation: MapNavigation;
   setMapNavigation: SetMapNavigation;
+  tabBarStyle: ViewStyle | null;
+  setTabBarStyle: setTabBarStyle;
 }
 
 type SetMapNavigation = (mapNavigation: MapNavigation) => void;
+type setTabBarStyle = (tabBarStyle: ViewStyle) => void;
 
-export type { MapProps, MapInterface };
+export type { MapProps, MapStore };

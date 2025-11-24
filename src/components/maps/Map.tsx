@@ -31,9 +31,10 @@ const Map = ({ route }: MapProps) => {
     useState<OldSchoolLocation | null>(null);
 
   const { user, setUser } = useContext(UserContext)!;
-
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+  const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
+  setTabBarStyle(tabBarStyle);
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {

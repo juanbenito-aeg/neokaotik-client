@@ -21,9 +21,9 @@ import Button from '../../Button';
 import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
 import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
-import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
+import { useMapStore } from '../../../store/useMapStore';
 
 const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   });
 
   const navigation = useNavigation();
-  const tabBarStyle = useContext(TabBarStyleContext);
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
 
   // Styling for the button used to close the camera
   const { ms } = useMetrics();
