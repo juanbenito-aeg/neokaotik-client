@@ -7,10 +7,7 @@ import {
 import ScreenContainer from '../../ScreenContainer';
 import { UserContext } from '../../../contexts/UserContext';
 import Text from '../../Text';
-import {
-  MapNavigationContext,
-  TabBarStyleContext,
-} from '../../../contexts/MapContext';
+import { TabBarStyleContext } from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
@@ -23,6 +20,7 @@ import * as Animatable from 'react-native-animatable';
 import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
 import Header from '../../Header';
 import { MS } from '../../../interfaces/Metrics';
+import { useMapStore } from '../../../store/useMapStore';
 
 const TextWrapper = styled.View<{ $ms: MS }>`
   width: 70%;
@@ -57,7 +55,8 @@ const AcolyteSwampTower = () => {
     return cleanup;
   }, []);
 
-  const { mapNavigation, setMapNavigation } = useContext(MapNavigationContext);
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   useFocusEffect(
     useCallback(() => {

@@ -13,10 +13,6 @@ import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import {
-  MapNavigationContext,
-  TabBarStyleContext,
-} from '../../contexts/MapContext';
-import {
   EventMapCore,
   NavigationState,
   useNavigation,
@@ -26,9 +22,11 @@ import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
+import { useMapStore } from '../../store/useMapStore';
 
 const Map = ({ route }: MapProps) => {
-  const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
   const [specificLocation, setSpecificLocation] =
     useState<OldSchoolLocation | null>(null);
 
@@ -135,13 +133,7 @@ const Map = ({ route }: MapProps) => {
     return unsubscribe;
   }, [mapNavigation]);
 
-  return (
-    <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
-      <TabBarStyleContext value={tabBarStyle}>
-        {changeScreen(mapNavigation)}
-      </TabBarStyleContext>
-    </MapNavigationContext.Provider>
-  );
+  return <>{changeScreen(mapNavigation)}</>;
 };
 
 export default Map;
