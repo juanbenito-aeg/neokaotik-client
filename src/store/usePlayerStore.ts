@@ -9,6 +9,17 @@ const usePlayerStore = create<PlayerStore>()(set => ({
       user: typeof nextUser === 'function' ? nextUser(state.user!) : nextUser,
     }));
   },
+
+  // Acolytes state & action
+  acolytes: [],
+  setAcolytes: nextAcolytes => {
+    set(state => ({
+      acolytes:
+        typeof nextAcolytes === 'function'
+          ? nextAcolytes(state.acolytes)
+          : nextAcolytes,
+    }));
+  },
 }));
 
 export default usePlayerStore;
