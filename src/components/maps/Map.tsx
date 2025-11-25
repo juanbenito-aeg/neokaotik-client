@@ -11,32 +11,37 @@ import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState, useEffect, useContext } from 'react';
-import {
-  MapNavigationContext,
-  TabBarStyleContext,
-} from '../../contexts/MapContext';
+import { useState, useEffect } from 'react';
 import {
   EventMapCore,
   NavigationState,
   useNavigation,
 } from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
-import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 import Swamp from '../Swamp';
+import { useMapStore } from '../../store/useMapStore';
+import usePlayerStore from '../../store/usePlayerStore';
 
 const Map = ({ route }: MapProps) => {
-  const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
   const [specificLocation, setSpecificLocation] =
     useState<OldSchoolLocation | null>(null);
 
-  const { user, setUser } = useContext(UserContext)!;
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
 
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+  const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
+
+  useEffect(() => {
+    setTabBarStyle(tabBarStyle);
+  }, []);
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {
@@ -161,13 +166,7 @@ const Map = ({ route }: MapProps) => {
     return unsubscribe;
   }, [mapNavigation]);
 
-  return (
-    <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
-      <TabBarStyleContext value={tabBarStyle}>
-        {changeScreen(mapNavigation)}
-      </TabBarStyleContext>
-    </MapNavigationContext.Provider>
-  );
+  return <>{changeScreen(mapNavigation)}</>;
 };
 
 export default Map;

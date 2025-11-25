@@ -1,6 +1,11 @@
 import { ArtifactState } from '../constants';
 import { Location } from './geolocalization';
 
+interface ArtifactStore {
+  artifacts: Artifact[];
+  setArtifacts: SetArtifacts;
+}
+
 interface Artifact {
   _id: ArtifactId;
   name: string;
@@ -11,4 +16,6 @@ interface Artifact {
 
 type ArtifactId = string;
 
-export type { Artifact, ArtifactId };
+type SetArtifacts = (artifacts: Artifact[]) => void;
+
+export type { ArtifactStore, Artifact, ArtifactId };
