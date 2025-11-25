@@ -9,8 +9,13 @@ import Main from './Main';
 import CircleSpinner from './Spinner';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { initSocket, performSocketCleanUp } from '../socket/socket';
-import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
+import { initSocket, performSocketCleanUp, socket } from '../socket/socket';
+import {
+  DEFAULT_MODAL_DATA,
+  DeviceState,
+  SocketServerToClientEvents,
+  UserRole,
+} from '../constants';
 import { EventListenersCleaners } from '../interfaces/App';
 import {
   listenForAcolyteDisconnected,
@@ -28,6 +33,8 @@ import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import { Artifact } from '../interfaces/Artifact';
 import useArtifactStore from '../store/useArtifactStore';
+import handleAcolytePositionChanged from '../socket/handlers/acolyte-position-changed';
+import { Location } from '../interfaces/geolocalization';
 
 const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
@@ -102,22 +109,35 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      let mortimerEventListenersCleaners: EventListenersCleaners = [];
+      // Register socket event handlers & initialize the socket
+
+      let eventListenersCleaners: EventListenersCleaners = [];
+
+      socket.on(
+        SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED,
+        (acolyteId: string, acolyteLocation: Location) => {
+          handleAcolytePositionChanged(setAcolytes, acolyteId, acolyteLocation);
+        },
+      );
 
       if (user.rol === UserRole.MORTIMER) {
         (async () => {
-          mortimerEventListenersCleaners = await setMortimerUp(
-            mortimerEventListenersCleaners,
-          );
+          await setMortimerUp(eventListenersCleaners);
         })();
       }
+
+      eventListenersCleaners.push(() => {
+        // Call socket event listener cleaners
+        socket.off(SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED);
+      });
 
       initSocket(user.email);
 
       return () => {
+        // Avoid socket disconnection every time user state is updated
         setTimeout(() => {
           if (!userRef.current) {
-            performSocketCleanUp(...mortimerEventListenersCleaners);
+            performSocketCleanUp(...eventListenersCleaners);
           }
         }, 0);
       };
@@ -202,9 +222,7 @@ const App = () => {
     return idToken;
   }
 
-  async function setMortimerUp(
-    mortimerEventListenersCleaners: EventListenersCleaners,
-  ) {
+  async function setMortimerUp(eventListenersCleaners: EventListenersCleaners) {
     const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
       UserRole.MORTIMER,
       undefined,
@@ -217,12 +235,10 @@ const App = () => {
       setAcolytes,
     );
 
-    mortimerEventListenersCleaners.push(
+    eventListenersCleaners.push(
       clearAcolyteInsideOutsideLab,
       clearAcolyteDisconnected,
     );
-
-    return mortimerEventListenersCleaners;
   }
 
   return (
