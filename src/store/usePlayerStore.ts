@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { PlayerStore } from '../interfaces/Player';
+import { PlayerStore } from '../interfaces/player';
 
 const usePlayerStore = create<PlayerStore>()(set => ({
   // User state & action
