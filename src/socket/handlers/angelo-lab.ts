@@ -70,4 +70,14 @@ function enterOrExitLab(isAcolyteInsideLab: boolean, setUser: SetUser) {
   setUser(prevUser => ({ ...prevUser!, isInside: isAcolyteInsideLab }));
 }
 
-export { handleAcolyteInsideOutsideLab, updateAcolytes };
+function handleAcolyteDisconnected(
+  acolyteEmail: string,
+  acolytes: KaotikaUser[],
+  setAcolytes: SetAcolytes,
+) {
+  const isAcolyteInsideLab = false;
+
+  updateAcolytes(acolyteEmail, isAcolyteInsideLab, acolytes, setAcolytes);
+}
+
+export { handleAcolyteInsideOutsideLab, handleAcolyteDisconnected };

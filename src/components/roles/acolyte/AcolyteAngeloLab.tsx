@@ -5,10 +5,8 @@ import ScreenContainer from '../../ScreenContainer';
 import {
   ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
-  UserRole,
 } from '../../../constants';
 import Button from '../../Button';
-import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
 import GoBackButton from '../../GoBackButton';
@@ -31,7 +29,6 @@ const QRWrapper = styled.View`
 
 const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const user = usePlayerStore(state => state.user);
-  const setUser = usePlayerStore(state => state.setUser);
 
   const isInside = user!.isInside;
 
@@ -53,17 +50,6 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [showQR, setShowQR] = useState<boolean>(false);
 
   const { ms } = useMetrics();
-
-  useEffect(() => {
-    const userData = listenForAcolyteInsideOutsideLab(
-      UserRole.ACOLYTE,
-      undefined,
-      undefined,
-      undefined,
-      setUser,
-    );
-    return userData;
-  }, []);
 
   const QRToScan = (email: string, isInside: boolean) => (
     <QRCode
