@@ -26,6 +26,8 @@ import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
+import { Artifact } from '../interfaces/Artifact';
+import useArtifactStore from '../store/useArtifactStore';
 
 const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
@@ -44,6 +46,8 @@ const App = () => {
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
+  const setArtifacts = useArtifactStore(state => state.setArtifacts);
+
   const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButton = () => {
@@ -60,32 +64,40 @@ const App = () => {
     userRef.current = user;
   }, [user]);
 
-  // Make a call to the API to get acolytes & save them locally
   useEffect(() => {
     if (user) {
       (async () => {
         setIsLoading(true);
 
-        const acolytesArray = await getAcolytes();
+        // Make calls to the API to get acolytes & artifacts & save them locally
+
+        const acolytesArray = (await getXArray(
+          'https://neokaotik-server.onrender.com/user/get-acolytes/',
+        )) as KaotikaUser[];
+        setAcolytes(acolytesArray);
+
+        if (user.rol === UserRole.ACOLYTE || user.rol === UserRole.MORTIMER) {
+          const artifactsArray = (await getXArray(
+            'https://neokaotik-server.onrender.com/api/artifacts/',
+          )) as Artifact[];
+          setArtifacts(artifactsArray);
+        }
 
         setIsLoading(false);
-
-        setAcolytes(acolytesArray);
       })();
     }
   }, [user]);
 
-  async function getAcolytes(): Promise<KaotikaUser[]> {
-    const url = 'https://neokaotik-server.onrender.com/user/get-acolytes/';
+  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
     const response = await fetch(url);
 
-    let acolytesArray = [];
+    let xArray = [];
 
     if (response.ok) {
-      acolytesArray = await response.json();
+      xArray = await response.json();
     }
 
-    return acolytesArray;
+    return xArray;
   }
 
   useEffect(() => {
