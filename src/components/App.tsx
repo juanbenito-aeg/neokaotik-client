@@ -9,13 +9,8 @@ import Main from './Main';
 import CircleSpinner from './Spinner';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { initSocket, performSocketCleanUp } from '../socket/socket';
+import { initSocket } from '../socket/socket';
 import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
-import { EventListenersCleaners } from '../interfaces/App';
-import {
-  listenForAcolyteDisconnected,
-  listenForAcolyteInsideOutsideLab,
-} from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
   setNotificationHandlers,
@@ -102,22 +97,19 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      let mortimerEventListenersCleaners: EventListenersCleaners = [];
-
-      if (user.rol === UserRole.MORTIMER) {
-        (async () => {
-          mortimerEventListenersCleaners = await setMortimerUp(
-            mortimerEventListenersCleaners,
-          );
-        })();
-      }
-
-      initSocket(user.email);
+      const performSocketCleanUp = initSocket(
+        setModalData,
+        user,
+        setUser,
+        acolytes,
+        setAcolytes,
+      );
 
       return () => {
+        // Avoid socket disconnection every time user state is updated
         setTimeout(() => {
           if (!userRef.current) {
-            performSocketCleanUp(...mortimerEventListenersCleaners);
+            performSocketCleanUp();
           }
         }, 0);
       };
@@ -200,29 +192,6 @@ const App = () => {
     const { idToken } = tokens;
 
     return idToken;
-  }
-
-  async function setMortimerUp(
-    mortimerEventListenersCleaners: EventListenersCleaners,
-  ) {
-    const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
-      UserRole.MORTIMER,
-      undefined,
-      acolytes,
-      setAcolytes,
-    );
-
-    const clearAcolyteDisconnected = listenForAcolyteDisconnected(
-      acolytes,
-      setAcolytes,
-    );
-
-    mortimerEventListenersCleaners.push(
-      clearAcolyteInsideOutsideLab,
-      clearAcolyteDisconnected,
-    );
-
-    return mortimerEventListenersCleaners;
   }
 
   return (

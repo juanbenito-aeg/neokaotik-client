@@ -4,7 +4,6 @@ import {
   DEFAULT_MODAL_DATA,
   ScreenBackgroundImgSrc,
   SocketClientToServerEvents,
-  UserRole,
 } from '../../../constants';
 import {
   useCameraPermission,
@@ -14,12 +13,11 @@ import {
   Code,
 } from 'react-native-vision-camera';
 import { StyleSheet, ViewStyle } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../../Button';
 import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
-import { listenForAcolyteInsideOutsideLab } from '../../../socket/events/angelo-lab';
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
 import { useMapStore } from '../../../store/useMapStore';
@@ -29,15 +27,6 @@ const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [isCameraOpen, setIsCameraOpen] = useState<boolean>(false);
 
   const setModalData = useModalStore(state => state.setModalData);
-
-  useEffect(() => {
-    const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
-      UserRole.ISTVAN,
-      setModalData,
-    );
-
-    return clearAcolyteInsideOutsideLab;
-  }, []);
 
   // Elements needed to display the camera
   const device = useCameraDevice('back');

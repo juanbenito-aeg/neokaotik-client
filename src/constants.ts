@@ -63,6 +63,7 @@ enum SocketServerToClientEvents {
   ACOLYTE_INSIDE_OUTSIDE_LAB = 'acolyte inside/outside lab',
   ACOLYTE_DISCONNECTED = 'acolyte disconnected',
   ACOLYTE_TOWER_ACCESS = 'acolyte tower access',
+  ACOLYTE_POSITION_CHANGED = "acolyte's position changed",
 }
 
 enum SocketClientToServerEvents {

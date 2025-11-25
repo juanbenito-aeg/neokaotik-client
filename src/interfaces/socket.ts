@@ -2,6 +2,7 @@ import {
   SocketClientToServerEvents,
   SocketServerToClientEvents,
 } from '../constants';
+import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
 interface ServerToClientEvents {
@@ -13,6 +14,10 @@ interface ServerToClientEvents {
   ) => void;
   [SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS]: (
     acolyteData: AcolyteDataToAccessOrExitTower,
+  ) => void;
+  [SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED]: (
+    acolyteId: string,
+    acolyteLocation: Location,
   ) => void;
 }
 
