@@ -9,7 +9,6 @@ import Text from '../../Text';
 import GoBackButton from '../../GoBackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
-import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
 import { TextStyle, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
@@ -53,11 +52,6 @@ const AcolyteSwampTower = () => {
       isInsideTower && !isInTowerEntrance ? 'Interior' : 'Entrance'
     })`,
   };
-
-  useEffect(() => {
-    const cleanup = listenForAcolyteAccess(setUser);
-    return cleanup;
-  }, []);
 
   const mapNavigation = useMapStore(state => state.mapNavigation);
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
