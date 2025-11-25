@@ -32,8 +32,9 @@ function initSocket(
   acolytes: KaotikaUser[],
   setAcolytes: SetAcolytes,
 ) {
-  // Related to Angelo's laboratory
+  // Listen for events
 
+  // Related to Angelo's laboratory
   socket.on(
     SocketServerToClientEvents.ACOLYTE_INSIDE_OUTSIDE_LAB,
     (acolyteData: AcolyteDataAfterAccessExitLab) => {
@@ -47,7 +48,6 @@ function initSocket(
       );
     },
   );
-
   socket.on(
     SocketServerToClientEvents.ACOLYTE_DISCONNECTED,
     (acolyteEmail: string) => {
@@ -81,12 +81,8 @@ function initSocket(
 }
 
 function performSocketCleanUp() {
-  // Call socket event listener cleaners
-  socket.off(SocketServerToClientEvents.ACOLYTE_INSIDE_OUTSIDE_LAB);
-  socket.off(SocketServerToClientEvents.ACOLYTE_DISCONNECTED);
-  socket.off(SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS);
-  socket.off(SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED);
-  socket.off(SocketGeneralEvents.CONNECT);
+  // Remove all listeners for all events
+  socket.off();
 
   socket.disconnect();
 }
