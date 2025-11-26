@@ -18,9 +18,18 @@ import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
 import { Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
+import styled from 'styled-components/native';
+import { MS } from '../interfaces/Metrics';
+
+const MapViewContainer = styled.View<{ $ms: MS }>`
+  position: absolute;
+  top: ${({ $ms }) => $ms(125, 0.9)}px;
+  border-radius: 15px;
+  overflow: hidden;
+`;
 
 const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
-  const { ms } = useMetrics();
+  const { hs, vs, ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
 
@@ -36,14 +45,13 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
 
-  const baseWidth = ms(350, 1);
-  const baseHeight = ms(350, 0.8);
-
   const isVillainOrIstvan =
     user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
+  const isAcolyteOrMortimer =
+    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
 
-  const mapWidth = isVillainOrIstvan ? ms(350, 1) : baseWidth;
-  const mapHeight = isVillainOrIstvan ? ms(450, 1.5) : baseHeight;
+  const mapWidth = hs(328);
+  const mapHeight = isVillainOrIstvan ? vs(540) : vs(350);
 
   useEffect(() => {
     if (user!.rol !== UserRole.ACOLYTE) {
@@ -125,12 +133,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
       <GoBackButton onPress={onPressGoBackButton} />
 
-      <View
-        style={[styles.mapContainer, { width: mapWidth, height: mapHeight }]}
-      >
+      <MapViewContainer style={{ width: mapWidth, height: mapHeight }} $ms={ms}>
         <MapView
           provider={PROVIDER_GOOGLE}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           region={{
             latitude: 43.3102,
             longitude: -2.002594,
@@ -186,8 +192,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               }
             })}
 
-          {(user!.rol === UserRole.ACOLYTE ||
-            user!.rol === UserRole.MORTIMER) &&
+          {isAcolyteOrMortimer &&
             artifacts.map((artifact, index) => {
               if (artifact.state === ArtifactState.ACTIVE) {
                 return (
@@ -221,29 +226,9 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               }
             })}
         </MapView>
-      </View>
+      </MapViewContainer>
     </ScreenContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  mapContainer: {
-    position: 'absolute',
-    top: '20%',
-    left: '3%',
-    zIndex: 1,
-    borderWidth: 3,
-    borderColor: '#233117',
-    borderRadius: 15,
-    borderStyle: 'solid',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-    overflow: 'hidden',
-    backgroundColor: '#233117',
-  },
-});
 
 export default Swamp;
