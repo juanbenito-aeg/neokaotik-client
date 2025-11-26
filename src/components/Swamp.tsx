@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect, useActionState } from 'react';
-import { View, StyleSheet, Alert, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
@@ -43,9 +43,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const mapHeight = isVillainOrIstvan ? ms(450, 1.5) : baseHeight;
 
   useEffect(() => {
-    if (user!.rol === UserRole.ACOLYTE) {
-      getCurrentPosition();
-    } else {
+    if (user!.rol !== UserRole.ACOLYTE) {
       setAcolytes(prevAcolytes => {
         return prevAcolytes.map(acolyte => {
           if (!acolyte.location) {
@@ -58,6 +56,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         });
       });
     }
+
+    getCurrentPosition();
   }, [user]);
 
   const getCurrentPosition = () => {
@@ -77,7 +77,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         pos => {
           setPosition({
             type: 'Point',
-            coordinates: [pos.coords.longitude, pos.coords.latitude],
+            coordinates: [pos.coords.latitude, pos.coords.longitude],
           });
 
           setWatching(true);
@@ -137,15 +137,21 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
           followsUserLocation={true}
           userInterfaceStyle="dark"
         >
-          {user?.rol === UserRole.ACOLYTE && position && (
+          {position && (
             <Marker
-              key={200}
               coordinate={{
-                latitude: position.coordinates[1],
-                longitude: position.coordinates[0],
+                latitude: position.coordinates[0],
+                longitude: position.coordinates[1],
               }}
             >
-              <Image source={{ uri: user.avatar }} style={styles.markerImage} />
+              <Image
+                source={{ uri: user!.avatar }}
+                style={{
+                  width: ms(40, 0.8),
+                  height: ms(40, 0.8),
+                  borderRadius: ms(20, 2),
+                }}
+              />
             </Marker>
           )}
           {user?.rol !== UserRole.ACOLYTE &&
@@ -163,8 +169,12 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                     description={acolyte.name}
                   >
                     <Image
-                      source={{ uri: acolyte.avatar }}
-                      style={styles.markerImage}
+                      source={{ uri: `${acolyte.avatar}` }}
+                      style={{
+                        width: ms(40, 0.8),
+                        height: ms(40, 0.8),
+                        borderRadius: ms(20, 2),
+                      }}
                     />
                   </Marker>
                 );
@@ -227,11 +237,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     overflow: 'hidden',
     backgroundColor: '#233117',
-  },
-  markerImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
 });
 
