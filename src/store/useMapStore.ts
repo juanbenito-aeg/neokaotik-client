@@ -5,7 +5,8 @@ import { ViewStyle } from 'react-native';
 
 export const useMapStore = create<MapStore>()(set => ({
   mapNavigation: MapNavigation.MAP,
-  setMapNavigation: (mapNavigation: MapNavigation) => set({ mapNavigation }),
+  setMapNavigation: (mapNavigation: MapNavigation) =>
+    set(() => ({ mapNavigation })),
   tabBarStyle: null,
-  setTabBarStyle: (tabBarStyle: ViewStyle) => set({ tabBarStyle }),
+  setTabBarStyle: (tabBarStyle: ViewStyle) => set(() => ({ tabBarStyle })),
 }));

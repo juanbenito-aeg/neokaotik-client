@@ -20,6 +20,17 @@ const usePlayerStore = create<PlayerStore>()(set => ({
           : nextAcolytes,
     }));
   },
+
+  // Non-acolytes state & action
+  nonAcolytes: [],
+  setNonAcolytes: nextNonAcolytes => {
+    set(state => ({
+      nonAcolytes:
+        typeof nextNonAcolytes === 'function'
+          ? nextNonAcolytes(state.nonAcolytes)
+          : nextNonAcolytes,
+    }));
+  },
 }));
 
 export default usePlayerStore;
