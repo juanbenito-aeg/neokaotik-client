@@ -23,6 +23,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
+
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
@@ -32,13 +33,15 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const setModalData = useModalStore(state => state.setModalData);
 
   const [position, setPosition] = useState<Location | null>(null);
-  const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
   const [watching, setWatching] = useState<boolean>(false);
+  const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
 
   const baseWidth = ms(350, 1);
   const baseHeight = ms(350, 0.8);
+
   const isVillainOrIstvan =
     user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
+
   const mapWidth = isVillainOrIstvan ? ms(350, 1) : baseWidth;
   const mapHeight = isVillainOrIstvan ? ms(450, 1.5) : baseHeight;
 
@@ -71,6 +74,18 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     });
   };
 
+  useEffect(() => {
+    if (!watching && subscriptionId === null) {
+      startWatching();
+    }
+
+    return () => {
+      if (subscriptionId !== null) {
+        Geolocation.clearWatch(subscriptionId);
+      }
+    };
+  }, [watching, subscriptionId]);
+
   const startWatching = () => {
     try {
       const watchID = Geolocation.watchPosition(
@@ -99,28 +114,17 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
       setSubscriptionId(watchID);
     } catch (error) {
       console.error('WatchPosition Error:', error);
-      (modalData.content!.message = 'WatchPosition Error'),
-        'Could not start position tracking.';
+      modalData.content!.message = 'Could not start position tracking.';
       setModalData(modalData);
     }
   };
 
-  useEffect(() => {
-    if (!watching && subscriptionId === null) {
-      startWatching();
-    }
-
-    return () => {
-      if (subscriptionId !== null) {
-        Geolocation.clearWatch(subscriptionId);
-      }
-    };
-  }, [watching, subscriptionId]);
-
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
       <Header>The Swamp</Header>
+
       <GoBackButton onPress={onPressGoBackButton} />
+
       <View
         style={[styles.mapContainer, { width: mapWidth, height: mapHeight }]}
       >
@@ -154,6 +158,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               />
             </Marker>
           )}
+
           {user?.rol !== UserRole.ACOLYTE &&
             acolytes.map((acolyte, index) => {
               const location = acolyte.location;
@@ -180,6 +185,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                 );
               }
             })}
+
           {(user!.rol === UserRole.ACOLYTE ||
             user!.rol === UserRole.MORTIMER) &&
             artifacts.map((artifact, index) => {
