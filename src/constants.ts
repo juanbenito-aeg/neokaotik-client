@@ -42,6 +42,10 @@ enum ModalBackgroundImgSrc {
   NORMAL = require('../public/images/normal-modal.png'),
 }
 
+enum ModalImgSrc {
+  BAG_OF_ARTIFACTS = require('../public/images/bag-of-artifacts.png'),
+}
+
 enum UserRole {
   ACOLYTE = 'acolyte',
   ISTVAN = 'istvan',
@@ -64,6 +68,7 @@ enum SocketServerToClientEvents {
   ACOLYTE_DISCONNECTED = 'acolyte disconnected',
   ACOLYTE_TOWER_ACCESS = 'acolyte tower access',
   ACOLYTE_POSITION_CHANGED = "acolyte's position changed",
+  ARTIFACT_COLLECTED = 'artifact collected',
 }
 
 enum SocketClientToServerEvents {
@@ -117,6 +122,7 @@ export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ModalBackgroundImgSrc,
+  ModalImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,

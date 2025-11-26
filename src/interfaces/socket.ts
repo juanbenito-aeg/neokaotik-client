@@ -19,6 +19,10 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteLocation: Location,
   ) => void;
+  [SocketServerToClientEvents.ARTIFACT_COLLECTED]: (
+    acolyteId: string,
+    artifactId: string,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
