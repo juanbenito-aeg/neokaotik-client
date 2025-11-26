@@ -41,6 +41,8 @@ const App = () => {
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
+
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
 
   const { ms } = useMetrics();
@@ -64,12 +66,17 @@ const App = () => {
       (async () => {
         setIsLoading(true);
 
-        // Make calls to the API to get acolytes & artifacts & save them locally
+        // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
 
         const acolytesArray = (await getXArray(
           'https://neokaotik-server.onrender.com/user/get-acolytes/',
         )) as KaotikaUser[];
         setAcolytes(acolytesArray);
+
+        const nonAcolyteArray = (await getXArray(
+          'https://neokaotik-server.onrender.com/user/non-acolyte-players/',
+        )) as KaotikaUser[];
+        setNonAcolytes(nonAcolyteArray);
 
         if (user.rol === UserRole.ACOLYTE || user.rol === UserRole.MORTIMER) {
           const artifactsArray = (await getXArray(

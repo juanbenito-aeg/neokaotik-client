@@ -8,6 +8,10 @@ interface PlayerStore {
   // Acolytes state & action
   acolytes: KaotikaUser[];
   setAcolytes: SetAcolytes;
+
+  // Non-acolytes state & action
+  nonAcolytes: KaotikaUser[];
+  setNonAcolytes: SetNonAcolytes;
 }
 
 type SetUser = (
@@ -20,4 +24,10 @@ type SetAcolytes = (
     | ((currentAcolytes: KaotikaUser[]) => KaotikaUser[]),
 ) => void;
 
-export type { PlayerStore, SetUser, SetAcolytes };
+type SetNonAcolytes = (
+  nextNonAcolytes:
+    | KaotikaUser[]
+    | ((currentNonAcolytes: KaotikaUser[]) => KaotikaUser[]),
+) => void;
+
+export type { PlayerStore, SetUser, SetAcolytes, SetNonAcolytes };
