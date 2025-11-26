@@ -17,6 +17,8 @@ import {
 import { Location } from '../interfaces/geolocalization';
 import handleAcolytePositionChanged from './handlers/acolyte-position-changed';
 import { handleAcolyteTowerAccess } from './handlers/tower-access';
+import handlerArtifactCollected from './handlers/artifact-collected';
+import { MS } from '../interfaces/Metrics';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -26,6 +28,7 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
 );
 
 function initSocket(
+  ms: MS,
   setModalData: SetModalData,
   user: KaotikaUser,
   setUser: SetUser,
@@ -68,6 +71,19 @@ function initSocket(
     SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED,
     (acolyteId: string, acolyteLocation: Location) => {
       handleAcolytePositionChanged(setAcolytes, acolyteId, acolyteLocation);
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ARTIFACT_COLLECTED,
+    (acolyteId: string, artifactId: string) => {
+      handlerArtifactCollected(
+        ms,
+        setModalData,
+        setAcolytes,
+        acolyteId,
+        artifactId,
+      );
     },
   );
 
