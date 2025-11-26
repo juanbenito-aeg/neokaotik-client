@@ -105,6 +105,7 @@ const App = () => {
   useEffect(() => {
     if (user) {
       const performSocketCleanUp = initSocket(
+        ms,
         setModalData,
         user,
         setUser,
