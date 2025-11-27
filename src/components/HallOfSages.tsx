@@ -67,7 +67,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
             });
           }
 
-          updateAcolyteOrMortimerEnteredOrExitedHS(isInsideHS);
+          updateAcolyteOrMortimerEnteredOrExitedHS(user._id, isInsideHS);
         }
 
         updateAcolyteOrMortimerIsInsideHS(
