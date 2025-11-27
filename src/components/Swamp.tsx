@@ -18,11 +18,22 @@ import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
 import { Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
+import styled from 'styled-components/native';
+import { MS } from '../interfaces/Metrics';
+import ArtifactInventory from './ArtifactInventory';
+
+const MapViewContainer = styled.View<{ $ms: MS }>`
+  position: absolute;
+  top: ${({ $ms }) => $ms(125, 0.9)}px;
+  border-radius: 15px;
+  overflow: hidden;
+`;
 
 const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
-  const { ms } = useMetrics();
+  const { hs, vs, ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
+
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
@@ -32,15 +43,16 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const setModalData = useModalStore(state => state.setModalData);
 
   const [position, setPosition] = useState<Location | null>(null);
-  const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
   const [watching, setWatching] = useState<boolean>(false);
+  const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
 
-  const baseWidth = ms(350, 1);
-  const baseHeight = ms(350, 0.8);
   const isVillainOrIstvan =
     user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
-  const mapWidth = isVillainOrIstvan ? ms(350, 1) : baseWidth;
-  const mapHeight = isVillainOrIstvan ? ms(450, 1.5) : baseHeight;
+  const isAcolyteOrMortimer =
+    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
+
+  const mapWidth = hs(328);
+  const mapHeight = isVillainOrIstvan ? vs(540) : vs(335);
 
   useEffect(() => {
     if (user!.rol !== UserRole.ACOLYTE) {
@@ -71,6 +83,18 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     });
   };
 
+  useEffect(() => {
+    if (!watching && subscriptionId === null) {
+      startWatching();
+    }
+
+    return () => {
+      if (subscriptionId !== null) {
+        Geolocation.clearWatch(subscriptionId);
+      }
+    };
+  }, [watching, subscriptionId]);
+
   const startWatching = () => {
     try {
       const watchID = Geolocation.watchPosition(
@@ -99,34 +123,21 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
       setSubscriptionId(watchID);
     } catch (error) {
       console.error('WatchPosition Error:', error);
-      (modalData.content!.message = 'WatchPosition Error'),
-        'Could not start position tracking.';
+      modalData.content!.message = 'Could not start position tracking.';
       setModalData(modalData);
     }
   };
 
-  useEffect(() => {
-    if (!watching && subscriptionId === null) {
-      startWatching();
-    }
-
-    return () => {
-      if (subscriptionId !== null) {
-        Geolocation.clearWatch(subscriptionId);
-      }
-    };
-  }, [watching, subscriptionId]);
-
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
       <Header>The Swamp</Header>
+
       <GoBackButton onPress={onPressGoBackButton} />
-      <View
-        style={[styles.mapContainer, { width: mapWidth, height: mapHeight }]}
-      >
+
+      <MapViewContainer style={{ width: mapWidth, height: mapHeight }} $ms={ms}>
         <MapView
           provider={PROVIDER_GOOGLE}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           region={{
             latitude: 43.3102,
             longitude: -2.002594,
@@ -154,6 +165,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               />
             </Marker>
           )}
+
           {user?.rol !== UserRole.ACOLYTE &&
             acolytes.map((acolyte, index) => {
               const location = acolyte.location;
@@ -180,8 +192,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                 );
               }
             })}
-          {(user!.rol === UserRole.ACOLYTE ||
-            user!.rol === UserRole.MORTIMER) &&
+
+          {isAcolyteOrMortimer &&
             artifacts.map((artifact, index) => {
               if (artifact.state === ArtifactState.ACTIVE) {
                 return (
@@ -215,29 +227,11 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               }
             })}
         </MapView>
-      </View>
+      </MapViewContainer>
+
+      {isAcolyteOrMortimer && <ArtifactInventory />}
     </ScreenContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  mapContainer: {
-    position: 'absolute',
-    top: '20%',
-    left: '3%',
-    zIndex: 1,
-    borderWidth: 3,
-    borderColor: '#233117',
-    borderRadius: 15,
-    borderStyle: 'solid',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 3,
-    elevation: 5,
-    overflow: 'hidden',
-    backgroundColor: '#233117',
-  },
-});
 
 export default Swamp;

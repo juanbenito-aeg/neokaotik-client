@@ -1,5 +1,10 @@
 import { ModalData } from './interfaces/Modal';
 
+enum GeneralBackgroundImgSrc {
+  ARTIFACT_INVENTORY = require('../public/images/artifact-inventory.png'),
+  ARTIFACT_SLOT = require('../public/images/artifact-slot.png'),
+}
+
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
   ACOLYTE_SWAMP_TOWER_ENTRANCE = require('../public/images/roles/acolyte/swamp-tower-entrance.png'),
@@ -120,6 +125,7 @@ enum ArtifactState {
 }
 
 export {
+  GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ModalBackgroundImgSrc,
