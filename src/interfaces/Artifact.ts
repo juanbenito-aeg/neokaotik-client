@@ -18,4 +18,10 @@ type ArtifactId = string;
 
 type SetArtifacts = (artifacts: Artifact[]) => void;
 
-export type { ArtifactStore, Artifact, ArtifactId };
+interface ArtifactProps {
+  _id: ArtifactId;
+  source: string;
+  state: ArtifactState;
+}
+
+export type { ArtifactStore, Artifact, ArtifactId, ArtifactProps };
