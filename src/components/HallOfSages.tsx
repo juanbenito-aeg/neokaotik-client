@@ -1,5 +1,5 @@
 import ScreenContainer from './ScreenContainer';
-import { ScreenBackgroundImgSrc } from '../constants';
+import { ScreenBackgroundImgSrc, UserRole } from '../constants';
 import GoBackButton from './GoBackButton';
 import { NestedScreenProps } from '../interfaces/generics';
 import Header from './Header';
@@ -7,6 +7,11 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
+import { useCallback } from 'react';
+import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
+import KaotikaUser from '../interfaces/KaotikaUser';
+import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Avatar = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(70, 1)}px;
@@ -20,10 +25,71 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
   const acolytes = usePlayerStore(state => state.acolytes);
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
+
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const players = [...acolytes, ...nonAcolytes];
+
+  useFocusEffect(
+    useCallback(() => {
+      if (user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER) {
+        function updateAcolyteOrMortimerIsInsideHS(
+          isInsideHS: boolean,
+          user: KaotikaUser,
+          setUser: SetUser,
+          setAcolytes: SetAcolytes,
+          setNonAcolytes: SetNonAcolytes,
+        ) {
+          setUser(prevUser => ({ ...prevUser, is_inside_hs: isInsideHS }));
+
+          if (user.rol === UserRole.ACOLYTE) {
+            setAcolytes(prevAcolytes => {
+              return prevAcolytes.map(acolyte => {
+                if (acolyte._id === user._id) {
+                  return { ...acolyte, is_inside_hs: isInsideHS };
+                }
+                return acolyte;
+              });
+            });
+          } else {
+            setNonAcolytes(prevNonAcolytes => {
+              return prevNonAcolytes.map(nonAcolyte => {
+                if (nonAcolyte._id === user._id) {
+                  return { ...nonAcolyte, is_inside_hs: isInsideHS };
+                }
+                return nonAcolyte;
+              });
+            });
+          }
+
+          updateAcolyteOrMortimerEnteredOrExitedHS(isInsideHS);
+        }
+
+        updateAcolyteOrMortimerIsInsideHS(
+          true,
+          user,
+          setUser,
+          setAcolytes,
+          setNonAcolytes,
+        );
+
+        return () => {
+          updateAcolyteOrMortimerIsInsideHS(
+            false,
+            user,
+            setUser,
+            setAcolytes,
+            setNonAcolytes,
+          );
+        };
+      }
+    }, []),
+  );
 
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
