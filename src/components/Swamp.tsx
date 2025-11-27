@@ -20,6 +20,7 @@ import { Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
+import ArtifactInventory from './ArtifactInventory';
 
 const MapViewContainer = styled.View<{ $ms: MS }>`
   position: absolute;
@@ -51,7 +52,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
 
   const mapWidth = hs(328);
-  const mapHeight = isVillainOrIstvan ? vs(540) : vs(350);
+  const mapHeight = isVillainOrIstvan ? vs(540) : vs(335);
 
   useEffect(() => {
     if (user!.rol !== UserRole.ACOLYTE) {
@@ -227,6 +228,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             })}
         </MapView>
       </MapViewContainer>
+
+      {isAcolyteOrMortimer && <ArtifactInventory />}
     </ScreenContainer>
   );
 };

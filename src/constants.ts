@@ -42,6 +42,11 @@ enum ModalBackgroundImgSrc {
   NORMAL = require('../public/images/normal-modal.png'),
 }
 
+enum GeneralBackgroundImgSrc {
+  ARTIFACT_INVENTORY = require('../public/images/artifact-inventory.png'),
+  ARTIFACT_SLOT = require('../public/images/artifact-slot.png'),
+}
+
 enum UserRole {
   ACOLYTE = 'acolyte',
   ISTVAN = 'istvan',
@@ -117,6 +122,7 @@ export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ModalBackgroundImgSrc,
+  GeneralBackgroundImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,
