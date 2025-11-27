@@ -77,6 +77,7 @@ enum SocketClientToServerEvents {
   INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
   SCROLL_PRESS = 'scroll press',
   REMOVE_SPELL_PRESS = 'remove spell press',
+  ENTERED_EXITED_HS = 'player entered/exited HS',
 }
 
 enum MapNavigation {

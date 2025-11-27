@@ -49,6 +49,7 @@ interface ClientToServerEvents {
   ) => void;
   [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: () => void;
   [SocketClientToServerEvents.SCROLL_PRESS]: (isPressed: boolean) => void;
+  [SocketClientToServerEvents.ENTERED_EXITED_HS]: (isInsideHS: boolean) => void;
 }
 
 export type {
