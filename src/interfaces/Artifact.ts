@@ -22,6 +22,7 @@ interface ArtifactProps {
   _id: ArtifactId;
   source: string;
   state: ArtifactState;
+  testID: string;
 }
 
 export type { ArtifactStore, Artifact, ArtifactId, ArtifactProps };

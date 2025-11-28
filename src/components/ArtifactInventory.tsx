@@ -40,6 +40,7 @@ const ArtifactInventory = () => {
           _id={artifact._id}
           source={artifact.source}
           state={artifact.state}
+          testID={`artifact-${index}`}
         />
       ))}
     </Container>

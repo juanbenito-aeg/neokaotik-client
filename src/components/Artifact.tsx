@@ -24,7 +24,7 @@ const CollectorAvatar = styled.Image<{ $ms: MS }>`
   border-radius: 9999px;
 `;
 
-const Artifact = ({ _id, source, state }: ArtifactProps) => {
+const Artifact = ({ _id, source, state, testID }: ArtifactProps) => {
   const acolytes = usePlayerStore(state => state.acolytes);
 
   const collector = acolytes.find(acolyte =>
@@ -40,6 +40,7 @@ const Artifact = ({ _id, source, state }: ArtifactProps) => {
       $hs={hs}
       $vs={vs}
       $ms={ms}
+      testID={testID}
     >
       {state === ArtifactState.COLLECTED && (
         <>
