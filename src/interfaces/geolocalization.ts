@@ -1,6 +1,8 @@
 interface Location {
   type: 'Point';
-  coordinates: number[];
+  coordinates: Coordinates;
 }
 
-export type { Location };
+type Coordinates = [number, number];
+
+export type { Location, Coordinates };

@@ -131,6 +131,11 @@ const NULL_LOCATION: Location = {
   coordinates: [0, 0],
 };
 
+enum Coordinate {
+  LONGITUDE,
+  LATITUDE,
+}
+
 export {
   GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
@@ -150,4 +155,5 @@ export {
   NotificationTitle,
   ArtifactState,
   NULL_LOCATION,
+  Coordinate,
 };

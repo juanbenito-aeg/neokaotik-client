@@ -4,6 +4,7 @@ import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
   ArtifactState,
+  Coordinate,
   DEFAULT_MODAL_DATA,
   NULL_LOCATION,
   ScreenBackgroundImgSrc,
@@ -19,12 +20,13 @@ import Geolocation, {
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
-import { Location } from '../interfaces/geolocalization';
+import { Coordinates, Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import ArtifactInventory from './ArtifactInventory';
 import emitAcolyteMoved from '../socket/events/acolyte-moved';
+import { ArtifactId } from '../interfaces/Artifact';
 
 const MapViewContainer = styled.View<{ $ms: MS }>`
   position: absolute;
@@ -49,6 +51,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [position, setPosition] = useState<Location>(NULL_LOCATION);
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
+
+  const [pressableArtifactId, setPressableArtifact] = useState<ArtifactId>('');
 
   const isVillainOrIstvan =
     user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
@@ -138,6 +142,55 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     setPosition(nextPosition);
 
     emitAcolyteMoved(user!._id, nextPosition);
+
+    togglePressableArtifactId(nextPosition);
+  }
+
+  function togglePressableArtifactId(position: Location) {
+    const pressableArtifact = artifacts.find(artifact => {
+      const distanceBetweenUserAndArtifact =
+        calculateDistanceBetweenUserAndArtifact(
+          position.coordinates,
+          artifact.location.coordinates,
+        );
+
+      if (distanceBetweenUserAndArtifact < 1) {
+        return artifact;
+      }
+    });
+
+    if (pressableArtifact?._id !== pressableArtifactId) {
+      setPressableArtifact(pressableArtifact?._id || '');
+    }
+  }
+
+  function calculateDistanceBetweenUserAndArtifact(
+    userCoords: Coordinates,
+    artifactCoords: Coordinates,
+  ) {
+    // Calculate distance between latitude/longitude points (φ is latitude, λ is longitude, R is earth’s radius)
+
+    const R = 6371e3; // meters
+    const φ1 = (userCoords[Coordinate.LATITUDE] * Math.PI) / 180; // φ, λ in radians
+    const φ2 = (artifactCoords[Coordinate.LATITUDE] * Math.PI) / 180;
+    const Δφ =
+      ((artifactCoords[Coordinate.LATITUDE] - userCoords[Coordinate.LATITUDE]) *
+        Math.PI) /
+      180;
+    const Δλ =
+      ((artifactCoords[Coordinate.LONGITUDE] -
+        userCoords[Coordinate.LONGITUDE]) *
+        Math.PI) /
+      180;
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const d = R * c; // in meters
+
+    return d;
   }
 
   return (
@@ -209,9 +262,13 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                       latitude: artifact.location.coordinates[1],
                       longitude: artifact.location.coordinates[0],
                     }}
+                    zIndex={1}
                   >
                     <Image
                       source={{ uri: artifact.source }}
+                      tintColor={
+                        artifact._id === pressableArtifactId ? '' : 'black'
+                      }
                       style={{
                         width: ms(40, 1),
                         height: ms(40, 1),
