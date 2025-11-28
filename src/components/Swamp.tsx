@@ -141,9 +141,11 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
     setPosition(nextPosition);
 
-    emitAcolyteMoved(user!._id, nextPosition);
+    if (user?.rol === UserRole.ACOLYTE) {
+      emitAcolyteMoved(user!._id, nextPosition);
 
-    togglePressableArtifactId(nextPosition);
+      togglePressableArtifactId(nextPosition);
+    }
   }
 
   function togglePressableArtifactId(position: Location) {
@@ -217,6 +219,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               latitude: position.coordinates[1],
               longitude: position.coordinates[0],
             }}
+            zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
           >
             <Image
               source={{ uri: user!.avatar }}
@@ -238,6 +241,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                       latitude: acolyte.location!.coordinates[1],
                       longitude: acolyte.location!.coordinates[0],
                     }}
+                    zIndex={0}
                   >
                     <Image
                       source={{ uri: acolyte.avatar }}
@@ -267,7 +271,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                     <Image
                       source={{ uri: artifact.source }}
                       tintColor={
-                        artifact._id === pressableArtifactId ? '' : 'black'
+                        artifact._id === pressableArtifactId ||
+                        user.rol === UserRole.MORTIMER
+                          ? ''
+                          : 'black'
                       }
                       style={{
                         width: ms(40, 1),
