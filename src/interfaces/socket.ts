@@ -53,6 +53,10 @@ interface ClientToServerEvents {
     acolyteOrMortimerId: string,
     isInsideHS: boolean,
   ) => void;
+  [SocketClientToServerEvents.ACOLYTE_MOVED]: (
+    acolyteId: string,
+    acolyteLocation: Location,
+  ) => void;
 }
 
 export type {

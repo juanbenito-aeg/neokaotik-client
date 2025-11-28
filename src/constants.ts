@@ -1,3 +1,4 @@
+import { Location } from './interfaces/geolocalization';
 import { ModalData } from './interfaces/Modal';
 
 enum GeneralBackgroundImgSrc {
@@ -83,6 +84,7 @@ enum SocketClientToServerEvents {
   SCROLL_PRESS = 'scroll press',
   REMOVE_SPELL_PRESS = 'remove spell press',
   ENTERED_EXITED_HS = 'player entered/exited HS',
+  ACOLYTE_MOVED = 'acolyte moved',
 }
 
 enum MapNavigation {
@@ -124,6 +126,11 @@ enum ArtifactState {
   COLLECTED = 'collected',
 }
 
+const NULL_LOCATION: Location = {
+  type: 'Point',
+  coordinates: [0, 0],
+};
+
 export {
   GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
@@ -142,4 +149,5 @@ export {
   DEFAULT_MODAL_DATA,
   NotificationTitle,
   ArtifactState,
+  NULL_LOCATION,
 };

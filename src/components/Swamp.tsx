@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
   ArtifactState,
   DEFAULT_MODAL_DATA,
+  NULL_LOCATION,
   ScreenBackgroundImgSrc,
   UserRole,
 } from '../constants';
@@ -12,7 +13,9 @@ import Header from './Header';
 import GoBackButton from './GoBackButton';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import useMetrics from '../hooks/use-metrics';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation, {
+  GeolocationResponse,
+} from '@react-native-community/geolocation';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { ModalData } from '../interfaces/Modal';
@@ -21,6 +24,7 @@ import useArtifactStore from '../store/useArtifactStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import ArtifactInventory from './ArtifactInventory';
+import emitAcolyteMoved from '../socket/events/acolyte-moved';
 
 const MapViewContainer = styled.View<{ $ms: MS }>`
   position: absolute;
@@ -42,7 +46,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
   const setModalData = useModalStore(state => state.setModalData);
 
-  const [position, setPosition] = useState<Location | null>(null);
+  const [position, setPosition] = useState<Location>(NULL_LOCATION);
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
 
@@ -59,27 +63,23 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
       setAcolytes(prevAcolytes => {
         return prevAcolytes.map(acolyte => {
           if (!acolyte.location) {
-            return {
-              ...acolyte,
-              location: { type: 'Point', coordinates: [0, 0] },
-            };
+            return { ...acolyte, location: NULL_LOCATION };
           }
+
           return acolyte;
         });
       });
     }
 
     getCurrentPosition();
-  }, [user]);
+  }, []);
 
   const getCurrentPosition = () => {
     Geolocation.getCurrentPosition(pos => {
       setPosition({
         type: 'Point',
-        coordinates: [pos.coords.latitude, pos.coords.longitude],
+        coordinates: [pos.coords.longitude, pos.coords.latitude],
       });
-
-      setWatching(true);
     });
   };
 
@@ -99,34 +99,46 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     try {
       const watchID = Geolocation.watchPosition(
         pos => {
-          setPosition({
-            type: 'Point',
-            coordinates: [pos.coords.latitude, pos.coords.longitude],
-          });
-
-          setWatching(true);
+          handlePositionChange(pos);
         },
         error => {
-          console.error('Geolocation Error:', error);
+          console.error('Geolocation error:', error);
+
           modalData.content!.message =
             'Please ensure location services are active and the Google Maps API key is configured.';
           setModalData(modalData);
+
           setWatching(false);
+          setSubscriptionId(null);
         },
         {
+          interval: 1000,
+          maximumAge: 0,
           enableHighAccuracy: true,
-          distanceFilter: 10,
-          timeout: 15000,
-          maximumAge: 10000,
+          distanceFilter: 0,
         },
       );
+
+      setWatching(true);
       setSubscriptionId(watchID);
     } catch (error) {
-      console.error('WatchPosition Error:', error);
+      console.error('WatchPosition error:', error);
+
       modalData.content!.message = 'Could not start position tracking.';
       setModalData(modalData);
     }
   };
+
+  function handlePositionChange(pos: GeolocationResponse) {
+    const nextPosition: Location = {
+      type: 'Point',
+      coordinates: [pos.coords.longitude, pos.coords.latitude],
+    };
+
+    setPosition(nextPosition);
+
+    emitAcolyteMoved(user!._id, nextPosition);
+  }
 
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
@@ -145,43 +157,37 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             longitudeDelta: 0.003,
           }}
           showsUserLocation={false}
-          followsUserLocation={true}
           userInterfaceStyle="dark"
         >
-          {position && (
-            <Marker
-              coordinate={{
-                latitude: position.coordinates[0],
-                longitude: position.coordinates[1],
+          <Marker
+            coordinate={{
+              latitude: position.coordinates[1],
+              longitude: position.coordinates[0],
+            }}
+          >
+            <Image
+              source={{ uri: user!.avatar }}
+              style={{
+                width: ms(40, 0.8),
+                height: ms(40, 0.8),
+                borderRadius: ms(20, 2),
               }}
-            >
-              <Image
-                source={{ uri: user!.avatar }}
-                style={{
-                  width: ms(40, 0.8),
-                  height: ms(40, 0.8),
-                  borderRadius: ms(20, 2),
-                }}
-              />
-            </Marker>
-          )}
+            />
+          </Marker>
 
           {user?.rol !== UserRole.ACOLYTE &&
-            acolytes.map((acolyte, index) => {
-              const location = acolyte.location;
-
-              if (location && location.coordinates) {
+            acolytes.map(acolyte => {
+              if (acolyte.location) {
                 return (
                   <Marker
-                    key={index}
+                    key={acolyte._id}
                     coordinate={{
                       latitude: acolyte.location!.coordinates[1],
                       longitude: acolyte.location!.coordinates[0],
                     }}
-                    description={acolyte.name}
                   >
                     <Image
-                      source={{ uri: `${acolyte.avatar}` }}
+                      source={{ uri: acolyte.avatar }}
                       style={{
                         width: ms(40, 0.8),
                         height: ms(40, 0.8),
@@ -194,34 +200,24 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             })}
 
           {isAcolyteOrMortimer &&
-            artifacts.map((artifact, index) => {
+            artifacts.map(artifact => {
               if (artifact.state === ArtifactState.ACTIVE) {
                 return (
                   <Marker
-                    key={`${index}`}
+                    key={artifact._id + Date.now()}
                     coordinate={{
                       latitude: artifact.location.coordinates[1],
                       longitude: artifact.location.coordinates[0],
                     }}
-                    description={artifact.name}
                   >
-                    <View
+                    <Image
+                      source={{ uri: artifact.source }}
                       style={{
-                        width: ms(30, 0.9),
+                        width: ms(40, 1),
                         height: ms(40, 1),
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        resizeMode: 'contain',
                       }}
-                    >
-                      <Image
-                        source={{ uri: `${artifact.source}` }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </View>
+                    />
                   </Marker>
                 );
               }
