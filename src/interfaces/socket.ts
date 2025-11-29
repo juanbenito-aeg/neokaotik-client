@@ -23,6 +23,10 @@ interface ServerToClientEvents {
     acolyteId: string,
     artifactId: string,
   ) => void;
+  [SocketServerToClientEvents.ENTERED_EXITED_HS]: (
+    acolyteOrMortimerId: string,
+    isInsideHS: boolean,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

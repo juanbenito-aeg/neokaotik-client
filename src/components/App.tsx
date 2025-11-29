@@ -41,7 +41,6 @@ const App = () => {
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
-  const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
@@ -112,13 +111,14 @@ const App = () => {
         setUser,
         acolytes,
         setAcolytes,
+        setNonAcolytes,
       );
 
       return () => {
         performSocketCleanUp(userRef);
       };
     }
-  }, [user, acolytes, nonAcolytes]);
+  }, [user, acolytes]);
 
   useEffect(() => {
     if (user) {

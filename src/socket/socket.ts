@@ -8,7 +8,7 @@ import type {
 import { SocketGeneralEvents, SocketServerToClientEvents } from '../constants';
 import { handleConnection } from './handlers/connection';
 import KaotikaUser from '../interfaces/KaotikaUser';
-import { SetAcolytes, SetUser } from '../interfaces/player';
+import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
 import { SetModalData } from '../interfaces/Modal';
 import {
   handleAcolyteDisconnected,
@@ -19,6 +19,7 @@ import handleAcolytePositionChanged from './handlers/acolyte-position-changed';
 import { handleAcolyteTowerAccess } from './handlers/tower-access';
 import handlerArtifactCollected from './handlers/artifact-collected';
 import { MS } from '../interfaces/Metrics';
+import handleEnteredExitedHS from './handlers/entered-exited-hs';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -34,6 +35,7 @@ function initSocket(
   setUser: SetUser,
   acolytes: KaotikaUser[],
   setAcolytes: SetAcolytes,
+  setNonAcolytes: SetNonAcolytes,
 ) {
   // Listen for events
 
@@ -73,7 +75,6 @@ function initSocket(
       handleAcolytePositionChanged(setAcolytes, acolyteId, acolyteLocation);
     },
   );
-
   socket.on(
     SocketServerToClientEvents.ARTIFACT_COLLECTED,
     (acolyteId: string, artifactId: string) => {
@@ -83,6 +84,20 @@ function initSocket(
         setAcolytes,
         acolyteId,
         artifactId,
+      );
+    },
+  );
+
+  // Related to The Hall of Sages
+  socket.on(
+    SocketServerToClientEvents.ENTERED_EXITED_HS,
+    (acolyteOrMortimerId: string, isInsideHS: boolean) => {
+      handleEnteredExitedHS(
+        acolyteOrMortimerId,
+        isInsideHS,
+        acolytes,
+        setAcolytes,
+        setNonAcolytes,
       );
     },
   );
