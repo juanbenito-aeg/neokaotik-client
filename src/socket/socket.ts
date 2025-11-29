@@ -96,11 +96,16 @@ function initSocket(
   return performSocketCleanUp;
 }
 
-function performSocketCleanUp() {
+function performSocketCleanUp(userRef: React.RefObject<KaotikaUser | null>) {
   // Remove all listeners for all events
   socket.off();
 
-  socket.disconnect();
+  // Avoid socket disconnection every time state used in "initSocket" is updated
+  setTimeout(() => {
+    if (!userRef.current) {
+      socket.disconnect();
+    }
+  }, 0);
 }
 
 export { socket, initSocket };

@@ -41,6 +41,7 @@ const App = () => {
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
+  const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
@@ -114,15 +115,10 @@ const App = () => {
       );
 
       return () => {
-        // Avoid socket disconnection every time user state is updated
-        setTimeout(() => {
-          if (!userRef.current) {
-            performSocketCleanUp();
-          }
-        }, 0);
+        performSocketCleanUp(userRef);
       };
     }
-  }, [user]);
+  }, [user, acolytes, nonAcolytes]);
 
   useEffect(() => {
     if (user) {
