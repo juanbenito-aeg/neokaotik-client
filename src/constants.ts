@@ -86,6 +86,7 @@ enum SocketClientToServerEvents {
   REMOVE_SPELL_PRESS = 'remove spell press',
   ENTERED_EXITED_HS = 'player entered/exited HS',
   ACOLYTE_MOVED = 'acolyte moved',
+  ARTIFACT_PRESSED = 'artifact pressed',
 }
 
 enum MapNavigation {

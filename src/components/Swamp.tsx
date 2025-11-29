@@ -27,6 +27,7 @@ import { MS } from '../interfaces/Metrics';
 import ArtifactInventory from './ArtifactInventory';
 import emitAcolyteMoved from '../socket/events/acolyte-moved';
 import { ArtifactId } from '../interfaces/Artifact';
+import emitArtifactPressed from '../socket/events/artifact-pressed';
 
 const MapViewContainer = styled.View<{ $ms: MS }>`
   position: absolute;
@@ -52,7 +53,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
 
-  const [pressableArtifactId, setPressableArtifact] = useState<ArtifactId>('');
+  const [pressableArtifactId, setPressableArtifactId] =
+    useState<ArtifactId>('');
 
   const isVillainOrIstvan =
     user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
@@ -162,7 +164,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     });
 
     if (pressableArtifact?._id !== pressableArtifactId) {
-      setPressableArtifact(pressableArtifact?._id || '');
+      setPressableArtifactId(pressableArtifact?._id || '');
     }
   }
 
@@ -195,6 +197,12 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     return d;
   }
 
+  function handleArtifactPress(artifactId: ArtifactId) {
+    if (artifactId === pressableArtifactId) {
+      emitArtifactPressed(user!._id, artifactId);
+    }
+  }
+
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
       <Header>The Swamp</Header>
@@ -213,6 +221,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
           }}
           showsUserLocation={false}
           userInterfaceStyle="dark"
+          toolbarEnabled={false}
+          moveOnMarkerPress={false}
         >
           <Marker
             coordinate={{
@@ -267,6 +277,9 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                       longitude: artifact.location.coordinates[0],
                     }}
                     zIndex={1}
+                    onPress={() => {
+                      handleArtifactPress(artifact._id);
+                    }}
                   >
                     <Image
                       source={{ uri: artifact.source }}

@@ -20,6 +20,7 @@ import { handleAcolyteTowerAccess } from './handlers/tower-access';
 import handlerArtifactCollected from './handlers/artifact-collected';
 import { MS } from '../interfaces/Metrics';
 import handleEnteredExitedHS from './handlers/entered-exited-hs';
+import { SetArtifacts } from '../interfaces/Artifact';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -36,6 +37,7 @@ function initSocket(
   acolytes: KaotikaUser[],
   setAcolytes: SetAcolytes,
   setNonAcolytes: SetNonAcolytes,
+  setArtifacts: SetArtifacts,
 ) {
   // Listen for events
 
@@ -84,6 +86,8 @@ function initSocket(
         setAcolytes,
         acolyteId,
         artifactId,
+        setArtifacts,
+        user,
       );
     },
   );
