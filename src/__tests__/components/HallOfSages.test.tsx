@@ -1,7 +1,7 @@
 import { act, render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
-import player from '../../__mocks__/player.json';
+import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { SetUser } from '../../interfaces/player';
 
 beforeAll(() => {
@@ -49,7 +49,10 @@ describe('Hall of Sages', () => {
     const isInsideHS: boolean = true;
 
     await act(async () => {
-      setUser({ ...player, is_inside_hs: isInsideHS });
+      setUser({
+        ...mockedPlayers[MockedPlayer.ACOLYTE],
+        is_inside_hs: isInsideHS,
+      });
 
       expect(setUser).toHaveBeenCalledWith(
         expect.objectContaining({ is_inside_hs: isInsideHS }),
