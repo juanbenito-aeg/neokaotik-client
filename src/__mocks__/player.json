@@ -3,7 +3,7 @@
   "is_in_tower_entrance": false,
   "is_inside_tower": true,
   "active": true,
-  "rol": "Acolyte",
+  "rol": "acolyte",
   "socketId": "socket1234",
   "isInside": true,
   "attributes": {

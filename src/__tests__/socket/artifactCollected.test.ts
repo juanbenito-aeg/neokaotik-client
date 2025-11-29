@@ -4,6 +4,8 @@ import { SetAcolytes } from '../../interfaces/player';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import player from '../../__mocks__/player.json';
+import { SetArtifacts } from '../../interfaces/Artifact';
+import mockArtifacts from '../../__mocks__/mockArtifacts';
 
 // Mock the navigate function
 jest.mock('../../RootNavigation', () => ({
@@ -11,18 +13,29 @@ jest.mock('../../RootNavigation', () => ({
 }));
 
 describe('handleArtifactCollected', () => {
+  let ms: MS;
   let setModalData: SetModalData;
   let setAcolytes: SetAcolytes;
-  let ms: MS;
+  let setArtifacts: SetArtifacts;
   let acolytes: KaotikaUser[];
 
   beforeEach(() => {
     setModalData = jest.fn();
-    setAcolytes = jest.fn() as jest.Mock<SetAcolytes>;
     ms = jest.fn().mockReturnValue(1);
+    setAcolytes = jest.fn() as jest.Mock<SetAcolytes>;
+    setArtifacts = jest.fn(nextArtifacts => {
+      if (typeof nextArtifacts === 'function') {
+        return nextArtifacts(mockArtifacts);
+      }
+
+      return nextArtifacts;
+    });
 
     acolytes = [
-      { ...player, found_artifacts: ['artifact1', 'artifact2', 'artifact3'] },
+      {
+        ...player,
+        found_artifacts: ['artifact_1', 'artifact_2', 'artifact_3'],
+      },
     ];
   });
 
@@ -32,7 +45,9 @@ describe('handleArtifactCollected', () => {
       setModalData,
       setAcolytes,
       player._id,
-      '12345665433',
+      'artifact_4',
+      setArtifacts,
+      player,
     );
 
     expect(setAcolytes).toHaveBeenCalled();
@@ -44,7 +59,9 @@ describe('handleArtifactCollected', () => {
       setModalData,
       setAcolytes,
       player._id,
-      '1123432',
+      'artifact_1',
+      setArtifacts,
+      player,
     );
 
     expect(setModalData).not.toHaveBeenCalled();
@@ -63,7 +80,9 @@ describe('handleArtifactCollected', () => {
       setModalData,
       setAcolytes,
       player._id,
-      'artifact4',
+      'artifact_4',
+      setArtifacts,
+      player,
     );
 
     expect(setAcolytes).toHaveBeenCalledTimes(1);
