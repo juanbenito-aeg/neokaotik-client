@@ -16,7 +16,9 @@ interface Artifact {
 
 type ArtifactId = string;
 
-type SetArtifacts = (artifacts: Artifact[]) => void;
+type SetArtifacts = (
+  nextArtifacts: Artifact[] | ((currentArtifacts: Artifact[]) => Artifact[]),
+) => void;
 
 interface ArtifactProps {
   _id: ArtifactId;
@@ -25,4 +27,10 @@ interface ArtifactProps {
   testID: string;
 }
 
-export type { ArtifactStore, Artifact, ArtifactId, ArtifactProps };
+export type {
+  ArtifactStore,
+  Artifact,
+  ArtifactId,
+  SetArtifacts,
+  ArtifactProps,
+};
