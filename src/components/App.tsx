@@ -111,6 +111,7 @@ const App = () => {
         setUser,
         acolytes,
         setAcolytes,
+        setArtifacts,
       );
 
       return () => {
