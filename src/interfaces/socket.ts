@@ -57,6 +57,10 @@ interface ClientToServerEvents {
     acolyteId: string,
     acolyteLocation: Location,
   ) => void;
+  [SocketClientToServerEvents.ARTIFACT_PRESSED]: (
+    acolyteId: string,
+    artifactId: string,
+  ) => void;
 }
 
 export type {
