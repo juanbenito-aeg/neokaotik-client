@@ -96,9 +96,11 @@ const Modal = ({
               />
             )}
 
-            <ActionButton onPress={onPressActionButton}>
-              <ActionButtonText $hs={hs}>{actionButtonText}</ActionButtonText>
-            </ActionButton>
+            {actionButtonText && (
+              <ActionButton onPress={onPressActionButton}>
+                <ActionButtonText $hs={hs}>{actionButtonText}</ActionButtonText>
+              </ActionButton>
+            )}
           </Content>
         </BackgroundImage>
       </Container>

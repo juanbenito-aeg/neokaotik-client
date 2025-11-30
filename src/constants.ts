@@ -50,6 +50,7 @@ enum ModalBackgroundImgSrc {
 
 enum ModalImgSrc {
   BAG_OF_ARTIFACTS = require('../public/images/bag-of-artifacts.png'),
+  WAITING_HS = require('../public/images/waiting-for-validation.png'),
 }
 
 enum UserRole {
@@ -87,6 +88,7 @@ enum SocketClientToServerEvents {
   ENTERED_EXITED_HS = 'player entered/exited HS',
   ACOLYTE_MOVED = 'acolyte moved',
   ARTIFACT_PRESSED = 'artifact pressed',
+  REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
 }
 
 enum MapNavigation {

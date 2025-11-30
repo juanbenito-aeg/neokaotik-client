@@ -1,6 +1,7 @@
 import ScreenContainer from './ScreenContainer';
 import {
   ButtonBackgroundImgSrc,
+  ModalImgSrc,
   ScreenBackgroundImgSrc,
   UserRole,
 } from '../constants';
@@ -18,6 +19,9 @@ import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
 import { useFocusEffect } from '@react-navigation/native';
 import Button from './Button';
 import { ViewStyle } from 'react-native';
+import { ModalData, SetModalData } from '../interfaces/Modal';
+import { useModalStore } from '../store/useModalStore';
+import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
 
 const Avatar = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(70, 1)}px;
@@ -45,6 +49,8 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
+  const setModalData = useModalStore(state => state.setModalData);
+
   const players = [...acolytes, ...nonAcolytes];
 
   const [allArtifactsCollected, setAllArtifactsCollected] =
@@ -64,6 +70,14 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const buttonCustomStyleObj: ViewStyle = {
     position: 'absolute',
     top: '60%',
+  };
+
+  const [buttonClicked, setButtonClicked] = useState<boolean>(false);
+
+  const handleShowArtifactsClick = () => {
+    setButtonClicked(true);
+    setWaitingForValidationModal(ms, setModalData);
+    emitToRequestedToShowArtifacts();
   };
 
   useFocusEffect(
@@ -141,17 +155,19 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
         })}
       </AvatarsContainer>
 
-      {players.map(player => {
+      {players.map((player, index) => {
         if (player.rol === UserRole.MORTIMER && player.is_inside_hs) {
           if (
+            !buttonClicked &&
             user!.rol === UserRole.ACOLYTE &&
             user?.is_inside_hs &&
             allArtifactsCollected
           ) {
             return (
               <Button
+                key={index}
                 customStyleObj={buttonCustomStyleObj}
-                onPress={() => {}}
+                onPress={handleShowArtifactsClick}
                 backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
                 text="Show Artifacts"
               />
@@ -162,5 +178,21 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     </ScreenContainer>
   );
 };
+
+function setWaitingForValidationModal(ms: MS, setModalData: SetModalData) {
+  const modalData: ModalData = {
+    fullScreen: true,
+    content: {
+      message: 'Waiting for validation...',
+      image: {
+        source: ModalImgSrc.WAITING_HS,
+        width: ms(350, 1),
+        height: ms(350, 1),
+      },
+    },
+  };
+
+  setModalData(modalData);
+}
 
 export default HallOfSages;
