@@ -56,6 +56,7 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.ENTERED_EXITED_HS]: (
     acolyteOrMortimerId: string,
     isInsideHS: boolean,
+    handleEventNotReceivedInServer: (error: any) => void,
   ) => void;
   [SocketClientToServerEvents.ACOLYTE_MOVED]: (
     acolyteId: string,
