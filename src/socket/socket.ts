@@ -24,9 +24,7 @@ import { SetArtifacts } from '../interfaces/Artifact';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
-  {
-    autoConnect: false,
-  },
+  { autoConnect: false },
 );
 
 function initSocket(
@@ -106,11 +104,13 @@ function initSocket(
     },
   );
 
-  socket.on(SocketGeneralEvents.CONNECT, () => {
-    handleConnection(user.email);
-  });
+  if (socket.disconnected) {
+    socket.on(SocketGeneralEvents.CONNECT, () => {
+      handleConnection(user.email);
+    });
 
-  socket.connect();
+    socket.connect();
+  }
 
   return performSocketCleanUp;
 }
