@@ -1,8 +1,9 @@
-import { act, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { SetUser } from '../../interfaces/player';
+import { UserRole } from '../../constants';
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -58,5 +59,20 @@ describe('Hall of Sages', () => {
         expect.objectContaining({ is_inside_hs: isInsideHS }),
       );
     });
+  });
+
+  it('should not display the Show Artifacts button when conditions are not met', async () => {
+    const allArtifactsCollected = false;
+
+    render(
+      <NavigationContainer>
+        <HallOfSages onPressGoBackButton={() => {}} />
+      </NavigationContainer>,
+    );
+
+    if (!allArtifactsCollected) {
+      const showArtifactsButton = screen.queryByText('Show Artifacts');
+      expect(showArtifactsButton).toBeNull();
+    }
   });
 });
