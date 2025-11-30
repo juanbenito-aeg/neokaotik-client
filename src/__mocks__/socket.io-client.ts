@@ -1,7 +1,6 @@
-const socket = {
-  on: jest.fn(),
-  emit: jest.fn(),
-  disconnect: jest.fn(),
-};
+function io() {
+  const socket = { on: jest.fn(), emit: jest.fn(), disconnect: jest.fn() };
+  return socket;
+}
 
-export default jest.fn(() => socket);
+export { io };
