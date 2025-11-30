@@ -1,5 +1,9 @@
 import ScreenContainer from './ScreenContainer';
-import { ScreenBackgroundImgSrc, UserRole } from '../constants';
+import {
+  ButtonBackgroundImgSrc,
+  ScreenBackgroundImgSrc,
+  UserRole,
+} from '../constants';
 import GoBackButton from './GoBackButton';
 import { NestedScreenProps } from '../interfaces/generics';
 import Header from './Header';
@@ -7,11 +11,13 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
 import { useFocusEffect } from '@react-navigation/native';
+import Button from './Button';
+import { ViewStyle } from 'react-native';
 
 const Avatar = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(70, 1)}px;
@@ -19,6 +25,12 @@ const Avatar = styled.Image<{ $ms: MS }>`
   margin: ${({ $ms }) => $ms(10, 0.5)}px;
   border-radius: 9999px;
   filter: drop-shadow(0 0px 10px rgb(191 245 205));
+`;
+
+const AvatarsContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
 const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
@@ -34,6 +46,25 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const players = [...acolytes, ...nonAcolytes];
+
+  const [allArtifactsCollected, setAllArtifactsCollected] =
+    useState<boolean>(false);
+
+  const checkAllArtifactsCollected = (acolytes: KaotikaUser[]) => {
+    const allFoundArtifacts = acolytes.reduce((acc, acolyte) => {
+      if (acolyte.found_artifacts) {
+        acc.push(...acolyte.found_artifacts);
+      }
+      return acc;
+    }, [] as string[]);
+
+    return allFoundArtifacts.length === 4;
+  };
+
+  const buttonCustomStyleObj: ViewStyle = {
+    position: 'absolute',
+    top: '60%',
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -78,6 +109,11 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
           setNonAcolytes,
         );
 
+        if (user.rol === UserRole.ACOLYTE) {
+          const artifactsCollected = checkAllArtifactsCollected(acolytes);
+          setAllArtifactsCollected(artifactsCollected);
+        }
+
         return () => {
           updateAcolyteOrMortimerIsInsideHS(
             false,
@@ -95,11 +131,32 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
       <Header>The Hall of Sages</Header>
       <GoBackButton onPress={onPressGoBackButton} />
-      {players.map((player, index) => {
-        if (user?._id !== player._id && player.is_inside_hs) {
-          return (
-            <Avatar key={index} source={{ uri: player.avatar }} $ms={ms} />
-          );
+      <AvatarsContainer>
+        {players.map((player, index) => {
+          if (user?._id !== player._id && player.is_inside_hs) {
+            return (
+              <Avatar key={index} source={{ uri: player.avatar }} $ms={ms} />
+            );
+          }
+        })}
+      </AvatarsContainer>
+
+      {players.map(player => {
+        if (player.rol === UserRole.MORTIMER && player.is_inside_hs) {
+          if (
+            user!.rol === UserRole.ACOLYTE &&
+            user?.is_inside_hs &&
+            allArtifactsCollected
+          ) {
+            return (
+              <Button
+                customStyleObj={buttonCustomStyleObj}
+                onPress={() => {}}
+                backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+                text="Show Artifacts"
+              />
+            );
+          }
         }
       })}
     </ScreenContainer>
