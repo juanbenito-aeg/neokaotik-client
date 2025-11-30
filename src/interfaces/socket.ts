@@ -66,6 +66,7 @@ interface ClientToServerEvents {
     acolyteId: string,
     artifactId: string,
   ) => void;
+  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
 }
 
 export type {
