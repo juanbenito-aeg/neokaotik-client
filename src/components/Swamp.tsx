@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
@@ -28,6 +28,7 @@ import ArtifactInventory from './ArtifactInventory';
 import emitAcolyteMoved from '../socket/events/acolyte-moved';
 import { ArtifactId } from '../interfaces/Artifact';
 import emitArtifactPressed from '../socket/events/artifact-pressed';
+import { useFocusEffect } from '@react-navigation/native';
 
 const MapViewContainer = styled.View<{ $ms: MS }>`
   position: absolute;
@@ -76,9 +77,31 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         });
       });
     }
-
-    getCurrentPosition();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!watching && subscriptionId === null) {
+        getCurrentPosition();
+        startWatching();
+      }
+
+      return () => {
+        if (subscriptionId !== null) {
+          // When the user exits the screen, stop watching for changes in their position & reset the related state
+
+          setPosition(NULL_LOCATION);
+          setWatching(false);
+          setSubscriptionId(null);
+          Geolocation.clearWatch(subscriptionId);
+
+          if (user!.rol === UserRole.ACOLYTE) {
+            emitAcolyteMoved(user!._id, NULL_LOCATION);
+          }
+        }
+      };
+    }, [watching, subscriptionId]),
+  );
 
   const getCurrentPosition = () => {
     Geolocation.getCurrentPosition(pos => {
@@ -88,18 +111,6 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
       });
     });
   };
-
-  useEffect(() => {
-    if (!watching && subscriptionId === null) {
-      startWatching();
-    }
-
-    return () => {
-      if (subscriptionId !== null) {
-        Geolocation.clearWatch(subscriptionId);
-      }
-    };
-  }, [watching, subscriptionId]);
 
   const startWatching = () => {
     try {
@@ -159,7 +170,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             artifact.location.coordinates,
           );
 
-        return distanceBetweenUserAndArtifact < 2;
+        return distanceBetweenUserAndArtifact < 1;
       }
     });
 
