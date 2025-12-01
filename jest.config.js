@@ -1,14 +1,6 @@
 module.exports = {
   preset: 'react-native',
-  transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest',
-  },
   transformIgnorePatterns: [
-    'node_modules/(?!@react-navigation|react-native|@react-native)',
+    'node_modules/(?!((@)?react-native|@react-navigation))',
   ],
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
-  },
 };
