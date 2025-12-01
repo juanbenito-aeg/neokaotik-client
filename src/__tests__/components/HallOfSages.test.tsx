@@ -1,9 +1,8 @@
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import { act, render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { SetUser } from '../../interfaces/player';
-import { UserRole } from '../../constants';
 
 beforeAll(() => {
   jest.clearAllMocks();

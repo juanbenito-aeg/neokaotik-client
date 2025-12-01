@@ -1,7 +1,6 @@
 import ScreenContainer from './ScreenContainer';
 import {
   ButtonBackgroundImgSrc,
-  ModalImgSrc,
   ScreenBackgroundImgSrc,
   UserRole,
 } from '../constants';
@@ -19,8 +18,6 @@ import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
 import { useFocusEffect } from '@react-navigation/native';
 import Button from './Button';
 import { ViewStyle } from 'react-native';
-import { ModalData, SetModalData } from '../interfaces/Modal';
-import { useModalStore } from '../store/useModalStore';
 import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
 
 const Avatar = styled.Image<{ $ms: MS }>`
@@ -49,8 +46,6 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
-  const setModalData = useModalStore(state => state.setModalData);
-
   const players = [...acolytes, ...nonAcolytes];
 
   const [allArtifactsCollected, setAllArtifactsCollected] =
@@ -76,7 +71,6 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   const handleShowArtifactsClick = () => {
     setButtonClicked(true);
-    setWaitingForValidationModal(ms, setModalData);
     emitToRequestedToShowArtifacts();
   };
 
@@ -178,21 +172,5 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     </ScreenContainer>
   );
 };
-
-function setWaitingForValidationModal(ms: MS, setModalData: SetModalData) {
-  const modalData: ModalData = {
-    fullScreen: true,
-    content: {
-      message: 'Waiting for validation...',
-      image: {
-        source: ModalImgSrc.WAITING_HS,
-        width: ms(350, 1),
-        height: ms(350, 1),
-      },
-    },
-  };
-
-  setModalData(modalData);
-}
 
 export default HallOfSages;
