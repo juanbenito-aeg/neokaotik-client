@@ -152,14 +152,14 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   function togglePressableArtifactId(position: Location) {
     const pressableArtifact = artifacts.find(artifact => {
-      const distanceBetweenUserAndArtifact =
-        calculateDistanceBetweenUserAndArtifact(
-          position.coordinates,
-          artifact.location.coordinates,
-        );
+      if (artifact.state === ArtifactState.ACTIVE) {
+        const distanceBetweenUserAndArtifact =
+          calculateDistanceBetweenUserAndArtifact(
+            position.coordinates,
+            artifact.location.coordinates,
+          );
 
-      if (distanceBetweenUserAndArtifact < 1) {
-        return artifact;
+        return distanceBetweenUserAndArtifact < 2;
       }
     });
 
