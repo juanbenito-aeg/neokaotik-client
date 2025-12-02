@@ -1,6 +1,9 @@
-import { render, screen } from '@testing-library/react-native';
-import ArtifactsPanel from '../../components/ArtifactsPanel';
 import React from 'react';
+import ArtifactsPanel from '../../components/ArtifactsPanel';
+import { fireEvent, render, screen } from '@testing-library/react-native';
+import emitArtifactsSearchValidationOrReset from '../../socket/events/artifacts-search-validation-reset';
+
+jest.mock('../../socket/events/artifacts-search-validation-reset');
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -20,5 +23,25 @@ describe('Artifacts Panel', () => {
 
     const buttons = screen.getByTestId('button-container');
     expect(buttons).toBeTruthy();
+  });
+
+  it('should trigger a validate when clicking (Validate search) button', () => {
+    render(<ArtifactsPanel />);
+
+    const validateButton = screen.getByText(/Validate search/);
+
+    fireEvent.press(validateButton);
+
+    expect(emitArtifactsSearchValidationOrReset).toHaveBeenCalledWith(true);
+  });
+
+  it('should trigger a reset when clicking (Reset search) button', () => {
+    render(<ArtifactsPanel />);
+
+    const resetButton = screen.getByText(/Reset search/);
+
+    fireEvent.press(resetButton);
+
+    expect(emitArtifactsSearchValidationOrReset).toHaveBeenCalledWith(false);
   });
 });
