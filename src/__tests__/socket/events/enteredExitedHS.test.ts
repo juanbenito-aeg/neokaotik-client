@@ -3,7 +3,6 @@ import { SocketClientToServerEvents } from '../../../constants';
 jest.mock('socket.io-client');
 
 let socket: any;
-let io: any;
 
 beforeEach(() => {
   socket = {
