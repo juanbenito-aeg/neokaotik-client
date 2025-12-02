@@ -23,6 +23,7 @@ import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import { Artifact } from '../interfaces/Artifact';
 import useArtifactStore from '../store/useArtifactStore';
+import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
 const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
@@ -44,6 +45,10 @@ const App = () => {
   const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
+
+  const setShowArtifactsAnimation = useHallOfSageStore(
+    state => state.setShowArtifactsAnimation,
+  );
 
   const { ms } = useMetrics();
 
@@ -113,6 +118,7 @@ const App = () => {
         setAcolytes,
         setNonAcolytes,
         setArtifacts,
+        setShowArtifactsAnimation,
       );
 
       return () => {
