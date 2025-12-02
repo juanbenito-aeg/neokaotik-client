@@ -3,6 +3,7 @@ import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { SetUser } from '../../interfaces/player';
+import { useHallOfSageStore } from '../../store/useHallOfSageStore';
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -25,6 +26,7 @@ describe('Hall of Sages', () => {
   let io: any;
 
   beforeEach(() => {
+    useHallOfSageStore.setState({ showArtifactsAnimation: true });
     onPressGoBackButton = jest.fn();
     socket = {
       on: jest.fn(),
@@ -73,5 +75,16 @@ describe('Hall of Sages', () => {
       const showArtifactsButton = screen.queryByText('Show Artifacts');
       expect(showArtifactsButton).toBeNull();
     }
+  });
+
+  it('should display an ArtifactPanel if showArtifactsAnimation is true', async () => {
+    render(
+      <NavigationContainer>
+        <HallOfSages onPressGoBackButton={() => {}} />
+      </NavigationContainer>,
+    );
+
+    const artifactsPanel = await screen.findByTestId('artifacts-panel');
+    expect(artifactsPanel).toBeTruthy();
   });
 });
