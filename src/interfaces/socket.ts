@@ -27,6 +27,7 @@ interface ServerToClientEvents {
     acolyteOrMortimerId: string,
     isInsideHS: boolean,
   ) => void;
+  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
