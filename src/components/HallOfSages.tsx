@@ -138,7 +138,9 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
       <Header>The Hall of Sages</Header>
+
       <GoBackButton onPress={onPressGoBackButton} />
+
       <AvatarsContainer>
         {players.map((player, index) => {
           if (user?._id !== player._id && player.is_inside_hs) {
