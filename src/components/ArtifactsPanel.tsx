@@ -7,6 +7,8 @@ import useMetrics from '../hooks/use-metrics';
 import { useState } from 'react';
 import Button from './Button';
 import { MS } from '../interfaces/Metrics';
+import { useHallOfSageStore } from '../store/useHallOfSageStore';
+import emitArtifactsSearchValidationOrReset from '../socket/events/artifacts-search-validation-reset';
 
 const ArtifactsContainer = styled.View`
   width: 100%;
@@ -44,9 +46,19 @@ const ButtonContainer = styled.View`
 
 const ArtifactsPanel = () => {
   const { ms } = useMetrics();
+
   const artifacts = useArtifactStore(state => state.artifacts);
+  const setShowArtifactsAnimation = useHallOfSageStore(
+    state => state.setShowArtifactsAnimation,
+  );
 
   const [isAnimationFinished, setAnimationFinished] = useState<boolean>(false);
+
+  const handlePress = (isSearchValidated: boolean) => {
+    setAnimationFinished(false);
+    setShowArtifactsAnimation(false);
+    emitArtifactsSearchValidationOrReset(isSearchValidated);
+  };
 
   return (
     <ArtifactsContainer testID="artifacts-panel">
@@ -84,13 +96,17 @@ const ArtifactsPanel = () => {
           <Animatable.View animation="fadeInUp" duration={900}>
             <Button
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-              onPress={() => {}}
+              onPress={() => {
+                handlePress(true);
+              }}
               text="Validate search"
             />
 
             <Button
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-              onPress={() => {}}
+              onPress={() => {
+                handlePress(false);
+              }}
               text="Reset search"
             />
           </Animatable.View>
