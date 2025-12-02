@@ -19,6 +19,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import Button from './Button';
 import { ViewStyle } from 'react-native';
 import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
+import ArtifactsPanel from './ArtifactsPanel';
+import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
 const Avatar = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(70, 1)}px;
@@ -68,6 +70,10 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   };
 
   const [buttonClicked, setButtonClicked] = useState<boolean>(false);
+
+  const showArtifactsAnimation = useHallOfSageStore(
+    state => state.showArtifactsAnimation,
+  );
 
   const handleShowArtifactsClick = () => {
     setButtonClicked(true);
@@ -140,37 +146,45 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
       <Header>The Hall of Sages</Header>
 
       <GoBackButton onPress={onPressGoBackButton} />
+      {!showArtifactsAnimation && (
+        <>
+          <AvatarsContainer>
+            {players.map((player, index) => {
+              if (user?._id !== player._id && player.is_inside_hs) {
+                return (
+                  <Avatar
+                    key={index}
+                    source={{ uri: player.avatar }}
+                    $ms={ms}
+                  />
+                );
+              }
+            })}
+          </AvatarsContainer>
 
-      <AvatarsContainer>
-        {players.map((player, index) => {
-          if (user?._id !== player._id && player.is_inside_hs) {
-            return (
-              <Avatar key={index} source={{ uri: player.avatar }} $ms={ms} />
-            );
-          }
-        })}
-      </AvatarsContainer>
-
-      {players.map((player, index) => {
-        if (player.rol === UserRole.MORTIMER && player.is_inside_hs) {
-          if (
-            !buttonClicked &&
-            user!.rol === UserRole.ACOLYTE &&
-            user?.is_inside_hs &&
-            allArtifactsCollected
-          ) {
-            return (
-              <Button
-                key={index}
-                customStyleObj={buttonCustomStyleObj}
-                onPress={handleShowArtifactsClick}
-                backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-                text="Show Artifacts"
-              />
-            );
-          }
-        }
-      })}
+          {players.map((player, index) => {
+            if (
+              player.rol === UserRole.MORTIMER &&
+              player.is_inside_hs &&
+              !buttonClicked &&
+              user!.rol === UserRole.ACOLYTE &&
+              user?.is_inside_hs &&
+              allArtifactsCollected
+            ) {
+              return (
+                <Button
+                  key={index}
+                  customStyleObj={buttonCustomStyleObj}
+                  onPress={handleShowArtifactsClick}
+                  backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+                  text="Show artifacts"
+                />
+              );
+            }
+          })}
+        </>
+      )}
+      {showArtifactsAnimation && <ArtifactsPanel />}
     </ScreenContainer>
   );
 };

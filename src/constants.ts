@@ -4,6 +4,7 @@ import { ModalData } from './interfaces/Modal';
 enum GeneralBackgroundImgSrc {
   ARTIFACT_INVENTORY = require('../public/images/artifact-inventory.png'),
   ARTIFACT_SLOT = require('../public/images/artifact-slot.png'),
+  ARTIFACTS_PANEL = require('../public/images/artifacts-panel.png'),
 }
 
 enum ScreenBackgroundImgSrc {
@@ -79,6 +80,7 @@ enum SocketServerToClientEvents {
   ARTIFACT_COLLECTED = 'artifact collected',
   ENTERED_EXITED_HS = 'player entered/exited HS',
   ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED = 'artifacts search validation/reset managed',
+  REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
 }
 
 enum SocketClientToServerEvents {

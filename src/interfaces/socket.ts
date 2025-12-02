@@ -30,6 +30,7 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED]: (
     acolytesHaveCompletedArtifactsSearch: boolean,
   ) => void;
+  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
