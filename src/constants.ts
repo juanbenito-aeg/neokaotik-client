@@ -93,6 +93,7 @@ enum SocketClientToServerEvents {
   ACOLYTE_MOVED = 'acolyte moved',
   ARTIFACT_PRESSED = 'artifact pressed',
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
+  ARTIFACTS_SEARCH_VALIDATION_RESET = 'artifacts search validated/reset',
 }
 
 enum MapNavigation {

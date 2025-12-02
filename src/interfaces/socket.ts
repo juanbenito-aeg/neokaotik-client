@@ -71,6 +71,9 @@ interface ClientToServerEvents {
     artifactId: string,
   ) => void;
   [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
+    isSearchValidated: boolean,
+  ) => void;
 }
 
 export type {
