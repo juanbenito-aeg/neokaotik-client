@@ -72,13 +72,13 @@ const AcolyteAngeloLab = ({ onPressGoBackButton }: NestedScreenProps) => {
             text={showQR ? 'Hide QR' : 'Show QR'}
           />
 
-          <QRWrapper>
+          <QRWrapper testID="inner-qr-code-container">
             {showQR && QRToScan(user!.email, user!.isInside)}
           </QRWrapper>
         </>
       ) : (
         <>
-          <ScannerContainer>
+          <ScannerContainer testID="outer-qr-code-container">
             <>{QRToScan(user!.email, user!.isInside)}</>
           </ScannerContainer>
 
