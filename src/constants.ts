@@ -41,6 +41,7 @@ enum ButtonBackgroundImgSrc {
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
   SCROLL = require('../public/images/roles/acolyte/scroll.png'),
   HALL_OF_SAGES = require('../public/images/the-hall-of-sages-icon.png'),
+  OBITUARY = require('../public/images/obituary-icon.png'),
 }
 
 enum ModalBackgroundImgSrc {
@@ -97,6 +98,7 @@ enum MapNavigation {
   OLD_SCHOOL_MAP = 'Old School Map',
   SWAMP = 'Swamp',
   SWAMP_TOWER = 'Swamp Tower',
+  OBITUARY = 'The Obituary',
 }
 
 enum OldSchoolLocation {

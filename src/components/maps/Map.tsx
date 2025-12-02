@@ -24,6 +24,7 @@ import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entr
 import Swamp from '../Swamp';
 import { useMapStore } from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
+import Obituary from '../Obituary';
 
 const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
@@ -112,6 +113,21 @@ const Map = ({ route }: MapProps) => {
                 backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP_TOWER}
               />
             )}
+
+            {(user!.has_completed_artifacts_search ||
+              user!.rol !== UserRole.ACOLYTE) && (
+              <Button
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '36%',
+                  left: '20%',
+                }}
+                onPress={() => {
+                  handlePress(MapNavigation.OBITUARY);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.OBITUARY}
+              />
+            )}
           </ScreenContainer>
         );
 
@@ -143,6 +159,15 @@ const Map = ({ route }: MapProps) => {
             backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_SWAMP_TOWER}
             headerText="Swamp Tower Access Log"
             fieldToFilterAcolytesBy="is_inside_tower"
+          />
+        );
+
+      case MapNavigation.OBITUARY:
+        return (
+          <Obituary
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
           />
         );
     }
