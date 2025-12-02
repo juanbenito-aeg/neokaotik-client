@@ -21,6 +21,8 @@ import handlerArtifactCollected from './handlers/artifact-collected';
 import { MS } from '../interfaces/Metrics';
 import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
+import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
+import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -36,6 +38,7 @@ function initSocket(
   setAcolytes: SetAcolytes,
   setNonAcolytes: SetNonAcolytes,
   setArtifacts: SetArtifacts,
+  setShowArtifactsAnimation: SetShowArtifactsAnimation,
 ) {
   // Listen for events
 
@@ -103,6 +106,15 @@ function initSocket(
       );
     },
   );
+
+  socket.on(SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS, () => {
+    handleRequestedToShowArtifacts(
+      user!,
+      ms,
+      setModalData,
+      setShowArtifactsAnimation,
+    );
+  });
 
   if (socket.disconnected) {
     socket.on(SocketGeneralEvents.CONNECT, () => {
