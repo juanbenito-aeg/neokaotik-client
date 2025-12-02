@@ -77,6 +77,7 @@ enum SocketServerToClientEvents {
   ACOLYTE_POSITION_CHANGED = "acolyte's position changed",
   ARTIFACT_COLLECTED = 'artifact collected',
   ENTERED_EXITED_HS = 'player entered/exited HS',
+  ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED = 'artifacts search validation/reset managed',
 }
 
 enum SocketClientToServerEvents {

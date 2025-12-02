@@ -27,6 +27,9 @@ interface ServerToClientEvents {
     acolyteOrMortimerId: string,
     isInsideHS: boolean,
   ) => void;
+  [SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED]: (
+    acolytesHaveCompletedArtifactsSearch: boolean,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

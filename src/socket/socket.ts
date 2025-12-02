@@ -21,6 +21,7 @@ import handlerArtifactCollected from './handlers/artifact-collected';
 import { MS } from '../interfaces/Metrics';
 import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
+import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -100,6 +101,19 @@ function initSocket(
         acolytes,
         setAcolytes,
         setNonAcolytes,
+      );
+    },
+  );
+  socket.on(
+    SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED,
+    acolytesHaveCompletedArtifactsSearch => {
+      handleArtifactsSearchValidationResetManaged(
+        acolytesHaveCompletedArtifactsSearch,
+        setModalData,
+        user,
+        setUser,
+        setAcolytes,
+        setArtifacts,
       );
     },
   );
