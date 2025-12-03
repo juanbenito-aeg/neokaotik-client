@@ -11,6 +11,8 @@ beforeEach(() => {
 
 jest.spyOn(React, 'useState').mockImplementation(() => [true, jest.fn()]);
 
+jest.useFakeTimers();
+
 describe('Artifacts Panel', () => {
   it('should render Artifacts Panel container', () => {
     render(<ArtifactsPanel />);
