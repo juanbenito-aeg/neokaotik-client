@@ -11,7 +11,7 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
@@ -21,6 +21,7 @@ import { ViewStyle } from 'react-native';
 import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
 import ArtifactsPanel from './ArtifactsPanel';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
+import * as Animatable from 'react-native-animatable';
 
 const Avatar = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(70, 1)}px;
@@ -144,19 +145,24 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
       <Header>The Hall of Sages</Header>
-
       <GoBackButton onPress={onPressGoBackButton} />
       {!showArtifactsAnimation && (
         <>
           <AvatarsContainer>
             {players.map((player, index) => {
-              if (user?._id !== player._id && player.is_inside_hs) {
+              if (user!._id !== player._id && player.is_inside_hs) {
                 return (
-                  <Avatar
+                  <Animatable.View
                     key={index}
-                    source={{ uri: player.avatar }}
-                    $ms={ms}
-                  />
+                    animation="zoomIn"
+                    duration={500}
+                  >
+                    <Avatar
+                      key={index}
+                      source={{ uri: player.avatar }}
+                      $ms={ms}
+                    />
+                  </Animatable.View>
                 );
               }
             })}
