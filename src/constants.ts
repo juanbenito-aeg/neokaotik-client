@@ -148,6 +148,13 @@ enum Coordinate {
   LATITUDE,
 }
 
+enum ArtifactImgSrc {
+  'The Auracle Sphere' = require('../public/images/artifacts/orb.png'),
+  'The Chalice of Dawnbound Kings' = require('../public/images/artifacts/chalice.png'),
+  "The Compass of Asterion's Path" = require('../public/images/artifacts/compass.png'),
+  'The Stoneheart Sigil' = require('../public/images/artifacts/amulet.png'),
+}
+
 export {
   GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
@@ -168,4 +175,5 @@ export {
   ArtifactState,
   NULL_LOCATION,
   Coordinate,
+  ArtifactImgSrc,
 };
