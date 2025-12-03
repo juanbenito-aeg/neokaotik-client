@@ -1,20 +1,14 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ButtonBackgroundImgSrc,
   MapNavigation,
   ScreenBackgroundImgSrc,
 } from '../../../constants';
 import ScreenContainer from '../../ScreenContainer';
-import { UserContext } from '../../../contexts/UserContext';
 import Text from '../../Text';
-import {
-  MapNavigationContext,
-  TabBarStyleContext,
-} from '../../../contexts/MapContext';
 import GoBackButton from '../../GoBackButton';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { updateAcolyteTowerEntranceStatus } from '../../../socket/events/tower-entrance';
-import { listenForAcolyteAccess } from '../../../socket/handlers/tower-access';
 import { TextStyle, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';
@@ -23,6 +17,8 @@ import * as Animatable from 'react-native-animatable';
 import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
 import Header from '../../Header';
 import { MS } from '../../../interfaces/Metrics';
+import { useMapStore } from '../../../store/useMapStore';
+import usePlayerStore from '../../../store/usePlayerStore';
 
 const TextWrapper = styled.View<{ $ms: MS }>`
   width: 70%;
@@ -32,11 +28,16 @@ const TextWrapper = styled.View<{ $ms: MS }>`
 `;
 
 const AcolyteSwampTower = () => {
-  const { ms } = useMetrics();
-  const { user, setUser } = useContext(UserContext)!;
+  const [hasClickedScroll, setHasClickedScroll] = useState(false);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
   const isInTowerEntrance = user!.is_in_tower_entrance;
   const isInsideTower = user!.is_inside_tower;
-  const [hasClickedScroll, setHasClickedScroll] = useState(false);
+
+  const { ms } = useMetrics();
+
   const textStyle: TextStyle & ViewStyle = {
     color: 'white',
     fontSize: ms(30, 1),
@@ -52,12 +53,8 @@ const AcolyteSwampTower = () => {
     })`,
   };
 
-  useEffect(() => {
-    const cleanup = listenForAcolyteAccess(setUser);
-    return cleanup;
-  }, []);
-
-  const { mapNavigation, setMapNavigation } = useContext(MapNavigationContext);
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   useFocusEffect(
     useCallback(() => {
@@ -84,7 +81,7 @@ const AcolyteSwampTower = () => {
   };
 
   const navigation = useNavigation();
-  const tabBarStyle = useContext(TabBarStyleContext);
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
 
   useEffect(() => {
     navigation.setOptions({

@@ -11,31 +11,38 @@ import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
 import useMetrics from '../../hooks/use-metrics';
 import { ViewStyle } from 'react-native';
-import { useState, useEffect, useContext } from 'react';
-import {
-  MapNavigationContext,
-  TabBarStyleContext,
-} from '../../contexts/MapContext';
+import { useState, useEffect } from 'react';
 import {
   EventMapCore,
   NavigationState,
   useNavigation,
 } from '@react-navigation/native';
 import { MapProps } from '../../interfaces/Map';
-import { UserContext } from '../../contexts/UserContext';
 import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
+import Swamp from '../Swamp';
+import { useMapStore } from '../../store/useMapStore';
+import usePlayerStore from '../../store/usePlayerStore';
+import Obituary from '../Obituary';
 
 const Map = ({ route }: MapProps) => {
-  const [mapNavigation, setMapNavigation] = useState(MapNavigation.MAP);
   const [specificLocation, setSpecificLocation] =
     useState<OldSchoolLocation | null>(null);
 
-  const { user, setUser } = useContext(UserContext)!;
+  const mapNavigation = useMapStore(state => state.mapNavigation);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
 
   const navigation = useNavigation();
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+  const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
+
+  useEffect(() => {
+    setTabBarStyle(tabBarStyle);
+  }, []);
 
   useEffect(() => {
     if (screenChangingNotificationData?.destination) {
@@ -80,14 +87,45 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
             />
 
+            <Button
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                top: '50%',
+                left: '48%',
+              }}
+              onPress={() => {
+                handlePress(MapNavigation.SWAMP);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP}
+            />
+
             {(user!.rol === UserRole.ACOLYTE ||
               user!.rol === UserRole.MORTIMER) && (
               <Button
-                customStyleObj={{ ...buttonCustomStyleObj, top: '60%' }}
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '67%',
+                  left: '46.5%',
+                }}
                 onPress={() => {
                   handlePress(MapNavigation.SWAMP_TOWER);
                 }}
                 backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP_TOWER}
+              />
+            )}
+
+            {(user!.has_completed_artifacts_search ||
+              user!.rol !== UserRole.ACOLYTE) && (
+              <Button
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '36%',
+                  left: '20%',
+                }}
+                onPress={() => {
+                  handlePress(MapNavigation.OBITUARY);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.OBITUARY}
               />
             )}
           </ScreenContainer>
@@ -98,6 +136,15 @@ const Map = ({ route }: MapProps) => {
           <OldSchoolMap
             initialLocation={specificLocation}
             setSpecificLocation={setSpecificLocation}
+          />
+        );
+
+      case MapNavigation.SWAMP:
+        return (
+          <Swamp
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
           />
         );
 
@@ -112,6 +159,15 @@ const Map = ({ route }: MapProps) => {
             backgroundImgSrc={ScreenBackgroundImgSrc.MORTIMER_SWAMP_TOWER}
             headerText="Swamp Tower Access Log"
             fieldToFilterAcolytesBy="is_inside_tower"
+          />
+        );
+
+      case MapNavigation.OBITUARY:
+        return (
+          <Obituary
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
           />
         );
     }
@@ -135,13 +191,7 @@ const Map = ({ route }: MapProps) => {
     return unsubscribe;
   }, [mapNavigation]);
 
-  return (
-    <MapNavigationContext.Provider value={{ mapNavigation, setMapNavigation }}>
-      <TabBarStyleContext value={tabBarStyle}>
-        {changeScreen(mapNavigation)}
-      </TabBarStyleContext>
-    </MapNavigationContext.Provider>
-  );
+  return <>{changeScreen(mapNavigation)}</>;
 };
 
 export default Map;

@@ -19,6 +19,11 @@ interface ModalImage {
   height: number;
 }
 
-type SetModalData = React.Dispatch<React.SetStateAction<ModalData | null>>;
+interface ModalStore {
+  modalData: ModalData | null;
+  setModalData: SetModalData;
+}
 
-export type { ModalData, SetModalData };
+type SetModalData = (modalData: ModalData | null) => void;
+
+export type { ModalData, SetModalData, ModalStore };

@@ -6,36 +6,49 @@ import { authenticateUser } from '../helpers/auth.helpers';
 import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
-import { UserContext } from '../contexts/UserContext';
 import CircleSpinner from './Spinner';
-import { ModalContext } from '../contexts/ModalContext';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { initSocket, performSocketCleanUp } from '../socket/socket';
+import { initSocket } from '../socket/socket';
 import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
-import AcolytesContext from '../contexts/AcolytesContext';
-import IsLoadingContext from '../contexts/IsLoadingContext';
-import { EventListenersCleaners } from '../interfaces/App';
-import {
-  listenForAcolyteDisconnected,
-  listenForAcolyteInsideOutsideLab,
-} from '../socket/events/angelo-lab';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
   setNotificationHandlers,
   handleBackgroundOrQuitNotification,
 } from '../helpers/fcm.helpers';
 import messaging from '@react-native-firebase/messaging';
-import { ModalData } from '../interfaces/Modal';
 import useMetrics from '../hooks/use-metrics';
+import usePlayerStore from '../store/usePlayerStore';
+import { useModalStore } from '../store/useModalStore';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
+import { Artifact } from '../interfaces/Artifact';
+import useArtifactStore from '../store/useArtifactStore';
+import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
 const App = () => {
-  const [modalData, setModalData] = useState<ModalData | null>(null);
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<KaotikaUser | null>(null);
+
+  const modalData = useModalStore(state => state.modalData);
+  const setModalData = useModalStore(state => state.setModalData);
+
+  const isLoading = useIsLoadingStore(state => state.isLoading);
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
+  const user = usePlayerStore(state => state.user);
+  const setUser = usePlayerStore(state => state.setUser);
+
   const userRef = useRef(user);
-  const [acolytes, setAcolytes] = useState<KaotikaUser[]>([]);
+
+  const acolytes = usePlayerStore(state => state.acolytes);
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
+
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
+
+  const setArtifacts = useArtifactStore(state => state.setArtifacts);
+
+  const setShowArtifactsAnimation = useHallOfSageStore(
+    state => state.setShowArtifactsAnimation,
+  );
 
   const { ms } = useMetrics();
 
@@ -55,27 +68,64 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      let mortimerEventListenersCleaners: EventListenersCleaners = [];
+      (async () => {
+        setIsLoading(true);
 
-      if (user.rol === UserRole.MORTIMER) {
-        (async () => {
-          mortimerEventListenersCleaners = await setMortimerUp(
-            mortimerEventListenersCleaners,
-          );
-        })();
-      }
+        // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
 
-      initSocket(user.email);
+        const acolytesArray = (await getXArray(
+          'http://10.50.0.50:6000/user/get-acolytes/',
+        )) as KaotikaUser[];
+        setAcolytes(acolytesArray);
 
-      return () => {
-        setTimeout(() => {
-          if (!userRef.current) {
-            performSocketCleanUp(...mortimerEventListenersCleaners);
-          }
-        }, 0);
-      };
+        const nonAcolyteArray = (await getXArray(
+          'http://10.50.0.50:6000/user/non-acolyte-players/',
+        )) as KaotikaUser[];
+        setNonAcolytes(nonAcolyteArray);
+
+        if (user.rol === UserRole.ACOLYTE || user.rol === UserRole.MORTIMER) {
+          const artifactsArray = (await getXArray(
+            'http://10.50.0.50:6000/api/artifacts/',
+          )) as Artifact[];
+          setArtifacts(artifactsArray);
+        }
+
+        setIsLoading(false);
+      })();
     }
   }, [user]);
+
+  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
+    const response = await fetch(url);
+
+    let xArray = [];
+
+    if (response.ok) {
+      xArray = await response.json();
+    }
+
+    return xArray;
+  }
+
+  useEffect(() => {
+    if (user) {
+      const performSocketCleanUp = initSocket(
+        ms,
+        setModalData,
+        user,
+        setUser,
+        acolytes,
+        setAcolytes,
+        setNonAcolytes,
+        setArtifacts,
+        setShowArtifactsAnimation,
+      );
+
+      return () => {
+        performSocketCleanUp(userRef);
+      };
+    }
+  }, [user, acolytes]);
 
   useEffect(() => {
     if (user) {
@@ -155,81 +205,29 @@ const App = () => {
     return idToken;
   }
 
-  async function setMortimerUp(
-    mortimerEventListenersCleaners: EventListenersCleaners,
-  ) {
-    setIsLoading(true);
-
-    const acolytesArray = await getAcolytes();
-
-    setIsLoading(false);
-
-    setAcolytes(acolytesArray);
-
-    const clearAcolyteInsideOutsideLab = listenForAcolyteInsideOutsideLab(
-      UserRole.MORTIMER,
-      undefined,
-      acolytesArray,
-      setAcolytes,
-    );
-
-    const clearAcolyteDisconnected = listenForAcolyteDisconnected(
-      acolytesArray,
-      setAcolytes,
-    );
-
-    mortimerEventListenersCleaners.push(
-      clearAcolyteInsideOutsideLab,
-      clearAcolyteDisconnected,
-    );
-
-    return mortimerEventListenersCleaners;
-  }
-
-  async function getAcolytes(): Promise<KaotikaUser[]> {
-    const url = 'http://10.50.0.50:6000/user/get-acolytes/';
-    const response = await fetch(url);
-
-    let acolytesArray = [];
-
-    if (response.ok) {
-      acolytesArray = await response.json();
-    }
-
-    return acolytesArray;
-  }
-
   return (
-    <UserContext value={{ user, setUser }}>
-      <SafeAreaView>
-        <Modal
-          fullScreen={modalData?.fullScreen}
-          content={modalData?.content}
-          onPressActionButton={modalData?.onPressActionButton}
-          actionButtonText={modalData?.actionButtonText}
-        />
+    <SafeAreaView>
+      <Modal
+        fullScreen={modalData?.fullScreen}
+        content={modalData?.content}
+        onPressActionButton={modalData?.onPressActionButton}
+        actionButtonText={modalData?.actionButtonText}
+      />
 
-        <ModalContext value={setModalData}>
-          <IsLoadingContext value={{ isLoading, setIsLoading }}>
-            {isConfigured ? (
-              !user ? (
-                <>
-                  <Login setUser={setUser} />
+      {isConfigured ? (
+        !user ? (
+          <>
+            <Login />
 
-                  {isLoading && <CircleSpinner />}
-                </>
-              ) : (
-                <AcolytesContext value={{ acolytes, setAcolytes }}>
-                  <Main />
-                </AcolytesContext>
-              )
-            ) : (
-              <SplashScreen />
-            )}
-          </IsLoadingContext>
-        </ModalContext>
-      </SafeAreaView>
-    </UserContext>
+            {isLoading && <CircleSpinner />}
+          </>
+        ) : (
+          <Main />
+        )
+      ) : (
+        <SplashScreen />
+      )}
+    </SafeAreaView>
   );
 };
 

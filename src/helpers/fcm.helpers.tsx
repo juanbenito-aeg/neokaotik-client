@@ -21,12 +21,12 @@ import {
 } from '../constants';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SetAcolytes } from '../interfaces/Acolytes';
+import { SetAcolytes } from '../interfaces/player';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
 import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
-import { SetUser } from '../interfaces/UserContext';
+import { SetUser } from '../interfaces/player';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
@@ -133,40 +133,37 @@ function handleBackgroundOrQuitNotification(
 ) {
   const notificationTitle = remoteMessage?.notification!.title;
 
-  let canMoveUser = false;
+  let canMoveUser = true;
 
-  if (notificationTitle === NotificationTitle.ACOLYTE_DISCOVERY) {
-    const modalData = getNotificationModalData(
-      notificationTitle,
-      ms,
-      setModalData,
-    );
-    setModalData(modalData);
-  } else {
-    if (
-      notificationTitle === NotificationTitle.SWAMP_TOWER &&
-      deviceState === DeviceState.BACKGROUND
-    ) {
+  switch (notificationTitle) {
+    case NotificationTitle.ACOLYTE_DISCOVERY: {
+      const modalData = getNotificationModalData(
+        notificationTitle,
+        ms,
+        setModalData,
+      );
+      setModalData(modalData);
+      break;
+    }
+
+    case NotificationTitle.SWAMP_TOWER: {
       updateAcolyteEnteringOrExitingSwampTower(setAcolytes!, remoteMessage!);
-      canMoveUser = true;
-    } else if (notificationTitle === NotificationTitle.SWAMP_TOWER) {
-      canMoveUser = true;
-    } else if (notificationTitle === NotificationTitle.SUMMONED_HALL_SAGES) {
+      break;
+    }
+
+    case NotificationTitle.SUMMONED_HALL_SAGES: {
+      if (user!.isInside || user!.is_inside_tower) {
+        canMoveUser = false;
+      }
+
       updateAcolyteHasBeenSummonedToHOS(setUser!);
 
-      if (!user?.isInside && !user?.is_inside_tower) {
-        canMoveUser = true;
-      }
-    }
-
-    if (canMoveUser) {
-      moveUserToNotificationDestination(remoteMessage, deviceState);
+      break;
     }
   }
-}
 
-function updateAcolyteHasBeenSummonedToHOS(setUser: SetUser) {
-  setUser(prevUser => ({ ...prevUser!, has_been_summoned_to_hos: true }));
+  // Always call it to avoid moving the user to app destinations through duplicate (invalid) notifications
+  moveUserToNotificationDestination(remoteMessage, deviceState, canMoveUser);
 }
 
 function updateAcolyteEnteringOrExitingSwampTower(
@@ -190,9 +187,14 @@ function updateAcolyteEnteringOrExitingSwampTower(
   }
 }
 
+function updateAcolyteHasBeenSummonedToHOS(setUser: SetUser) {
+  setUser(prevUser => ({ ...prevUser!, has_been_summoned_to_hos: true }));
+}
+
 async function moveUserToNotificationDestination(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
   deviceState: DeviceState,
+  canMoveUser: boolean,
 ) {
   // Check if the message/notification has been opened before, & move the user to another screen if it has not
 
@@ -205,7 +207,9 @@ async function moveUserToNotificationDestination(
     : '';
 
   if (
-    lastRemoteMessageIdAndDeviceState !== currentRemoteMessageIdAndDeviceState
+    lastRemoteMessageIdAndDeviceState !==
+      currentRemoteMessageIdAndDeviceState &&
+    canMoveUser
   ) {
     if (
       (remoteMessage?.data?.destination as unknown as MapNavigation) ===

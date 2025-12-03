@@ -2,6 +2,7 @@ import {
   SocketClientToServerEvents,
   SocketServerToClientEvents,
 } from '../constants';
+import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
 interface ServerToClientEvents {
@@ -14,6 +15,22 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ACOLYTE_TOWER_ACCESS]: (
     acolyteData: AcolyteDataToAccessOrExitTower,
   ) => void;
+  [SocketServerToClientEvents.ACOLYTE_POSITION_CHANGED]: (
+    acolyteId: string,
+    acolyteLocation: Location,
+  ) => void;
+  [SocketServerToClientEvents.ARTIFACT_COLLECTED]: (
+    acolyteId: string,
+    artifactId: string,
+  ) => void;
+  [SocketServerToClientEvents.ENTERED_EXITED_HS]: (
+    acolyteOrMortimerId: string,
+    isInsideHS: boolean,
+  ) => void;
+  [SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED]: (
+    acolytesHaveCompletedArtifactsSearch: boolean,
+  ) => void;
+  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
@@ -40,6 +57,23 @@ interface ClientToServerEvents {
   ) => void;
   [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: () => void;
   [SocketClientToServerEvents.SCROLL_PRESS]: (isPressed: boolean) => void;
+  [SocketClientToServerEvents.ENTERED_EXITED_HS]: (
+    acolyteOrMortimerId: string,
+    isInsideHS: boolean,
+    handleEventNotReceivedInServer: (error: any) => void,
+  ) => void;
+  [SocketClientToServerEvents.ACOLYTE_MOVED]: (
+    acolyteId: string,
+    acolyteLocation: Location,
+  ) => void;
+  [SocketClientToServerEvents.ARTIFACT_PRESSED]: (
+    acolyteId: string,
+    artifactId: string,
+  ) => void;
+  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
+    isSearchValidated: boolean,
+  ) => void;
 }
 
 export type {

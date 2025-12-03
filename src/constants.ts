@@ -1,4 +1,11 @@
+import { Location } from './interfaces/geolocalization';
 import { ModalData } from './interfaces/Modal';
+
+enum GeneralBackgroundImgSrc {
+  ARTIFACT_INVENTORY = require('../public/images/artifact-inventory.png'),
+  ARTIFACT_SLOT = require('../public/images/artifact-slot.png'),
+  ARTIFACTS_PANEL = require('../public/images/artifacts-panel.png'),
+}
 
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../public/images/roles/acolyte/home.png'),
@@ -19,6 +26,7 @@ enum ScreenBackgroundImgSrc {
   MAP = require('../public/images/map.png'),
   OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
   HALL_OF_SAGES = require('../public/images/hall-of-sages.png'),
+  SWAMP = require('../public/images/swamp.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -30,14 +38,21 @@ enum ButtonBackgroundImgSrc {
   OLD_SCHOOL = require('../public/images/old-school-icon.png'),
   GO_BACK = require('../public/images/go-back.png'),
   ANGELO_LAB = require('../public/images/angelo-lab-icon.png'),
+  SWAMP = require('../public/images/swamp-icon.png'),
   SWAMP_TOWER = require('../public/images/swamp-tower-icon.png'),
   SCROLL = require('../public/images/roles/acolyte/scroll.png'),
   HALL_OF_SAGES = require('../public/images/the-hall-of-sages-icon.png'),
+  OBITUARY = require('../public/images/obituary-icon.png'),
 }
 
 enum ModalBackgroundImgSrc {
   FULL_SCREEN = require('../public/images/full-screen-modal.png'),
   NORMAL = require('../public/images/normal-modal.png'),
+}
+
+enum ModalImgSrc {
+  BAG_OF_ARTIFACTS = require('../public/images/bag-of-artifacts.png'),
+  WAITING_HS = require('../public/images/waiting-for-validation.png'),
 }
 
 enum UserRole {
@@ -61,6 +76,11 @@ enum SocketServerToClientEvents {
   ACOLYTE_INSIDE_OUTSIDE_LAB = 'acolyte inside/outside lab',
   ACOLYTE_DISCONNECTED = 'acolyte disconnected',
   ACOLYTE_TOWER_ACCESS = 'acolyte tower access',
+  ACOLYTE_POSITION_CHANGED = "acolyte's position changed",
+  ARTIFACT_COLLECTED = 'artifact collected',
+  ENTERED_EXITED_HS = 'player entered/exited HS',
+  ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED = 'artifacts search validation/reset managed',
+  REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
 }
 
 enum SocketClientToServerEvents {
@@ -69,12 +89,19 @@ enum SocketClientToServerEvents {
   INSIDE_OUTSIDE_TOWER_ENTRANCE = 'acolyte inside/outside tower',
   SCROLL_PRESS = 'scroll press',
   REMOVE_SPELL_PRESS = 'remove spell press',
+  ENTERED_EXITED_HS = 'player entered/exited HS',
+  ACOLYTE_MOVED = 'acolyte moved',
+  ARTIFACT_PRESSED = 'artifact pressed',
+  REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
+  ARTIFACTS_SEARCH_VALIDATION_RESET = 'artifacts search validated/reset',
 }
 
 enum MapNavigation {
   MAP = 'Map',
   OLD_SCHOOL_MAP = 'Old School Map',
+  SWAMP = 'Swamp',
   SWAMP_TOWER = 'Swamp Tower',
+  OBITUARY = 'The Obituary',
 }
 
 enum OldSchoolLocation {
@@ -104,10 +131,27 @@ enum NotificationTitle {
   SUMMONED_HALL_SAGES = 'Summoned to The Hall of Sages',
 }
 
+enum ArtifactState {
+  ACTIVE = 'active',
+  COLLECTED = 'collected',
+}
+
+const NULL_LOCATION: Location = {
+  type: 'Point',
+  coordinates: [0, 0],
+};
+
+enum Coordinate {
+  LONGITUDE,
+  LATITUDE,
+}
+
 export {
+  GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ModalBackgroundImgSrc,
+  ModalImgSrc,
   UserRole,
   Tab,
   SocketGeneralEvents,
@@ -119,4 +163,7 @@ export {
   AsyncStorageKey,
   DEFAULT_MODAL_DATA,
   NotificationTitle,
+  ArtifactState,
+  NULL_LOCATION,
+  Coordinate,
 };

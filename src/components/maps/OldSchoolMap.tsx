@@ -7,17 +7,17 @@ import {
 } from '../../constants';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
-import React, { useContext, useEffect, useState } from 'react';
-import { MapNavigationContext } from '../../contexts/MapContext';
+import React, { useEffect, useState } from 'react';
 import { ViewStyle } from 'react-native';
 import useMetrics from '../../hooks/use-metrics';
-import { UserContext } from '../../contexts/UserContext';
 import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 import HallOfSages from '../HallOfSages';
 import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
+import { useMapStore } from '../../store/useMapStore';
+import usePlayerStore from '../../store/usePlayerStore';
 
 const OldSchoolMap = ({
   initialLocation,
@@ -26,7 +26,7 @@ const OldSchoolMap = ({
   const [currentOldSchoolLocation, setCurrentOldSchoolLocation] =
     useState<OldSchoolLocation>(initialLocation || OldSchoolLocation.MAP);
 
-  const { setMapNavigation } = useContext(MapNavigationContext);
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   const handlePress = (newLocation: MapNavigation | OldSchoolLocation) => {
     if (newLocation === MapNavigation.MAP) {
@@ -43,7 +43,7 @@ const OldSchoolMap = ({
     }
   }, [initialLocation]);
 
-  const { user } = useContext(UserContext)!;
+  const user = usePlayerStore(state => state.user);
 
   const { ms } = useMetrics();
 
