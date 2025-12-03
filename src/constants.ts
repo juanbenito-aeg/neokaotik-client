@@ -5,6 +5,7 @@ enum GeneralBackgroundImgSrc {
   ARTIFACT_INVENTORY = require('../public/images/artifact-inventory.png'),
   ARTIFACT_SLOT = require('../public/images/artifact-slot.png'),
   ARTIFACTS_PANEL = require('../public/images/artifacts-panel.png'),
+  ARTIFACTS_FRAME = require('../public/images/artifacts-frame.png'),
 }
 
 enum ScreenBackgroundImgSrc {
@@ -27,6 +28,7 @@ enum ScreenBackgroundImgSrc {
   OLD_SCHOOL_MAP = require('../public/images/old-school-map.png'),
   HALL_OF_SAGES = require('../public/images/hall-of-sages.png'),
   SWAMP = require('../public/images/swamp.png'),
+  OBITUARY = require('../public/images/obituary.png'),
 }
 
 enum ButtonBackgroundImgSrc {
