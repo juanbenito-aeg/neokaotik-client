@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 import useMetrics from '../hooks/use-metrics';
 import { HS, VS, MS } from '../interfaces/Metrics';
 import useArtifactStore from '../store/useArtifactStore';
-import { GeneralBackgroundImgSrc } from '../constants';
+import { ArtifactImgSrc, GeneralBackgroundImgSrc } from '../constants';
 import Artifact from './Artifact';
 
 const Container = styled.ImageBackground<{
@@ -38,7 +38,7 @@ const ArtifactInventory = () => {
         <Artifact
           key={index}
           _id={artifact._id}
-          source={artifact.source}
+          source={ArtifactImgSrc[artifact.name as keyof typeof ArtifactImgSrc]}
           state={artifact.state}
           testID={`artifact-${index}`}
         />

@@ -1,6 +1,7 @@
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
+  ArtifactImgSrc,
   ButtonBackgroundImgSrc,
   GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
@@ -67,7 +68,9 @@ const Obituary = ({ onPressGoBackButton }: NestedScreenProps) => {
         {artifacts.map((artifact, index) => (
           <Artifact
             key={artifact._id}
-            source={{ uri: artifact.source }}
+            source={
+              ArtifactImgSrc[artifact.name as keyof typeof ArtifactImgSrc]
+            }
             resizeMode="contain"
             style={artifactsPositions[index]}
             $size={ms(60, 1)}

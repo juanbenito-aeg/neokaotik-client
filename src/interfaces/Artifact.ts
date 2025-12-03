@@ -1,4 +1,4 @@
-import { ArtifactState } from '../constants';
+import { ArtifactImgSrc, ArtifactState } from '../constants';
 import { Location } from './geolocalization';
 
 interface ArtifactStore {
@@ -22,7 +22,7 @@ type SetArtifacts = (
 
 interface ArtifactProps {
   _id: ArtifactId;
-  source: string;
+  source: ArtifactImgSrc;
   state: ArtifactState;
   testID: string;
 }

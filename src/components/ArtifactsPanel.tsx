@@ -1,5 +1,9 @@
 import * as Animatable from 'react-native-animatable';
-import { ButtonBackgroundImgSrc, GeneralBackgroundImgSrc } from '../constants';
+import {
+  ArtifactImgSrc,
+  ButtonBackgroundImgSrc,
+  GeneralBackgroundImgSrc,
+} from '../constants';
 import useArtifactStore from '../store/useArtifactStore';
 import { Image } from 'react-native';
 import styled from 'styled-components/native';
@@ -78,7 +82,9 @@ const ArtifactsPanel = () => {
             >
               <Image
                 testID={`artifacts-artifact_${index}`}
-                source={{ uri: artifact.source }}
+                source={
+                  ArtifactImgSrc[artifact.name as keyof typeof ArtifactImgSrc]
+                }
                 style={{
                   width: ms(60, 0.9),
                   height: ms(70, 0.9),
