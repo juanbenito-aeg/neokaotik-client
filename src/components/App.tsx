@@ -83,12 +83,10 @@ const App = () => {
         )) as KaotikaUser[];
         setNonAcolytes(nonAcolyteArray);
 
-        if (user.rol === UserRole.ACOLYTE || user.rol === UserRole.MORTIMER) {
-          const artifactsArray = (await getXArray(
-            'https://neokaotik-server.onrender.com/api/artifacts/',
-          )) as Artifact[];
-          setArtifacts(artifactsArray);
-        }
+        const artifactsArray = (await getXArray(
+          'https://neokaotik-server.onrender.com/api/artifacts/',
+        )) as Artifact[];
+        setArtifacts(artifactsArray);
 
         setIsLoading(false);
       })();
