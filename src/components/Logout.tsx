@@ -1,13 +1,18 @@
 import { GoogleAuth } from 'react-native-google-auth';
 import styled from 'styled-components/native';
 import Button from './Button';
-import { ButtonBackgroundImgSrc, DEFAULT_MODAL_DATA } from '../constants';
+import {
+  ButtonBackgroundImgSrc,
+  DEFAULT_MODAL_DATA,
+  MapNavigation,
+} from '../constants';
 import {
   avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
   updateFcmToken,
 } from '../helpers/fcm.helpers';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
+import { useMapStore } from '../store/useMapStore';
 
 const Container = styled.View`
   flex: 1;
@@ -21,10 +26,13 @@ const Logout = () => {
   const user = usePlayerStore(state => state.user);
   const setUser = usePlayerStore(state => state.setUser);
 
+  const setMapNavigation = useMapStore(state => state.setMapNavigation);
+
   async function logOut() {
     await GoogleAuth.signOut();
     await updateFcmToken(user!.email, '');
     await avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn();
+    setMapNavigation(MapNavigation.MAP);
     setUser(null);
     setModalData({
       ...DEFAULT_MODAL_DATA,
