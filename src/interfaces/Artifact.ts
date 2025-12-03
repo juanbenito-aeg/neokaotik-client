@@ -9,7 +9,6 @@ interface ArtifactStore {
 interface Artifact {
   _id: ArtifactId;
   name: string;
-  source: string;
   state: ArtifactState;
   location: Location;
 }
