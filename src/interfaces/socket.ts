@@ -68,6 +68,7 @@ interface ClientToServerEvents {
   ) => void;
   [SocketClientToServerEvents.ARTIFACT_PRESSED]: (
     acolyteId: string,
+    acolyteLocation: Location,
     artifactId: string,
   ) => void;
   [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
