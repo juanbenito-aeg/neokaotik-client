@@ -10,7 +10,7 @@ import CircleSpinner from './Spinner';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket } from '../socket/socket';
-import { DEFAULT_MODAL_DATA, DeviceState, UserRole } from '../constants';
+import { DEFAULT_MODAL_DATA, DeviceState } from '../constants';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
   setNotificationHandlers,
@@ -83,12 +83,10 @@ const App = () => {
         )) as KaotikaUser[];
         setNonAcolytes(nonAcolyteArray);
 
-        if (user.rol === UserRole.ACOLYTE || user.rol === UserRole.MORTIMER) {
-          const artifactsArray = (await getXArray(
-            'http://10.50.0.50:6000/api/artifacts/',
-          )) as Artifact[];
-          setArtifacts(artifactsArray);
-        }
+        const artifactsArray = (await getXArray(
+          'http://10.50.0.50:6000/api/artifacts/',
+        )) as Artifact[];
+        setArtifacts(artifactsArray);
 
         setIsLoading(false);
       })();

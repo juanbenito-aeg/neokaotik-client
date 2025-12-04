@@ -3,6 +3,7 @@ import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
+  ArtifactImgSrc,
   ArtifactState,
   Coordinate,
   DEFAULT_MODAL_DATA,
@@ -293,7 +294,11 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                     }}
                   >
                     <Image
-                      source={{ uri: artifact.source }}
+                      source={
+                        ArtifactImgSrc[
+                          artifact.name as keyof typeof ArtifactImgSrc
+                        ]
+                      }
                       tintColor={
                         artifact._id === pressableArtifactId ||
                         user.rol === UserRole.MORTIMER

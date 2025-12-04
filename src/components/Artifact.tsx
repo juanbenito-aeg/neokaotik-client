@@ -44,11 +44,7 @@ const Artifact = ({ _id, source, state, testID }: ArtifactProps) => {
     >
       {state === ArtifactState.COLLECTED && (
         <>
-          <ArtifactImage
-            source={{ uri: source }}
-            resizeMode="contain"
-            $ms={ms}
-          />
+          <ArtifactImage source={source} resizeMode="contain" $ms={ms} />
 
           <CollectorAvatar
             source={{ uri: collector?.avatar }}

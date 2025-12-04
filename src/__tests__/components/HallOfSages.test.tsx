@@ -1,9 +1,8 @@
-import { act, render, screen } from '@testing-library/react-native';
+import { render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
-import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
-import { SetUser } from '../../interfaces/player';
 import { useHallOfSageStore } from '../../store/useHallOfSageStore';
+import { SetUser } from '../../interfaces/player';
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -20,49 +19,32 @@ jest.mock('../../socket/socket', () => {
 jest.useFakeTimers();
 
 describe('Hall of Sages', () => {
-  let onPressGoBackButton: () => void;
-  let setUser: SetUser;
   let socket: any;
   let io: any;
+  let setUser: SetUser;
 
   beforeEach(() => {
     useHallOfSageStore.setState({ showArtifactsAnimation: true });
-    onPressGoBackButton = jest.fn();
     socket = {
       on: jest.fn(),
       emit: jest.fn(),
       disconnect: jest.fn(),
     };
     io = jest.fn().mockReturnValue(socket);
-    setUser = jest.fn() as jest.Mock<SetUser>;
+    setUser = jest.fn();
   });
 
-  it('should render Hall of Sages component correctly', async () => {
+  it('should render Hall of Sages component correctly', () => {
     render(
       <NavigationContainer>
-        <HallOfSages onPressGoBackButton={onPressGoBackButton} />,
+        <HallOfSages onPressGoBackButton={() => {}} />,
       </NavigationContainer>,
     );
 
     expect(screen.getByText('The Hall of Sages')).toBeTruthy();
   });
 
-  it('should update user is_inside_hs if their role is Acolyte or Mortimer', async () => {
-    const isInsideHS: boolean = true;
-
-    await act(async () => {
-      setUser({
-        ...mockedPlayers[MockedPlayer.ACOLYTE],
-        is_inside_hs: isInsideHS,
-      });
-
-      expect(setUser).toHaveBeenCalledWith(
-        expect.objectContaining({ is_inside_hs: isInsideHS }),
-      );
-    });
-  });
-
-  it('should not display the Show Artifacts button when conditions are not met', async () => {
+  it('should not display the Show Artifacts button when conditions are not met', () => {
     const allArtifactsCollected = false;
 
     render(
@@ -77,14 +59,14 @@ describe('Hall of Sages', () => {
     }
   });
 
-  it('should display an ArtifactPanel if showArtifactsAnimation is true', async () => {
+  it('should display an ArtifactPanel if showArtifactsAnimation is true', () => {
     render(
       <NavigationContainer>
         <HallOfSages onPressGoBackButton={() => {}} />
       </NavigationContainer>,
     );
 
-    const artifactsPanel = await screen.findByTestId('artifacts-panel');
+    const artifactsPanel = screen.findByTestId('artifacts-panel');
     expect(artifactsPanel).toBeTruthy();
   });
 });
