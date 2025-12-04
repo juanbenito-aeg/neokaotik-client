@@ -216,7 +216,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   function handleArtifactPress(artifactId: ArtifactId) {
     if (artifactId === pressableArtifactId) {
-      emitArtifactPressed(user!._id, artifactId);
+      emitArtifactPressed(user!._id, position, artifactId);
     }
   }
 
