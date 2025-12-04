@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
@@ -47,6 +47,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const artifacts = useArtifactStore(state => state.artifacts);
+  const artifactsRef = useRef(artifacts);
 
   const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
   const setModalData = useModalStore(state => state.setModalData);
@@ -79,6 +80,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    artifactsRef.current = artifacts;
+  }, artifacts);
 
   useFocusEffect(
     useCallback(() => {
@@ -163,7 +168,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   }
 
   function togglePressableArtifactId(position: Location) {
-    const pressableArtifact = artifacts.find(artifact => {
+    const pressableArtifact = artifactsRef.current.find(artifact => {
       if (artifact.state === ArtifactState.ACTIVE) {
         const distanceBetweenUserAndArtifact =
           calculateDistanceBetweenUserAndArtifact(
