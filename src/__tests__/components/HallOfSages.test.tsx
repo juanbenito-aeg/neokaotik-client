@@ -1,43 +1,54 @@
 import { render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { NavigationContainer } from '@react-navigation/native';
-import { useHallOfSageStore } from '../../store/useHallOfSageStore';
-import { SetUser } from '../../interfaces/player';
+import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 
-beforeAll(() => {
-  jest.clearAllMocks();
-});
+jest.mock('socket.io-client', () => {
+  const originalModule = jest.requireActual('socket.io-client');
 
-jest.mock('socket.io-client');
-
-jest.mock('../../socket/socket', () => {
-  io: () => {
-    jest.fn();
+  return {
+    ...originalModule,
+    io: jest.fn(() => ({
+      timeout: jest.fn().mockReturnThis(),
+      emit: jest.fn(),
+    })),
   };
 });
+
+jest.mock('../../store/usePlayerStore', () => {
+  const actualState = jest
+    .requireActual<typeof import('../../store/usePlayerStore')>(
+      '../../store/usePlayerStore',
+    )
+    .default.getInitialState();
+
+  return {
+    __esModule: true,
+    default: jest.fn(getterFn => {
+      return getterFn({
+        ...actualState,
+        user: mockedPlayers[MockedPlayer.ACOLYTE],
+        acolytes: [mockedPlayers[MockedPlayer.ACOLYTE]],
+        nonAcolytes: [mockedPlayers[MockedPlayer.NON_ACOLYTE]],
+      });
+    }),
+  };
+});
+
+jest.mock('../../store/useHallOfSageStore', () => ({
+  __esModule: true,
+  useHallOfSageStore: jest.fn().mockReturnValue({
+    showArtifactsAnimation: true,
+  }),
+}));
 
 jest.useFakeTimers();
 
 describe('Hall of Sages', () => {
-  let socket: any;
-  let io: any;
-  let setUser: SetUser;
-
-  beforeEach(() => {
-    useHallOfSageStore.setState({ showArtifactsAnimation: true });
-    socket = {
-      on: jest.fn(),
-      emit: jest.fn(),
-      disconnect: jest.fn(),
-    };
-    io = jest.fn().mockReturnValue(socket);
-    setUser = jest.fn();
-  });
-
   it('should render Hall of Sages component correctly', () => {
     render(
       <NavigationContainer>
-        <HallOfSages onPressGoBackButton={() => {}} />,
+        <HallOfSages onPressGoBackButton={() => {}} />
       </NavigationContainer>,
     );
 
