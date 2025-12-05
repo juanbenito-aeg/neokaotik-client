@@ -83,7 +83,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   useEffect(() => {
     artifactsRef.current = artifacts;
-  }, artifacts);
+  }, [artifacts]);
 
   useFocusEffect(
     useCallback(() => {
@@ -246,6 +246,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
               latitude: position.coordinates[1],
               longitude: position.coordinates[0],
             }}
+            tracksViewChanges={false}
             zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
           >
             <Image
@@ -268,6 +269,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                       latitude: acolyte.location!.coordinates[1],
                       longitude: acolyte.location!.coordinates[0],
                     }}
+                    tracksViewChanges={false}
                     zIndex={0}
                   >
                     <Image
@@ -293,6 +295,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                       latitude: artifact.location.coordinates[1],
                       longitude: artifact.location.coordinates[0],
                     }}
+                    tracksViewChanges={false}
                     zIndex={1}
                     onPress={() => {
                       handleArtifactPress(artifact._id);
