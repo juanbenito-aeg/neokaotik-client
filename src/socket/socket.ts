@@ -113,14 +113,11 @@ function initSocket(
       handleArtifactsSearchValidationResetManaged(
         acolytesHaveCompletedArtifactsSearch,
         setModalData,
-        user,
-        setUser,
         setAcolytes,
         setArtifacts,
       );
     },
   );
-
   socket.on(SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS, () => {
     handleRequestedToShowArtifacts(
       user!,
