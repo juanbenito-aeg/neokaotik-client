@@ -318,7 +318,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         </MapView>
       </MapViewContainer>
 
-      {isAcolyteOrMortimer && <ArtifactInventory />}
+      {isAcolyteOrMortimer &&
+        !acolytes.find(acolyte => acolyte.has_completed_artifacts_search) && (
+          <ArtifactInventory />
+        )}
     </ScreenContainer>
   );
 };
