@@ -6,16 +6,30 @@ import { getToastConfig } from '../helpers/fcm.helpers';
 import { navigationRef } from '../RootNavigation';
 import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
+import { useModalStore } from '../store/useModalStore';
+import { DEFAULT_MODAL_DATA } from '../constants';
 
 const Container = styled.View`
   height: 100%;
 `;
 
 const Main = () => {
-  const Navigation = useAdaptiveNavigation();
-
   const user = usePlayerStore(state => state.user);
-  handleNotificationPermission(user!.email);
+
+  const setModalData = useModalStore(state => state.setModalData);
+
+  handleNotificationPermission(user!.email).then(permissionDeniedMessage => {
+    if (permissionDeniedMessage) {
+      setModalData({
+        ...DEFAULT_MODAL_DATA,
+        content: {
+          message: permissionDeniedMessage,
+        },
+      });
+    }
+  });
+
+  const Navigation = useAdaptiveNavigation();
 
   const { ms } = useMetrics();
   const toastConfig = getToastConfig(ms);
