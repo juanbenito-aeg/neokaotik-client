@@ -14,6 +14,7 @@ const GoBackButton = ({ onPress }: GoBackButtonProps) => {
     position: 'absolute',
     top: '-2.5%',
     left: '5%',
+    zIndex: 9999,
   };
 
   return (

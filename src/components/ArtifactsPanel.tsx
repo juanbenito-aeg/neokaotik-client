@@ -27,6 +27,7 @@ const PanelImage = styled.Image<{ $ms: MS }>`
   width: 100%;
   height: ${({ $ms }) => $ms(200, 0.8)}px;
   resize-mode: cover;
+  filter: drop-shadow(0 0 10px #000000);
 `;
 
 const Grid = styled.View<{ $ms: MS }>`

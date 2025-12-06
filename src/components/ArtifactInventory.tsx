@@ -19,6 +19,7 @@ const Container = styled.ImageBackground<{
   align-items: center;
   gap: ${({ $hs }) => $hs(10.5)}px;
   margin-bottom: ${({ $ms }) => $ms(65, 0.5)}px;
+  filter: drop-shadow(0 0 10px #000000);
 `;
 
 const ArtifactInventory = () => {

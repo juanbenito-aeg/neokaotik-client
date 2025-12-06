@@ -11,7 +11,6 @@ import {
   ScreenBackgroundImgSrc,
   UserRole,
 } from '../constants';
-import Header from './Header';
 import GoBackButton from './GoBackButton';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import useMetrics from '../hooks/use-metrics';
@@ -24,24 +23,24 @@ import { ModalData } from '../interfaces/Modal';
 import { Coordinates, Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
 import styled from 'styled-components/native';
-import { MS } from '../interfaces/Metrics';
 import ArtifactInventory from './ArtifactInventory';
 import emitAcolyteMoved from '../socket/events/acolyte-moved';
 import { ArtifactId } from '../interfaces/Artifact';
 import emitArtifactPressed from '../socket/events/artifact-pressed';
 import { useFocusEffect } from '@react-navigation/native';
 
-const MapViewContainer = styled.View<{ $ms: MS }>`
+const MapViewContainer = styled.View`
   position: absolute;
-  top: ${({ $ms }) => $ms(125, 0.9)}px;
-  border-radius: 15px;
-  overflow: hidden;
+  top: 0;
 `;
 
 const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
-  const { hs, vs, ms } = useMetrics();
+  const { windowWidth, windowHeight, ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
+
+  const isAcolyteOrMortimer =
+    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
 
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
@@ -59,13 +58,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [pressableArtifactId, setPressableArtifactId] =
     useState<ArtifactId>('');
 
-  const isVillainOrIstvan =
-    user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
-  const isAcolyteOrMortimer =
-    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
-
-  const mapWidth = hs(328);
-  const mapHeight = isVillainOrIstvan ? vs(540) : vs(335);
+  const markersWidthHeight = {
+    width: ms(35, 0.75),
+    height: ms(35, 0.75),
+  };
 
   useEffect(() => {
     if (user!.rol !== UserRole.ACOLYTE) {
@@ -222,20 +218,19 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
-      <Header>The Swamp</Header>
-
       <GoBackButton onPress={onPressGoBackButton} />
 
-      <MapViewContainer style={{ width: mapWidth, height: mapHeight }} $ms={ms}>
+      <MapViewContainer style={{ width: windowWidth, height: windowHeight }}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={StyleSheet.absoluteFill}
-          region={{
-            latitude: 43.3102,
-            longitude: -2.002594,
+          initialRegion={{
+            latitude: 43.309457334777676,
+            longitude: -2.002383890907663,
             latitudeDelta: 0,
-            longitudeDelta: 0.003,
+            longitudeDelta: 0.0025,
           }}
+          showsCompass={false}
           showsUserLocation={false}
           userInterfaceStyle="dark"
           toolbarEnabled={false}
@@ -252,9 +247,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             <Image
               source={{ uri: user!.avatar }}
               style={{
-                width: ms(40, 0.8),
-                height: ms(40, 0.8),
-                borderRadius: ms(20, 2),
+                ...markersWidthHeight,
+                borderRadius: 9999,
               }}
             />
           </Marker>
@@ -275,9 +269,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                     <Image
                       source={{ uri: acolyte.avatar }}
                       style={{
-                        width: ms(40, 0.8),
-                        height: ms(40, 0.8),
-                        borderRadius: ms(20, 2),
+                        ...markersWidthHeight,
+                        borderRadius: 9999,
                       }}
                     />
                   </Marker>
@@ -314,8 +307,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                           : 'black'
                       }
                       style={{
-                        width: ms(40, 1),
-                        height: ms(40, 1),
+                        ...markersWidthHeight,
                         resizeMode: 'contain',
                       }}
                     />
