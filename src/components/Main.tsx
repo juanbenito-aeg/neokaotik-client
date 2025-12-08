@@ -7,7 +7,7 @@ import { navigationRef } from '../RootNavigation';
 import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
-import { DEFAULT_MODAL_DATA } from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants/general';
 
 const Container = styled.View`
   height: 100%;

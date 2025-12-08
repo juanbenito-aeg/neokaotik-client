@@ -1,5 +1,6 @@
 import { MockedPlayer, mockedPlayers } from '../../../__mocks__/mockedPlayers';
-import { SocketServerToClientEvents, UserRole } from '../../../constants';
+import { UserRole } from '../../../constants/general';
+import { SocketServerToClientEvents } from '../../../constants/socket';
 import KaotikaUser from '../../../interfaces/KaotikaUser';
 import { AcolyteDataAfterAccessExitLab } from '../../../interfaces/socket';
 import { socket, initSocket } from '../../../socket/socket';

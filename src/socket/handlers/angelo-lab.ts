@@ -1,4 +1,4 @@
-import { DEFAULT_MODAL_DATA, UserRole } from '../../constants';
+import { DEFAULT_MODAL_DATA, UserRole } from '../../constants/general';
 import { SetAcolytes } from '../../interfaces/player';
 import { SetModalData } from '../../interfaces/Modal';
 import KaotikaUser from '../../interfaces/KaotikaUser';

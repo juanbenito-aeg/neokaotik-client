@@ -1,10 +1,10 @@
 import ScreenContainer from '../../ScreenContainer';
+import { DEFAULT_MODAL_DATA } from '../../../constants/general';
+import { SocketClientToServerEvents } from '../../../constants/socket';
 import {
-  ButtonBackgroundImgSrc,
-  DEFAULT_MODAL_DATA,
   ScreenBackgroundImgSrc,
-  SocketClientToServerEvents,
-} from '../../../constants';
+  ButtonBackgroundImgSrc,
+} from '../../../constants/image-sources';
 import {
   useCameraPermission,
   Camera,

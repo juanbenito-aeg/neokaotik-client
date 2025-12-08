@@ -1,4 +1,4 @@
-import { SocketClientToServerEvents } from '../../constants';
+import { SocketClientToServerEvents } from '../../constants/socket';
 import { socket } from '../socket';
 
 function updateAcolyteTowerEntranceStatus(isInTowerEntrance: boolean) {

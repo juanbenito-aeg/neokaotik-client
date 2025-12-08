@@ -4,7 +4,7 @@ import Text from './Text';
 import styled from 'styled-components/native';
 import type { HS, MS, VS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { ModalBackgroundImgSrc } from '../constants';
+import { ModalBackgroundImgSrc } from '../constants/image-sources';
 import { getToastConfig } from '../helpers/fcm.helpers';
 import Toast from 'react-native-toast-message';
 

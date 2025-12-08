@@ -1,5 +1,5 @@
 import { VoidFunction } from './generics';
-import { ScreenBackgroundImgSrc } from '../constants';
+import { ScreenBackgroundImgSrc } from '../constants/image-sources';
 import KaotikaUser from './KaotikaUser';
 
 interface AcolytesListProps {
