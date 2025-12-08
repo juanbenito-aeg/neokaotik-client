@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
@@ -52,6 +52,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
   const setModalData = useModalStore(state => state.setModalData);
 
+  const [isMapReady, setIsMapReady] = useState(false);
   const [position, setPosition] = useState<Location>(NULL_LOCATION);
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
@@ -93,6 +94,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         if (subscriptionId !== null) {
           // When the user exits the screen, stop watching for changes in their position & reset the related state
 
+          setIsMapReady(false);
           setPosition(NULL_LOCATION);
           setWatching(false);
           setSubscriptionId(null);
@@ -211,6 +213,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     return d;
   }
 
+  function handleMapReady() {
+    setIsMapReady(true);
+  }
+
   function handleArtifactPress(artifactId: ArtifactId) {
     if (artifactId === pressableArtifactId) {
       emitArtifactPressed(user!._id, position, artifactId);
@@ -236,86 +242,88 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
           userInterfaceStyle="dark"
           toolbarEnabled={false}
           moveOnMarkerPress={false}
+          onMapReady={handleMapReady}
         >
-          <Marker
-            coordinate={{
-              latitude: position.coordinates[1],
-              longitude: position.coordinates[0],
-            }}
-            tracksViewChanges={false}
-            zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
-          >
-            <Image
-              source={{ uri: user!.avatar }}
-              style={{
-                ...markersWidthHeight,
-                borderRadius: 9999,
-              }}
-            />
-          </Marker>
+          {isMapReady && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: position.coordinates[1],
+                  longitude: position.coordinates[0],
+                }}
+                zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
+              >
+                <Image
+                  source={{ uri: user!.avatar }}
+                  style={{
+                    ...markersWidthHeight,
+                    borderRadius: 9999,
+                  }}
+                />
+              </Marker>
 
-          {user?.rol !== UserRole.ACOLYTE &&
-            acolytes.map(acolyte => {
-              if (acolyte.location) {
-                return (
-                  <Marker
-                    key={acolyte._id}
-                    coordinate={{
-                      latitude: acolyte.location!.coordinates[1],
-                      longitude: acolyte.location!.coordinates[0],
-                    }}
-                    tracksViewChanges={false}
-                    zIndex={0}
-                  >
-                    <Image
-                      source={{ uri: acolyte.avatar }}
-                      style={{
-                        ...markersWidthHeight,
-                        borderRadius: 9999,
-                      }}
-                    />
-                  </Marker>
-                );
-              }
-            })}
+              {user?.rol !== UserRole.ACOLYTE &&
+                acolytes.map(acolyte => {
+                  if (acolyte.location) {
+                    return (
+                      <Marker
+                        key={acolyte._id}
+                        coordinate={{
+                          latitude: acolyte.location!.coordinates[1],
+                          longitude: acolyte.location!.coordinates[0],
+                        }}
+                        zIndex={0}
+                      >
+                        <Image
+                          source={{ uri: acolyte.avatar }}
+                          style={{
+                            ...markersWidthHeight,
+                            borderRadius: 9999,
+                          }}
+                        />
+                      </Marker>
+                    );
+                  }
+                })}
 
-          {isAcolyteOrMortimer &&
-            artifacts.map(artifact => {
-              if (artifact.state === ArtifactState.ACTIVE) {
-                return (
-                  <Marker
-                    key={artifact._id + Date.now()}
-                    coordinate={{
-                      latitude: artifact.location.coordinates[1],
-                      longitude: artifact.location.coordinates[0],
-                    }}
-                    tracksViewChanges={false}
-                    zIndex={1}
-                    onPress={() => {
-                      handleArtifactPress(artifact._id);
-                    }}
-                  >
-                    <Image
-                      source={
-                        ArtifactImgSrc[
-                          artifact.name as keyof typeof ArtifactImgSrc
-                        ]
-                      }
-                      tintColor={
-                        artifact._id === pressableArtifactId ||
-                        user.rol === UserRole.MORTIMER
-                          ? ''
-                          : 'black'
-                      }
-                      style={{
-                        ...markersWidthHeight,
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </Marker>
-                );
-              }
-            })}
+              {isAcolyteOrMortimer &&
+                artifacts.map(artifact => {
+                  if (artifact.state === ArtifactState.ACTIVE) {
+                    return (
+                      <Marker
+                        key={artifact._id + Date.now()}
+                        coordinate={{
+                          latitude: artifact.location.coordinates[1],
+                          longitude: artifact.location.coordinates[0],
+                        }}
+                        zIndex={1}
+                        onPress={() => {
+                          handleArtifactPress(artifact._id);
+                        }}
+                      >
+                        <Image
+                          source={
+                            ArtifactImgSrc[
+                              artifact.name as keyof typeof ArtifactImgSrc
+                            ]
+                          }
+                          tintColor={
+                            artifact._id === pressableArtifactId ||
+                            user.rol === UserRole.MORTIMER
+                              ? ''
+                              : 'black'
+                          }
+                          style={{
+                            ...markersWidthHeight,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </Marker>
+                    );
+                  }
+                })}
+            </>
+          )}
         </MapView>
       </MapViewContainer>
 
