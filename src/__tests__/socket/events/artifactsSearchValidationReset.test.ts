@@ -1,4 +1,4 @@
-import { SocketClientToServerEvents } from '../../../constants';
+import { SocketClientToServerEvents } from '../../../constants/socket';
 import emitArtifactsSearchValidationOrReset from '../../../socket/events/artifacts-search-validation-reset';
 import { socket } from '../../../socket/socket';
 

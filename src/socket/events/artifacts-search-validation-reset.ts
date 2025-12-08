@@ -1,5 +1,5 @@
 import { socket } from '../socket';
-import { SocketClientToServerEvents } from '../../constants';
+import { SocketClientToServerEvents } from '../../constants/socket';
 
 function emitArtifactsSearchValidationOrReset(isSearchValidated: boolean) {
   socket.emit(

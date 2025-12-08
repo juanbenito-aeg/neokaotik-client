@@ -1,8 +1,6 @@
 import ScreenContainer from '../../ScreenContainer';
-import {
-  DEFAULT_MODAL_DATA,
-  SocketClientToServerEvents,
-} from '../../../constants';
+import { DEFAULT_MODAL_DATA } from '../../../constants';
+import { SocketClientToServerEvents } from '../../../constants/socket';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,

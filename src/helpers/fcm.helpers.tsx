@@ -15,9 +15,9 @@ import {
   MapNavigation,
   NotificationTitle,
   OldSchoolLocation,
-  SocketClientToServerEvents,
   Tab,
 } from '../constants';
+import { SocketClientToServerEvents } from '../constants/socket';
 import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';

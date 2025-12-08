@@ -1,6 +1,6 @@
 import { Location } from '../../interfaces/geolocalization';
 import { socket } from '../socket';
-import { SocketClientToServerEvents } from '../../constants';
+import { SocketClientToServerEvents } from '../../constants/socket';
 
 function emitArtifactPressed(
   acolyteId: string,

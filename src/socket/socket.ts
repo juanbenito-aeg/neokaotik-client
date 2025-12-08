@@ -5,7 +5,10 @@ import type {
   AcolyteDataAfterAccessExitLab,
   AcolyteDataToAccessOrExitTower,
 } from '../interfaces/socket';
-import { SocketGeneralEvents, SocketServerToClientEvents } from '../constants';
+import {
+  SocketGeneralEvents,
+  SocketServerToClientEvents,
+} from '../constants/socket';
 import { handleConnection } from './handlers/connection';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';

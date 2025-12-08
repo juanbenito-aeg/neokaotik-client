@@ -1,7 +1,7 @@
 import {
-  SocketClientToServerEvents,
   SocketServerToClientEvents,
-} from '../constants';
+  SocketClientToServerEvents,
+} from '../constants/socket';
 import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
