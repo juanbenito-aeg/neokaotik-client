@@ -1,4 +1,4 @@
-import { ArtifactState, UserRole } from '../../constants';
+import { UserRole, ArtifactState } from '../../constants/general';
 import { Tab, MapNavigation } from '../../constants/navigation';
 import { ModalImgSrc } from '../../constants/image-sources';
 import { Artifact, SetArtifacts } from '../../interfaces/Artifact';

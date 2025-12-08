@@ -13,7 +13,7 @@ import VillainHome from '../components/roles/villain/VillainHome';
 import VillainSettings from '../components/roles/villain/VIllainSettings';
 import { AdaptiveNavigatorData } from '../interfaces/Navigation';
 import Map from '../components/maps/Map';
-import { UserRole } from '../constants';
+import { UserRole } from '../constants/general';
 import { Tab } from '../constants/navigation';
 import useMetrics from './use-metrics';
 import usePlayerStore from '../store/usePlayerStore';

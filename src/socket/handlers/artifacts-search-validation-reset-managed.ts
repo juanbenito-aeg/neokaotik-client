@@ -1,4 +1,4 @@
-import { ArtifactState } from '../../constants';
+import { ArtifactState } from '../../constants/general';
 import { SetArtifacts } from '../../interfaces/Artifact';
 import { SetModalData } from '../../interfaces/Modal';
 import { SetAcolytes } from '../../interfaces/player';

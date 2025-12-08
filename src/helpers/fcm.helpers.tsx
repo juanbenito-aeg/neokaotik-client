@@ -9,7 +9,7 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import { AsyncStorageKey } from '../constants';
+import { AsyncStorageKey } from '../constants/general';
 import { DeviceState, NotificationTitle } from '../constants/fcm';
 import { Tab, MapNavigation, OldSchoolLocation } from '../constants/navigation';
 import { SocketClientToServerEvents } from '../constants/socket';

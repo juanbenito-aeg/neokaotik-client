@@ -1,4 +1,4 @@
-import { UserRole } from '../../constants';
+import { UserRole } from '../../constants/general';
 import { ModalImgSrc } from '../../constants/image-sources';
 import { SetShowArtifactsAnimation } from '../../interfaces/HallSages';
 import KaotikaUser from '../../interfaces/KaotikaUser';

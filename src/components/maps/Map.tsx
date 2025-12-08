@@ -1,4 +1,4 @@
-import { UserRole } from '../../constants';
+import { UserRole } from '../../constants/general';
 import {
   Tab,
   MapNavigation,

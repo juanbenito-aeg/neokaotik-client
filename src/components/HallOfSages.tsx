@@ -1,5 +1,5 @@
 import ScreenContainer from './ScreenContainer';
-import { UserRole } from '../constants';
+import { UserRole } from '../constants/general';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,

@@ -10,7 +10,7 @@ import CircleSpinner from './Spinner';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket } from '../socket/socket';
-import { DEFAULT_MODAL_DATA } from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants/general';
 import { DeviceState } from '../constants/fcm';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {

@@ -1,4 +1,4 @@
-import { ArtifactState } from '../constants';
+import { ArtifactState } from '../constants/general';
 import { ArtifactImgSrc } from '../constants/image-sources';
 import { Location } from './geolocalization';
 

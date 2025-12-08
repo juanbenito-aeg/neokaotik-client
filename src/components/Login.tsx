@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import { authenticateUser } from '../helpers/auth.helpers';
 import Button from './Button';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { DEFAULT_MODAL_DATA } from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants/general';
 import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { getDeviceToken } from '../fcm/deviceToken';
 import { useModalStore } from '../store/useModalStore';

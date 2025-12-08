@@ -1,5 +1,5 @@
 import { Artifact } from '../interfaces/Artifact';
-import { ArtifactState } from '../constants';
+import { ArtifactState } from '../constants/general';
 
 const mockArtifacts: Artifact[] = [
   {
