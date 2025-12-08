@@ -11,7 +11,7 @@ beforeEach(() => {
 });
 
 it('should emit artifacts search validation/reset socket event', () => {
-  const isSearchValidated: boolean = false;
+  const isSearchValidated = false;
 
   emitArtifactsSearchValidationOrReset(isSearchValidated);
 

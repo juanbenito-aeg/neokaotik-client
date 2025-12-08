@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 it('should emit an entered-exited-hs socket event', () => {
-  const isInsideHS: boolean = true;
+  const isInsideHS = true;
 
   updateAcolyteOrMortimerEnteredOrExitedHS(
     mockedPlayers[MockedPlayer.ACOLYTE]._id,
