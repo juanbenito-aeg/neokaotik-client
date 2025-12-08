@@ -2,13 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
-import {
-  ArtifactState,
-  Coordinate,
-  DEFAULT_MODAL_DATA,
-  NULL_LOCATION,
-  UserRole,
-} from '../constants';
+import { ArtifactState, DEFAULT_MODAL_DATA, UserRole } from '../constants';
+import { Coordinate, NULL_LOCATION } from '../constants/geolocation';
 import {
   ScreenBackgroundImgSrc,
   ArtifactImgSrc,

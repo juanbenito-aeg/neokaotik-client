@@ -1,4 +1,3 @@
-import { Location } from './interfaces/geolocalization';
 import { ModalData } from './interfaces/Modal';
 
 enum UserRole {
@@ -23,21 +22,4 @@ enum ArtifactState {
   COLLECTED = 'collected',
 }
 
-const NULL_LOCATION: Location = {
-  type: 'Point',
-  coordinates: [0, 0],
-};
-
-enum Coordinate {
-  LONGITUDE,
-  LATITUDE,
-}
-
-export {
-  UserRole,
-  AsyncStorageKey,
-  DEFAULT_MODAL_DATA,
-  ArtifactState,
-  NULL_LOCATION,
-  Coordinate,
-};
+export { UserRole, AsyncStorageKey, DEFAULT_MODAL_DATA, ArtifactState };
