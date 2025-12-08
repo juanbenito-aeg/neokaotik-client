@@ -1,9 +1,9 @@
 import * as Animatable from 'react-native-animatable';
 import {
-  ArtifactImgSrc,
   ButtonBackgroundImgSrc,
-  GeneralBackgroundImgSrc,
-} from '../constants';
+  ArtifactImgSrc,
+} from '../constants/image-sources';
+import { GeneralBackgroundImgSrc } from '../constants/image-sources';
 import useArtifactStore from '../store/useArtifactStore';
 import { Image } from 'react-native';
 import styled from 'styled-components/native';

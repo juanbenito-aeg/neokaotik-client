@@ -3,9 +3,9 @@ import QRCode from 'react-native-qrcode-svg';
 import { useNavigation } from '@react-navigation/native';
 import ScreenContainer from '../../ScreenContainer';
 import {
-  ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
-} from '../../../constants';
+  ButtonBackgroundImgSrc,
+} from '../../../constants/image-sources';
 import Button from '../../Button';
 import styled from 'styled-components/native';
 import useMetrics from '../../../hooks/use-metrics';

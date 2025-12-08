@@ -1,9 +1,9 @@
 import ScreenContainer from './ScreenContainer';
+import { UserRole } from '../constants';
 import {
-  ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
-  UserRole,
-} from '../constants';
+  ButtonBackgroundImgSrc,
+} from '../constants/image-sources';
 import GoBackButton from './GoBackButton';
 import { NestedScreenProps } from '../interfaces/generics';
 import Header from './Header';

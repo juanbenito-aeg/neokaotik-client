@@ -11,7 +11,6 @@ import messaging, {
 import { VoidFunction } from '../interfaces/generics';
 import {
   AsyncStorageKey,
-  ButtonBackgroundImgSrc,
   DeviceState,
   MapNavigation,
   NotificationTitle,
@@ -19,6 +18,7 @@ import {
   SocketClientToServerEvents,
   Tab,
 } from '../constants';
+import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes } from '../interfaces/player';

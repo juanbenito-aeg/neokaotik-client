@@ -1,5 +1,5 @@
 import { ViewStyle } from 'react-native';
-import { ButtonBackgroundImgSrc } from '../constants';
+import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { VoidFunction } from './generics';
 
 interface ButtonProps {

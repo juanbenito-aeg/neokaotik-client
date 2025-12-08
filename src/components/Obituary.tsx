@@ -1,11 +1,11 @@
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
-  ArtifactImgSrc,
-  ButtonBackgroundImgSrc,
   GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
-} from '../constants';
+  ButtonBackgroundImgSrc,
+  ArtifactImgSrc,
+} from '../constants/image-sources';
 import Header from './Header';
 import GoBackButton from './GoBackButton';
 import Button from './Button';

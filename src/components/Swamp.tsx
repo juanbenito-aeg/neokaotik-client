@@ -3,14 +3,16 @@ import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
-  ArtifactImgSrc,
   ArtifactState,
   Coordinate,
   DEFAULT_MODAL_DATA,
   NULL_LOCATION,
-  ScreenBackgroundImgSrc,
   UserRole,
 } from '../constants';
+import {
+  ScreenBackgroundImgSrc,
+  ArtifactImgSrc,
+} from '../constants/image-sources';
 import GoBackButton from './GoBackButton';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import useMetrics from '../hooks/use-metrics';

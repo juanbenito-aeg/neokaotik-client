@@ -3,7 +3,8 @@ import { ArtifactProps } from '../interfaces/Artifact';
 import usePlayerStore from '../store/usePlayerStore';
 import { HS, MS, VS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { ArtifactState, GeneralBackgroundImgSrc } from '../constants';
+import { ArtifactState } from '../constants';
+import { GeneralBackgroundImgSrc } from '../constants/image-sources';
 
 const ArtifactContainer = styled.ImageBackground<{ $hs: HS; $vs: VS; $ms: MS }>`
   width: ${({ $hs }) => $hs(55)}px;

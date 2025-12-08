@@ -1,11 +1,13 @@
 import {
   MapNavigation,
-  ScreenBackgroundImgSrc,
-  ButtonBackgroundImgSrc,
   Tab,
   UserRole,
   OldSchoolLocation,
 } from '../../constants';
+import {
+  ScreenBackgroundImgSrc,
+  ButtonBackgroundImgSrc,
+} from '../../constants/image-sources';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';

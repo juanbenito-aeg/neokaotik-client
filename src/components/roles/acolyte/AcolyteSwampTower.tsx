@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { MapNavigation } from '../../../constants';
 import {
-  ButtonBackgroundImgSrc,
-  MapNavigation,
   ScreenBackgroundImgSrc,
-} from '../../../constants';
+  ButtonBackgroundImgSrc,
+} from '../../../constants/image-sources';
 import ScreenContainer from '../../ScreenContainer';
 import Text from '../../Text';
 import GoBackButton from '../../GoBackButton';

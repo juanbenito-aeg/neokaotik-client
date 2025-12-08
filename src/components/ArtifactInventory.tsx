@@ -2,7 +2,8 @@ import styled from 'styled-components/native';
 import useMetrics from '../hooks/use-metrics';
 import { HS, VS, MS } from '../interfaces/Metrics';
 import useArtifactStore from '../store/useArtifactStore';
-import { ArtifactImgSrc, GeneralBackgroundImgSrc } from '../constants';
+import { ArtifactImgSrc } from '../constants/image-sources';
+import { GeneralBackgroundImgSrc } from '../constants/image-sources';
 import Artifact from './Artifact';
 
 const Container = styled.ImageBackground<{
