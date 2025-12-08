@@ -1,10 +1,10 @@
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
-  GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ArtifactImgSrc,
+  ArtifactRelatedImgSrc,
 } from '../constants/image-sources';
 import Header from './Header';
 import GoBackButton from './GoBackButton';
@@ -62,7 +62,7 @@ const Obituary = ({ onPressGoBackButton }: NestedScreenProps) => {
       <GoBackButton onPress={onPressGoBackButton} />
 
       <ArtifactsFrame
-        source={GeneralBackgroundImgSrc.ARTIFACTS_FRAME}
+        source={ArtifactRelatedImgSrc.ARTIFACTS_FRAME}
         $size={ms(350, 1)}
       >
         {artifacts.map((artifact, index) => (

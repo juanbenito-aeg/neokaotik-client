@@ -4,7 +4,7 @@ import usePlayerStore from '../store/usePlayerStore';
 import { HS, MS, VS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
 import { ArtifactState } from '../constants/general';
-import { GeneralBackgroundImgSrc } from '../constants/image-sources';
+import { ArtifactRelatedImgSrc } from '../constants/image-sources';
 
 const ArtifactContainer = styled.ImageBackground<{ $hs: HS; $vs: VS; $ms: MS }>`
   width: ${({ $hs }) => $hs(55)}px;
@@ -36,7 +36,7 @@ const Artifact = ({ _id, source, state, testID }: ArtifactProps) => {
 
   return (
     <ArtifactContainer
-      source={GeneralBackgroundImgSrc.ARTIFACT_SLOT}
+      source={ArtifactRelatedImgSrc.ARTIFACT_SLOT}
       resizeMode="stretch"
       $hs={hs}
       $vs={vs}

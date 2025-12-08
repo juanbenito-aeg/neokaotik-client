@@ -3,7 +3,7 @@ import useMetrics from '../hooks/use-metrics';
 import { HS, VS, MS } from '../interfaces/Metrics';
 import useArtifactStore from '../store/useArtifactStore';
 import { ArtifactImgSrc } from '../constants/image-sources';
-import { GeneralBackgroundImgSrc } from '../constants/image-sources';
+import { ArtifactRelatedImgSrc } from '../constants/image-sources';
 import Artifact from './Artifact';
 
 const Container = styled.ImageBackground<{
@@ -30,7 +30,7 @@ const ArtifactInventory = () => {
 
   return (
     <Container
-      source={GeneralBackgroundImgSrc.ARTIFACT_INVENTORY}
+      source={ArtifactRelatedImgSrc.ARTIFACT_INVENTORY}
       resizeMode="stretch"
       $hs={hs}
       $vs={vs}

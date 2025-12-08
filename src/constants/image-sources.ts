@@ -1,10 +1,3 @@
-enum GeneralBackgroundImgSrc {
-  ARTIFACT_INVENTORY = require('../../public/images/artifact-inventory.png'),
-  ARTIFACT_SLOT = require('../../public/images/artifact-slot.png'),
-  ARTIFACTS_PANEL = require('../../public/images/artifacts-panel.png'),
-  ARTIFACTS_FRAME = require('../../public/images/artifacts-frame.png'),
-}
-
 enum ScreenBackgroundImgSrc {
   ACOLYTE_HOME = require('../../public/images/roles/acolyte/home.png'),
   ACOLYTE_ANGELO_LAB_ENTRANCE = require('../../public/images/roles/acolyte/angelo-lab-entrance.png'),
@@ -54,6 +47,13 @@ enum ModalImgSrc {
   WAITING_HS = require('../../public/images/waiting-for-validation.png'),
 }
 
+enum ArtifactRelatedImgSrc {
+  ARTIFACT_INVENTORY = require('../../public/images/artifact-inventory.png'),
+  ARTIFACT_SLOT = require('../../public/images/artifact-slot.png'),
+  ARTIFACTS_PANEL = require('../../public/images/artifacts-panel.png'),
+  ARTIFACTS_FRAME = require('../../public/images/artifacts-frame.png'),
+}
+
 enum ArtifactImgSrc {
   'The Auracle Sphere' = require('../../public/images/artifacts/orb.png'),
   'The Chalice of Dawnbound Kings' = require('../../public/images/artifacts/chalice.png'),
@@ -62,10 +62,10 @@ enum ArtifactImgSrc {
 }
 
 export {
-  GeneralBackgroundImgSrc,
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
   ModalBackgroundImgSrc,
   ModalImgSrc,
   ArtifactImgSrc,
+  ArtifactRelatedImgSrc,
 };
