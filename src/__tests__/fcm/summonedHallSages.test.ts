@@ -1,6 +1,6 @@
 import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { handleBackgroundOrQuitNotification } from '../../helpers/fcm.helpers';
-import { DeviceState, NotificationTitle } from '../../constants';
+import { DeviceState, NotificationTitle } from '../../constants/fcm';
 import { OldSchoolLocation } from '../../constants/navigation';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { navigate } from '../../RootNavigation';
