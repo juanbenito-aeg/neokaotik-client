@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { MapNavigation } from '../../../constants';
+import { MapNavigation } from '../../../constants/navigation';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,

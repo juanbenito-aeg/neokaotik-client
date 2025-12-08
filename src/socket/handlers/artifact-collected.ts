@@ -1,4 +1,5 @@
-import { ArtifactState, MapNavigation, Tab, UserRole } from '../../constants';
+import { ArtifactState, UserRole } from '../../constants';
+import { Tab, MapNavigation } from '../../constants/navigation';
 import { ModalImgSrc } from '../../constants/image-sources';
 import { Artifact, SetArtifacts } from '../../interfaces/Artifact';
 import KaotikaUser from '../../interfaces/KaotikaUser';

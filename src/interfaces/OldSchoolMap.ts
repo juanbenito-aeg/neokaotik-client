@@ -1,4 +1,4 @@
-import { OldSchoolLocation } from '../constants';
+import { OldSchoolLocation } from '../constants/navigation';
 
 interface OldSchoolMapProps {
   initialLocation: OldSchoolLocation | null;

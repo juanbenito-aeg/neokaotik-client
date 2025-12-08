@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { MapNavigation } from '../constants';
+import { MapNavigation } from '../constants/navigation';
 import { MapStore } from '../interfaces/Map';
 
 export const useMapStore = create<MapStore>()(set => ({

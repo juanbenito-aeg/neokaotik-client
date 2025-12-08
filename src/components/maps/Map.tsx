@@ -1,9 +1,9 @@
+import { UserRole } from '../../constants';
 import {
-  MapNavigation,
   Tab,
-  UserRole,
+  MapNavigation,
   OldSchoolLocation,
-} from '../../constants';
+} from '../../constants/navigation';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,

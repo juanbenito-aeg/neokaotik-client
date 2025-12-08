@@ -9,14 +9,8 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import {
-  AsyncStorageKey,
-  DeviceState,
-  MapNavigation,
-  NotificationTitle,
-  OldSchoolLocation,
-  Tab,
-} from '../constants';
+import { AsyncStorageKey, DeviceState, NotificationTitle } from '../constants';
+import { Tab, MapNavigation, OldSchoolLocation } from '../constants/navigation';
 import { SocketClientToServerEvents } from '../constants/socket';
 import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { navigate } from '../RootNavigation';
