@@ -8,12 +8,62 @@ import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { DEFAULT_MODAL_DATA } from '../constants/general';
+import { useEffect } from 'react';
+import KaotikaUser from '../interfaces/KaotikaUser';
+import { Artifact } from '../interfaces/Artifact';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
+import useArtifactStore from '../store/useArtifactStore';
 
 const Container = styled.View`
   height: 100%;
 `;
 
 const Main = () => {
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
+
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
+
+  const setArtifacts = useArtifactStore(state => state.setArtifacts);
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+
+      // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
+
+      const acolytesArray = (await getXArray(
+        'https://neokaotik-server.onrender.com/user/get-acolytes/',
+      )) as KaotikaUser[];
+      setAcolytes(acolytesArray);
+
+      const nonAcolyteArray = (await getXArray(
+        'https://neokaotik-server.onrender.com/user/non-acolyte-players/',
+      )) as KaotikaUser[];
+      setNonAcolytes(nonAcolyteArray);
+
+      const artifactsArray = (await getXArray(
+        'https://neokaotik-server.onrender.com/api/artifacts/',
+      )) as Artifact[];
+      setArtifacts(artifactsArray);
+
+      setIsLoading(false);
+    })();
+  }, []);
+
+  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
+    const response = await fetch(url);
+
+    let xArray = [];
+
+    if (response.ok) {
+      xArray = await response.json();
+    }
+
+    return xArray;
+  }
+
   const user = usePlayerStore(state => state.user);
 
   const setModalData = useModalStore(state => state.setModalData);
