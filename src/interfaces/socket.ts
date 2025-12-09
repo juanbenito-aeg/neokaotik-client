@@ -70,6 +70,7 @@ interface ClientToServerEvents {
     acolyteId: string,
     acolyteLocation: Location,
     artifactId: string,
+    handleEventNotReceivedInServer: (error: any) => void,
   ) => void;
   [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
   [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
