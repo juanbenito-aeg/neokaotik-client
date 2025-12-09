@@ -75,6 +75,7 @@ const App = () => {
         setNonAcolytes,
         setArtifacts,
         setShowArtifactsAnimation,
+        setIsLoading,
       );
 
       return () => {

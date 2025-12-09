@@ -118,12 +118,6 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         type: 'Point',
         coordinates: [pos.coords.longitude, pos.coords.latitude],
       });
-
-      const nextPosition: Location = {
-        type: 'Point',
-        coordinates: [pos.coords.longitude, pos.coords.latitude],
-      };
-      togglePressableArtifactId(nextPosition);
     });
   };
 
@@ -185,7 +179,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             artifact.location.coordinates,
           );
 
-        return distanceBetweenUserAndArtifact > 1;
+        return distanceBetweenUserAndArtifact < 1;
       }
     });
 

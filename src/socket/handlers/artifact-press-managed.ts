@@ -7,8 +7,9 @@ import { MS } from '../../interfaces/Metrics';
 import { ModalData, SetModalData } from '../../interfaces/Modal';
 import { SetAcolytes } from '../../interfaces/player';
 import { navigate } from '../../RootNavigation';
+import { SetIsLoading } from '../../interfaces/IsLoading';
 
-function handlerArtifactCollected(
+function handlerArtifactPressManaged(
   ms: MS,
   setModalData: SetModalData,
   setAcolytes: SetAcolytes,
@@ -16,33 +17,42 @@ function handlerArtifactCollected(
   artifactId: string,
   setArtifacts: SetArtifacts,
   user: KaotikaUser,
+  setIsLoading: SetIsLoading,
+  isArtifactCollected: boolean,
 ) {
-  setAcolytes(prevAcolytes =>
-    prevAcolytes.map(acolyte => {
-      if (acolyte._id === acolyteId) {
-        if (!acolyte.found_artifacts?.includes(artifactId)) {
-          const updatedFoundArtifacts = [
-            ...(acolyte.found_artifacts || []),
-            artifactId,
-          ];
+  setIsLoading(false);
 
-          return { ...acolyte, found_artifacts: updatedFoundArtifacts };
+  if (!isArtifactCollected) {
+    showErrorModal(setModalData);
+    return;
+  } else {
+    setAcolytes(prevAcolytes =>
+      prevAcolytes.map(acolyte => {
+        if (acolyte._id === acolyteId) {
+          if (!acolyte.found_artifacts?.includes(artifactId)) {
+            const updatedFoundArtifacts = [
+              ...(acolyte.found_artifacts || []),
+              artifactId,
+            ];
+
+            return { ...acolyte, found_artifacts: updatedFoundArtifacts };
+          }
         }
-      }
 
-      return acolyte;
-    }),
-  );
-
-  const nextArtifacts = setAndGetNextArtifacts(artifactId, setArtifacts);
-
-  if (user.rol === UserRole.ACOLYTE) {
-    const firstActiveArtifact = nextArtifacts.find(
-      artifact => artifact.state === ArtifactState.ACTIVE,
+        return acolyte;
+      }),
     );
 
-    if (!firstActiveArtifact) {
-      setAllArtifactsGatheredModalData(ms, setModalData);
+    const nextArtifacts = setAndGetNextArtifacts(artifactId, setArtifacts);
+
+    if (user.rol === UserRole.ACOLYTE) {
+      const firstActiveArtifact = nextArtifacts.find(
+        artifact => artifact.state === ArtifactState.ACTIVE,
+      );
+
+      if (!firstActiveArtifact) {
+        setAllArtifactsGatheredModalData(ms, setModalData);
+      }
     }
   }
 }
@@ -95,4 +105,19 @@ function setAllArtifactsGatheredModalData(ms: MS, setModalData: SetModalData) {
   setModalData(modalData);
 }
 
-export default handlerArtifactCollected;
+function showErrorModal(setModalData: SetModalData) {
+  const modalData: ModalData = {
+    fullScreen: false,
+    content: {
+      message: 'You are too far away from the artifact to collect it!',
+    },
+    actionButtonText: 'Dismiss',
+    onPressActionButton() {
+      setModalData(null);
+    },
+  };
+
+  setModalData(modalData);
+}
+
+export default handlerArtifactPressManaged;
