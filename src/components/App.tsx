@@ -64,49 +64,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    userRef.current = user;
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      (async () => {
-        setIsLoading(true);
-
-        // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
-
-        const acolytesArray = (await getXArray(
-          'https://neokaotik-server.onrender.com/user/get-acolytes/',
-        )) as KaotikaUser[];
-        setAcolytes(acolytesArray);
-
-        const nonAcolyteArray = (await getXArray(
-          'https://neokaotik-server.onrender.com/user/non-acolyte-players/',
-        )) as KaotikaUser[];
-        setNonAcolytes(nonAcolyteArray);
-
-        const artifactsArray = (await getXArray(
-          'https://neokaotik-server.onrender.com/api/artifacts/',
-        )) as Artifact[];
-        setArtifacts(artifactsArray);
-
-        setIsLoading(false);
-      })();
-    }
-  }, [user]);
-
-  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
-    const response = await fetch(url);
-
-    let xArray = [];
-
-    if (response.ok) {
-      xArray = await response.json();
-    }
-
-    return xArray;
-  }
-
-  useEffect(() => {
     if (user) {
       const performSocketCleanUp = initSocket(
         ms,
@@ -127,6 +84,8 @@ const App = () => {
   }, [user, acolytes]);
 
   useEffect(() => {
+    userRef.current = user;
+
     if (user) {
       const unsubscribe = setNotificationHandlers(
         setAcolytes,
@@ -206,6 +165,8 @@ const App = () => {
 
   return (
     <SafeAreaView>
+      {isLoading && <CircleSpinner />}
+
       <Modal
         fullScreen={modalData?.fullScreen}
         content={modalData?.content}
@@ -213,19 +174,7 @@ const App = () => {
         actionButtonText={modalData?.actionButtonText}
       />
 
-      {isConfigured ? (
-        !user ? (
-          <>
-            <Login />
-
-            {isLoading && <CircleSpinner />}
-          </>
-        ) : (
-          <Main />
-        )
-      ) : (
-        <SplashScreen />
-      )}
+      {isConfigured ? !user ? <Login /> : <Main /> : <SplashScreen />}
     </SafeAreaView>
   );
 };

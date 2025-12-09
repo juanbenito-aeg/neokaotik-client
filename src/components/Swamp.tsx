@@ -29,6 +29,8 @@ import emitAcolyteMoved from '../socket/events/acolyte-moved';
 import { ArtifactId } from '../interfaces/Artifact';
 import emitArtifactPressed from '../socket/events/artifact-pressed';
 import { useFocusEffect } from '@react-navigation/native';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
+import CircleSpinner from './Spinner';
 
 const MapViewContainer = styled.View`
   position: absolute;
@@ -51,6 +53,8 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
   const setModalData = useModalStore(state => state.setModalData);
+
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
 
   const [isMapReady, setIsMapReady] = useState(false);
   const [position, setPosition] = useState<Location>(NULL_LOCATION);
@@ -114,6 +118,12 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         type: 'Point',
         coordinates: [pos.coords.longitude, pos.coords.latitude],
       });
+
+      const nextPosition: Location = {
+        type: 'Point',
+        coordinates: [pos.coords.longitude, pos.coords.latitude],
+      };
+      togglePressableArtifactId(nextPosition);
     });
   };
 
@@ -175,7 +185,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
             artifact.location.coordinates,
           );
 
-        return distanceBetweenUserAndArtifact < 1;
+        return distanceBetweenUserAndArtifact > 1;
       }
     });
 
@@ -219,6 +229,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   function handleArtifactPress(artifactId: ArtifactId) {
     if (artifactId === pressableArtifactId) {
+      setIsLoading(true);
       emitArtifactPressed(user!._id, position, artifactId);
     }
   }
