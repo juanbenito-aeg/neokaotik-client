@@ -1,6 +1,8 @@
 interface IsLoadingStore {
   isLoading: boolean;
-  setIsLoading: (isLoading: boolean) => void;
+  setIsLoading: SetIsLoading;
 }
 
-export type { IsLoadingStore };
+type SetIsLoading = (isLoading: boolean) => void;
+
+export type { IsLoadingStore, SetIsLoading };

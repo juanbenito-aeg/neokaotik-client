@@ -19,7 +19,8 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteLocation: Location,
   ) => void;
-  [SocketServerToClientEvents.ARTIFACT_COLLECTED]: (
+  [SocketServerToClientEvents.ARTIFACT_PRESS_MANAGED]: (
+    isArtifactCollected: boolean,
     acolyteId: string,
     artifactId: string,
   ) => void;

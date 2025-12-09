@@ -20,13 +20,14 @@ import {
 import { Location } from '../interfaces/geolocalization';
 import handleAcolytePositionChanged from './handlers/acolyte-position-changed';
 import { handleAcolyteTowerAccess } from './handlers/tower-access';
-import handlerArtifactCollected from './handlers/artifact-collected';
+import handlerArtifactPressManaged from './handlers/artifact-press-managed';
 import { MS } from '../interfaces/Metrics';
 import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
 import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
 import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
+import { SetIsLoading } from '../interfaces/IsLoading';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -43,6 +44,7 @@ function initSocket(
   setNonAcolytes: SetNonAcolytes,
   setArtifacts: SetArtifacts,
   setShowArtifactsAnimation: SetShowArtifactsAnimation,
+  setIsLoading: SetIsLoading,
 ) {
   // Listen for events
 
@@ -83,9 +85,9 @@ function initSocket(
     },
   );
   socket.on(
-    SocketServerToClientEvents.ARTIFACT_COLLECTED,
-    (acolyteId: string, artifactId: string) => {
-      handlerArtifactCollected(
+    SocketServerToClientEvents.ARTIFACT_PRESS_MANAGED,
+    (isArtifactCollected, acolyteId, artifactId) => {
+      handlerArtifactPressManaged(
         ms,
         setModalData,
         setAcolytes,
@@ -93,6 +95,8 @@ function initSocket(
         artifactId,
         setArtifacts,
         user,
+        setIsLoading,
+        isArtifactCollected,
       );
     },
   );
