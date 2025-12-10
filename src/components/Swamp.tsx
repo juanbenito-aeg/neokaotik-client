@@ -63,9 +63,10 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [pressableArtifactId, setPressableArtifactId] =
     useState<ArtifactId>('');
 
-  const markersWidthHeight = {
+  const markersCommonStyle = {
     width: ms(35, 0.75),
     height: ms(35, 0.75),
+    opacity: 1.0,
   };
 
   useEffect(() => {
@@ -260,7 +261,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                 <Image
                   source={{ uri: user!.avatar }}
                   style={{
-                    ...markersWidthHeight,
+                    ...markersCommonStyle,
                     borderRadius: 9999,
                   }}
                 />
@@ -281,7 +282,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                         <Image
                           source={{ uri: acolyte.avatar }}
                           style={{
-                            ...markersWidthHeight,
+                            ...markersCommonStyle,
                             borderRadius: 9999,
                           }}
                         />
@@ -320,7 +321,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                               : 'black'
                           }
                           style={{
-                            ...markersWidthHeight,
+                            ...markersCommonStyle,
                             resizeMode: 'contain',
                           }}
                         />
