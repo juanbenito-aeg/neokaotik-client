@@ -7,7 +7,6 @@ import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
 import CircleSpinner from './Spinner';
-import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket } from '../socket/socket';
 import { DEFAULT_MODAL_DATA } from '../constants/general';
@@ -22,7 +21,6 @@ import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
-import { Artifact } from '../interfaces/Artifact';
 import useArtifactStore from '../store/useArtifactStore';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 

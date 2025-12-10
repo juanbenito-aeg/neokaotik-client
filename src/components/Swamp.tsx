@@ -30,7 +30,6 @@ import { ArtifactId } from '../interfaces/Artifact';
 import emitArtifactPressed from '../socket/events/artifact-pressed';
 import { useFocusEffect } from '@react-navigation/native';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
-import CircleSpinner from './Spinner';
 
 const MapViewContainer = styled.View`
   position: absolute;
@@ -296,7 +295,9 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
                   if (artifact.state === ArtifactState.ACTIVE) {
                     return (
                       <Marker
-                        key={artifact._id + Date.now()}
+                        key={
+                          artifact._id + (artifact._id === pressableArtifactId)
+                        }
                         coordinate={{
                           latitude: artifact.location.coordinates[1],
                           longitude: artifact.location.coordinates[0],
