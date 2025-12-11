@@ -1,11 +1,13 @@
+import { UserRole } from '../../constants/general';
 import {
+  Tab,
   MapNavigation,
+  OldSchoolLocation,
+} from '../../constants/navigation';
+import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
-  Tab,
-  UserRole,
-  OldSchoolLocation,
-} from '../../constants';
+} from '../../constants/image-sources';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
@@ -36,7 +38,28 @@ const Map = ({ route }: MapProps) => {
   const user = usePlayerStore(state => state.user);
   const setUser = usePlayerStore(state => state.setUser);
 
+  const acolytes = usePlayerStore(state => state.acolytes);
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener(
+      'tabPress' as keyof EventMapCore<Readonly<NavigationState>>,
+      e => {
+        const navigationState = navigation.getState()!;
+
+        const isMapScreenFocused =
+          navigationState.routes[navigationState.index!].name === Tab.MAP;
+
+        if (isMapScreenFocused && mapNavigation !== MapNavigation.MAP) {
+          setMapNavigation(MapNavigation.MAP);
+        }
+      },
+    );
+
+    return unsubscribe;
+  }, [mapNavigation]);
+
   const { screenChangingNotificationData, tabBarStyle } = route.params;
   const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
 
@@ -114,8 +137,9 @@ const Map = ({ route }: MapProps) => {
               />
             )}
 
-            {(user!.has_completed_artifacts_search ||
-              user!.rol !== UserRole.ACOLYTE) && (
+            {acolytes.find(
+              acolyte => acolyte.has_completed_artifacts_search,
+            ) && (
               <Button
                 customStyleObj={{
                   ...buttonCustomStyleObj,
@@ -172,24 +196,6 @@ const Map = ({ route }: MapProps) => {
         );
     }
   };
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener(
-      'tabPress' as keyof EventMapCore<Readonly<NavigationState>>,
-      e => {
-        const navigationState = navigation.getState()!;
-
-        const isMapScreenFocused =
-          navigationState.routes[navigationState.index!].name === Tab.MAP;
-
-        if (isMapScreenFocused && mapNavigation !== MapNavigation.MAP) {
-          setMapNavigation(MapNavigation.MAP);
-        }
-      },
-    );
-
-    return unsubscribe;
-  }, [mapNavigation]);
 
   return <>{changeScreen(mapNavigation)}</>;
 };

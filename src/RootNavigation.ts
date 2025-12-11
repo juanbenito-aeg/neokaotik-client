@@ -2,7 +2,7 @@ import {
   CommonActions,
   createNavigationContainerRef,
 } from '@react-navigation/native';
-import { Tab } from './constants';
+import { Tab } from './constants/navigation';
 
 const navigationRef = createNavigationContainerRef<{}>();
 

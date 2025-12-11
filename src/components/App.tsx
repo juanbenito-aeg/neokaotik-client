@@ -7,10 +7,10 @@ import Modal from './Modal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Main from './Main';
 import CircleSpinner from './Spinner';
-import KaotikaUser from '../interfaces/KaotikaUser';
 import { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
 import { initSocket } from '../socket/socket';
-import { DEFAULT_MODAL_DATA, DeviceState } from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants/general';
+import { DeviceState } from '../constants/fcm';
 import { getDeviceToken } from '../fcm/deviceToken';
 import {
   setNotificationHandlers,
@@ -21,7 +21,6 @@ import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
-import { Artifact } from '../interfaces/Artifact';
 import useArtifactStore from '../store/useArtifactStore';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
@@ -63,49 +62,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    userRef.current = user;
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
-      (async () => {
-        setIsLoading(true);
-
-        // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
-
-        const acolytesArray = (await getXArray(
-          'http://10.50.0.50:6000/user/get-acolytes/',
-        )) as KaotikaUser[];
-        setAcolytes(acolytesArray);
-
-        const nonAcolyteArray = (await getXArray(
-          'http://10.50.0.50:6000/user/non-acolyte-players/',
-        )) as KaotikaUser[];
-        setNonAcolytes(nonAcolyteArray);
-
-        const artifactsArray = (await getXArray(
-          'http://10.50.0.50:6000/api/artifacts/',
-        )) as Artifact[];
-        setArtifacts(artifactsArray);
-
-        setIsLoading(false);
-      })();
-    }
-  }, [user]);
-
-  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
-    const response = await fetch(url);
-
-    let xArray = [];
-
-    if (response.ok) {
-      xArray = await response.json();
-    }
-
-    return xArray;
-  }
-
-  useEffect(() => {
     if (user) {
       const performSocketCleanUp = initSocket(
         ms,
@@ -117,6 +73,7 @@ const App = () => {
         setNonAcolytes,
         setArtifacts,
         setShowArtifactsAnimation,
+        setIsLoading,
       );
 
       return () => {
@@ -126,6 +83,8 @@ const App = () => {
   }, [user, acolytes]);
 
   useEffect(() => {
+    userRef.current = user;
+
     if (user) {
       const unsubscribe = setNotificationHandlers(
         setAcolytes,
@@ -205,6 +164,8 @@ const App = () => {
 
   return (
     <SafeAreaView>
+      {isLoading && <CircleSpinner />}
+
       <Modal
         fullScreen={modalData?.fullScreen}
         content={modalData?.content}
@@ -212,19 +173,7 @@ const App = () => {
         actionButtonText={modalData?.actionButtonText}
       />
 
-      {isConfigured ? (
-        !user ? (
-          <>
-            <Login />
-
-            {isLoading && <CircleSpinner />}
-          </>
-        ) : (
-          <Main />
-        )
-      ) : (
-        <SplashScreen />
-      )}
+      {isConfigured ? !user ? <Login /> : <Main /> : <SplashScreen />}
     </SafeAreaView>
   );
 };

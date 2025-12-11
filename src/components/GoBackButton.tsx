@@ -1,7 +1,7 @@
 import { ViewStyle } from 'react-native';
 import useMetrics from '../hooks/use-metrics';
 import Button from './Button';
-import { ButtonBackgroundImgSrc } from '../constants';
+import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { GoBackButtonProps } from '../interfaces/buttons';
 
 const GoBackButton = ({ onPress }: GoBackButtonProps) => {
@@ -14,6 +14,7 @@ const GoBackButton = ({ onPress }: GoBackButtonProps) => {
     position: 'absolute',
     top: '-2.5%',
     left: '5%',
+    zIndex: 9999,
   };
 
   return (

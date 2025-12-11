@@ -1,10 +1,9 @@
+import { UserRole } from '../../constants/general';
+import { MapNavigation, OldSchoolLocation } from '../../constants/navigation';
 import {
-  ButtonBackgroundImgSrc,
-  MapNavigation,
-  OldSchoolLocation,
   ScreenBackgroundImgSrc,
-  UserRole,
-} from '../../constants';
+  ButtonBackgroundImgSrc,
+} from '../../constants/image-sources';
 import ScreenContainer from '../ScreenContainer';
 import Button from '../Button';
 import React, { useEffect, useState } from 'react';

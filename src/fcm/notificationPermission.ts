@@ -1,33 +1,26 @@
 import { deviceTokenToRefresh } from './deviceToken';
 import { PermissionsAndroid } from 'react-native';
-import { DEFAULT_MODAL_DATA } from '../constants';
-import { useModalStore } from '../store/useModalStore';
 
-export async function handleNotificationPermission(userEmail: string) {
-  const setModalData = useModalStore(state => state.setModalData);
-
+export async function handleNotificationPermission(
+  userEmail: string,
+): Promise<void | string> {
   const hasPermission = await PermissionsAndroid.check(
     PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
   );
 
   if (hasPermission) {
     deviceTokenToRefresh(userEmail);
-    return;
-  }
-  const result = await PermissionsAndroid.request(
-    PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-  );
+  } else {
+    const result = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
 
-  if (result === PermissionsAndroid.RESULTS.GRANTED) {
-    deviceTokenToRefresh(userEmail);
-    return;
-  } else if (result === PermissionsAndroid.RESULTS.DENIED) {
-    setModalData({
-      ...DEFAULT_MODAL_DATA,
-      content: {
-        message:
-          'You have to enable notifications from system settings to receive alerts.',
-      },
-    });
+    if (result === PermissionsAndroid.RESULTS.GRANTED) {
+      deviceTokenToRefresh(userEmail);
+    } else if (result === PermissionsAndroid.RESULTS.DENIED) {
+      const permissionDeniedMessage =
+        'You have to enable notifications from system settings to receive alerts.';
+      return permissionDeniedMessage;
+    }
   }
 }

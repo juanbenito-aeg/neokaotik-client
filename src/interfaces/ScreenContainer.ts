@@ -1,4 +1,4 @@
-import { ScreenBackgroundImgSrc } from '../constants';
+import { ScreenBackgroundImgSrc } from '../constants/image-sources';
 
 interface ScreenContainerProps {
   backgroundImgSrc: ScreenBackgroundImgSrc;

@@ -1,5 +1,5 @@
 import ScreenContainer from '../../ScreenContainer';
-import { ScreenBackgroundImgSrc } from '../../../constants';
+import { ScreenBackgroundImgSrc } from '../../../constants/image-sources';
 
 const IstvanHome = () => {
   return (

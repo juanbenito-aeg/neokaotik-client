@@ -1,7 +1,7 @@
 import {
-  SocketClientToServerEvents,
   SocketServerToClientEvents,
-} from '../constants';
+  SocketClientToServerEvents,
+} from '../constants/socket';
 import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
@@ -19,7 +19,8 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteLocation: Location,
   ) => void;
-  [SocketServerToClientEvents.ARTIFACT_COLLECTED]: (
+  [SocketServerToClientEvents.ARTIFACT_PRESS_MANAGED]: (
+    isArtifactCollected: boolean,
     acolyteId: string,
     artifactId: string,
   ) => void;
@@ -70,6 +71,7 @@ interface ClientToServerEvents {
     acolyteId: string,
     acolyteLocation: Location,
     artifactId: string,
+    handleEventNotReceivedInServer: (error: any) => void,
   ) => void;
   [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
   [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (

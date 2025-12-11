@@ -9,16 +9,11 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import {
-  AsyncStorageKey,
-  ButtonBackgroundImgSrc,
-  DeviceState,
-  MapNavigation,
-  NotificationTitle,
-  OldSchoolLocation,
-  SocketClientToServerEvents,
-  Tab,
-} from '../constants';
+import { AsyncStorageKey } from '../constants/general';
+import { DeviceState, NotificationTitle } from '../constants/fcm';
+import { Tab, MapNavigation, OldSchoolLocation } from '../constants/navigation';
+import { SocketClientToServerEvents } from '../constants/socket';
+import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes } from '../interfaces/player';

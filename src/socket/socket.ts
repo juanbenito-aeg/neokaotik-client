@@ -5,7 +5,10 @@ import type {
   AcolyteDataAfterAccessExitLab,
   AcolyteDataToAccessOrExitTower,
 } from '../interfaces/socket';
-import { SocketGeneralEvents, SocketServerToClientEvents } from '../constants';
+import {
+  SocketGeneralEvents,
+  SocketServerToClientEvents,
+} from '../constants/socket';
 import { handleConnection } from './handlers/connection';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetAcolytes, SetNonAcolytes, SetUser } from '../interfaces/player';
@@ -17,13 +20,14 @@ import {
 import { Location } from '../interfaces/geolocalization';
 import handleAcolytePositionChanged from './handlers/acolyte-position-changed';
 import { handleAcolyteTowerAccess } from './handlers/tower-access';
-import handlerArtifactCollected from './handlers/artifact-collected';
+import handlerArtifactPressManaged from './handlers/artifact-press-managed';
 import { MS } from '../interfaces/Metrics';
 import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
 import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
 import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
+import { SetIsLoading } from '../interfaces/IsLoading';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'http://10.50.0.50:6000/',
@@ -40,6 +44,7 @@ function initSocket(
   setNonAcolytes: SetNonAcolytes,
   setArtifacts: SetArtifacts,
   setShowArtifactsAnimation: SetShowArtifactsAnimation,
+  setIsLoading: SetIsLoading,
 ) {
   // Listen for events
 
@@ -80,9 +85,9 @@ function initSocket(
     },
   );
   socket.on(
-    SocketServerToClientEvents.ARTIFACT_COLLECTED,
-    (acolyteId: string, artifactId: string) => {
-      handlerArtifactCollected(
+    SocketServerToClientEvents.ARTIFACT_PRESS_MANAGED,
+    (isArtifactCollected, acolyteId, artifactId) => {
+      handlerArtifactPressManaged(
         ms,
         setModalData,
         setAcolytes,
@@ -90,6 +95,8 @@ function initSocket(
         artifactId,
         setArtifacts,
         user,
+        setIsLoading,
+        isArtifactCollected,
       );
     },
   );
@@ -113,14 +120,11 @@ function initSocket(
       handleArtifactsSearchValidationResetManaged(
         acolytesHaveCompletedArtifactsSearch,
         setModalData,
-        user,
-        setUser,
         setAcolytes,
         setArtifacts,
       );
     },
   );
-
   socket.on(SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS, () => {
     handleRequestedToShowArtifacts(
       user!,

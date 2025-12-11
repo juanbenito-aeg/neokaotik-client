@@ -1,4 +1,4 @@
-import handlerArtifactCollected from '../../../socket/handlers/artifact-collected';
+import handlerArtifactPressManaged from '../../../socket/handlers/artifact-press-managed';
 import { MS } from '../../../interfaces/Metrics';
 import { SetAcolytes } from '../../../interfaces/player';
 import { SetModalData } from '../../../interfaces/Modal';
@@ -13,8 +13,9 @@ jest.mock('../../../RootNavigation', () => ({
 }));
 
 const mockedAcolyte = mockedPlayers[MockedPlayer.ACOLYTE];
+const setIsLoading = jest.fn();
 
-describe('handleArtifactCollected', () => {
+describe('handlerArtifactPressManaged', () => {
   let ms: MS;
   let setModalData: SetModalData;
   let setAcolytes: SetAcolytes;
@@ -42,7 +43,7 @@ describe('handleArtifactCollected', () => {
   });
 
   it('should update acolytes when the function is called', () => {
-    handlerArtifactCollected(
+    handlerArtifactPressManaged(
       ms,
       setModalData,
       setAcolytes,
@@ -50,13 +51,15 @@ describe('handleArtifactCollected', () => {
       'artifact_4',
       setArtifacts,
       mockedAcolyte,
+      setIsLoading,
+      true,
     );
 
     expect(setAcolytes).toHaveBeenCalled();
   });
 
   it("shouldn't display modal if fewer that 4 artifacts are collected", () => {
-    handlerArtifactCollected(
+    handlerArtifactPressManaged(
       ms,
       setModalData,
       setAcolytes,
@@ -64,6 +67,8 @@ describe('handleArtifactCollected', () => {
       'artifact_1',
       setArtifacts,
       mockedAcolyte,
+      setIsLoading,
+      true,
     );
 
     expect(setModalData).not.toHaveBeenCalled();
@@ -77,7 +82,7 @@ describe('handleArtifactCollected', () => {
       return updater;
     });
 
-    handlerArtifactCollected(
+    handlerArtifactPressManaged(
       ms,
       setModalData,
       setAcolytes,
@@ -85,10 +90,29 @@ describe('handleArtifactCollected', () => {
       'artifact_4',
       setArtifacts,
       mockedAcolyte,
+      setIsLoading,
+      true,
     );
 
     expect(setAcolytes).toHaveBeenCalledTimes(1);
 
     expect(setModalData).toHaveBeenCalled();
+  });
+
+  it('should display modal if isArtifactCollected is false', () => {
+    handlerArtifactPressManaged(
+      ms,
+      setModalData,
+      setAcolytes,
+      mockedAcolyte._id,
+      'artifact_4',
+      setArtifacts,
+      mockedAcolyte,
+      setIsLoading,
+      false,
+    );
+
+    expect(setModalData).toHaveBeenCalled();
+    expect(setAcolytes).not.toHaveBeenCalled();
   });
 });

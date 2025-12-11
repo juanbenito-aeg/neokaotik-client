@@ -1,5 +1,5 @@
 import ScreenContainer from '../../ScreenContainer';
-import { ScreenBackgroundImgSrc } from '../../../constants';
+import { ScreenBackgroundImgSrc } from '../../../constants/image-sources';
 import Logout from '../../Logout';
 
 const AcolyteSettings = () => {

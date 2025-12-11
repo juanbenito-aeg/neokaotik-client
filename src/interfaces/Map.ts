@@ -1,7 +1,7 @@
 import { StaticScreenProps } from '@react-navigation/native';
 import { ViewStyle } from 'react-native';
 import { ScreenChangingNotificationData } from './fcm';
-import { MapNavigation } from '../constants';
+import { MapNavigation } from '../constants/navigation';
 
 type MapProps = StaticScreenProps<{
   screenChangingNotificationData?: ScreenChangingNotificationData;

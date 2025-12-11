@@ -2,7 +2,8 @@ import styled from 'styled-components/native';
 import useMetrics from '../hooks/use-metrics';
 import { HS, VS, MS } from '../interfaces/Metrics';
 import useArtifactStore from '../store/useArtifactStore';
-import { ArtifactImgSrc, GeneralBackgroundImgSrc } from '../constants';
+import { ArtifactImgSrc } from '../constants/image-sources';
+import { ArtifactRelatedImgSrc } from '../constants/image-sources';
 import Artifact from './Artifact';
 
 const Container = styled.ImageBackground<{
@@ -19,6 +20,7 @@ const Container = styled.ImageBackground<{
   align-items: center;
   gap: ${({ $hs }) => $hs(10.5)}px;
   margin-bottom: ${({ $ms }) => $ms(65, 0.5)}px;
+  filter: drop-shadow(0 0 10px #000000);
 `;
 
 const ArtifactInventory = () => {
@@ -28,7 +30,7 @@ const ArtifactInventory = () => {
 
   return (
     <Container
-      source={GeneralBackgroundImgSrc.ARTIFACT_INVENTORY}
+      source={ArtifactRelatedImgSrc.ARTIFACT_INVENTORY}
       resizeMode="stretch"
       $hs={hs}
       $vs={vs}

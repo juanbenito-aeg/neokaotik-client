@@ -1,9 +1,9 @@
 import * as Animatable from 'react-native-animatable';
 import {
-  ArtifactImgSrc,
   ButtonBackgroundImgSrc,
-  GeneralBackgroundImgSrc,
-} from '../constants';
+  ArtifactImgSrc,
+} from '../constants/image-sources';
+import { ArtifactRelatedImgSrc } from '../constants/image-sources';
 import useArtifactStore from '../store/useArtifactStore';
 import { Image } from 'react-native';
 import styled from 'styled-components/native';
@@ -27,6 +27,7 @@ const PanelImage = styled.Image<{ $ms: MS }>`
   width: 100%;
   height: ${({ $ms }) => $ms(200, 0.8)}px;
   resize-mode: cover;
+  filter: drop-shadow(0 0 10px #000000);
 `;
 
 const Grid = styled.View<{ $ms: MS }>`
@@ -66,7 +67,7 @@ const ArtifactsPanel = () => {
 
   return (
     <ArtifactsContainer testID="artifacts-panel">
-      <PanelImage source={GeneralBackgroundImgSrc.ARTIFACTS_PANEL} $ms={ms} />
+      <PanelImage source={ArtifactRelatedImgSrc.ARTIFACTS_PANEL} $ms={ms} />
       <Grid $ms={ms}>
         {artifacts.map((artifact, index) => {
           const delay = index * 300;

@@ -1,11 +1,9 @@
 import { GoogleAuth } from 'react-native-google-auth';
 import styled from 'styled-components/native';
 import Button from './Button';
-import {
-  ButtonBackgroundImgSrc,
-  DEFAULT_MODAL_DATA,
-  MapNavigation,
-} from '../constants';
+import { DEFAULT_MODAL_DATA } from '../constants/general';
+import { MapNavigation } from '../constants/navigation';
+import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import {
   avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn,
   updateFcmToken,

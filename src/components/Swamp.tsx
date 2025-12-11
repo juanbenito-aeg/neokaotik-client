@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { NestedScreenProps } from '../interfaces/generics';
 import ScreenContainer from './ScreenContainer';
 import {
-  ArtifactImgSrc,
   ArtifactState,
-  Coordinate,
   DEFAULT_MODAL_DATA,
-  NULL_LOCATION,
-  ScreenBackgroundImgSrc,
   UserRole,
-} from '../constants';
-import Header from './Header';
+} from '../constants/general';
+import { Coordinate, NULL_LOCATION } from '../constants/geolocation';
+import {
+  ScreenBackgroundImgSrc,
+  ArtifactImgSrc,
+} from '../constants/image-sources';
 import GoBackButton from './GoBackButton';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import useMetrics from '../hooks/use-metrics';
@@ -24,24 +24,25 @@ import { ModalData } from '../interfaces/Modal';
 import { Coordinates, Location } from '../interfaces/geolocalization';
 import useArtifactStore from '../store/useArtifactStore';
 import styled from 'styled-components/native';
-import { MS } from '../interfaces/Metrics';
 import ArtifactInventory from './ArtifactInventory';
 import emitAcolyteMoved from '../socket/events/acolyte-moved';
 import { ArtifactId } from '../interfaces/Artifact';
 import emitArtifactPressed from '../socket/events/artifact-pressed';
 import { useFocusEffect } from '@react-navigation/native';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
-const MapViewContainer = styled.View<{ $ms: MS }>`
+const MapViewContainer = styled.View`
   position: absolute;
-  top: ${({ $ms }) => $ms(125, 0.9)}px;
-  border-radius: 15px;
-  overflow: hidden;
+  top: 0;
 `;
 
 const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
-  const { hs, vs, ms } = useMetrics();
+  const { windowWidth, windowHeight, ms } = useMetrics();
 
   const user = usePlayerStore(state => state.user);
+
+  const isAcolyteOrMortimer =
+    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
 
   const acolytes = usePlayerStore(state => state.acolytes);
   const setAcolytes = usePlayerStore(state => state.setAcolytes);
@@ -52,6 +53,9 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const modalData: ModalData = { ...DEFAULT_MODAL_DATA };
   const setModalData = useModalStore(state => state.setModalData);
 
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
+  const [isMapReady, setIsMapReady] = useState(false);
   const [position, setPosition] = useState<Location>(NULL_LOCATION);
   const [watching, setWatching] = useState<boolean>(false);
   const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
@@ -59,13 +63,11 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
   const [pressableArtifactId, setPressableArtifactId] =
     useState<ArtifactId>('');
 
-  const isVillainOrIstvan =
-    user?.rol === UserRole.VILLAIN || user?.rol === UserRole.ISTVAN;
-  const isAcolyteOrMortimer =
-    user?.rol === UserRole.ACOLYTE || user?.rol === UserRole.MORTIMER;
-
-  const mapWidth = hs(328);
-  const mapHeight = isVillainOrIstvan ? vs(540) : vs(335);
+  const markersCommonStyle = {
+    width: ms(35, 0.75),
+    height: ms(35, 0.75),
+    opacity: 1.0,
+  };
 
   useEffect(() => {
     if (user!.rol !== UserRole.ACOLYTE) {
@@ -96,6 +98,7 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
         if (subscriptionId !== null) {
           // When the user exits the screen, stop watching for changes in their position & reset the related state
 
+          setIsMapReady(false);
           setPosition(NULL_LOCATION);
           setWatching(false);
           setSubscriptionId(null);
@@ -214,119 +217,127 @@ const Swamp = ({ onPressGoBackButton }: NestedScreenProps) => {
     return d;
   }
 
+  function handleMapReady() {
+    setIsMapReady(true);
+  }
+
   function handleArtifactPress(artifactId: ArtifactId) {
     if (artifactId === pressableArtifactId) {
+      setIsLoading(true);
       emitArtifactPressed(user!._id, position, artifactId);
     }
   }
 
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.SWAMP}>
-      <Header>The Swamp</Header>
-
       <GoBackButton onPress={onPressGoBackButton} />
 
-      <MapViewContainer style={{ width: mapWidth, height: mapHeight }} $ms={ms}>
+      <MapViewContainer style={{ width: windowWidth, height: windowHeight }}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={StyleSheet.absoluteFill}
-          region={{
-            latitude: 43.3102,
-            longitude: -2.002594,
+          initialRegion={{
+            latitude: 43.309457334777676,
+            longitude: -2.002383890907663,
             latitudeDelta: 0,
-            longitudeDelta: 0.003,
+            longitudeDelta: 0.0025,
           }}
+          showsCompass={false}
           showsUserLocation={false}
           userInterfaceStyle="dark"
           toolbarEnabled={false}
           moveOnMarkerPress={false}
+          onMapReady={handleMapReady}
         >
-          <Marker
-            coordinate={{
-              latitude: position.coordinates[1],
-              longitude: position.coordinates[0],
-            }}
-            tracksViewChanges={false}
-            zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
-          >
-            <Image
-              source={{ uri: user!.avatar }}
-              style={{
-                width: ms(40, 0.8),
-                height: ms(40, 0.8),
-                borderRadius: ms(20, 2),
-              }}
-            />
-          </Marker>
+          {isMapReady && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: position.coordinates[1],
+                  longitude: position.coordinates[0],
+                }}
+                zIndex={user?.rol !== UserRole.ACOLYTE ? 2 : 0}
+              >
+                <Image
+                  source={{ uri: user!.avatar }}
+                  style={{
+                    ...markersCommonStyle,
+                    borderRadius: 9999,
+                  }}
+                />
+              </Marker>
 
-          {user?.rol !== UserRole.ACOLYTE &&
-            acolytes.map(acolyte => {
-              if (acolyte.location) {
-                return (
-                  <Marker
-                    key={acolyte._id}
-                    coordinate={{
-                      latitude: acolyte.location!.coordinates[1],
-                      longitude: acolyte.location!.coordinates[0],
-                    }}
-                    tracksViewChanges={false}
-                    zIndex={0}
-                  >
-                    <Image
-                      source={{ uri: acolyte.avatar }}
-                      style={{
-                        width: ms(40, 0.8),
-                        height: ms(40, 0.8),
-                        borderRadius: ms(20, 2),
-                      }}
-                    />
-                  </Marker>
-                );
-              }
-            })}
+              {user?.rol !== UserRole.ACOLYTE &&
+                acolytes.map(acolyte => {
+                  if (acolyte.location) {
+                    return (
+                      <Marker
+                        key={acolyte._id}
+                        coordinate={{
+                          latitude: acolyte.location!.coordinates[1],
+                          longitude: acolyte.location!.coordinates[0],
+                        }}
+                        zIndex={0}
+                      >
+                        <Image
+                          source={{ uri: acolyte.avatar }}
+                          style={{
+                            ...markersCommonStyle,
+                            borderRadius: 9999,
+                          }}
+                        />
+                      </Marker>
+                    );
+                  }
+                })}
 
-          {isAcolyteOrMortimer &&
-            artifacts.map(artifact => {
-              if (artifact.state === ArtifactState.ACTIVE) {
-                return (
-                  <Marker
-                    key={artifact._id + Date.now()}
-                    coordinate={{
-                      latitude: artifact.location.coordinates[1],
-                      longitude: artifact.location.coordinates[0],
-                    }}
-                    tracksViewChanges={false}
-                    zIndex={1}
-                    onPress={() => {
-                      handleArtifactPress(artifact._id);
-                    }}
-                  >
-                    <Image
-                      source={
-                        ArtifactImgSrc[
-                          artifact.name as keyof typeof ArtifactImgSrc
-                        ]
-                      }
-                      tintColor={
-                        artifact._id === pressableArtifactId ||
-                        user.rol === UserRole.MORTIMER
-                          ? ''
-                          : 'black'
-                      }
-                      style={{
-                        width: ms(40, 1),
-                        height: ms(40, 1),
-                        resizeMode: 'contain',
-                      }}
-                    />
-                  </Marker>
-                );
-              }
-            })}
+              {isAcolyteOrMortimer &&
+                artifacts.map(artifact => {
+                  if (artifact.state === ArtifactState.ACTIVE) {
+                    return (
+                      <Marker
+                        key={
+                          artifact._id + (artifact._id === pressableArtifactId)
+                        }
+                        coordinate={{
+                          latitude: artifact.location.coordinates[1],
+                          longitude: artifact.location.coordinates[0],
+                        }}
+                        zIndex={1}
+                        onPress={() => {
+                          handleArtifactPress(artifact._id);
+                        }}
+                      >
+                        <Image
+                          source={
+                            ArtifactImgSrc[
+                              artifact.name as keyof typeof ArtifactImgSrc
+                            ]
+                          }
+                          tintColor={
+                            artifact._id === pressableArtifactId ||
+                            user.rol === UserRole.MORTIMER
+                              ? ''
+                              : 'black'
+                          }
+                          style={{
+                            ...markersCommonStyle,
+                            resizeMode: 'contain',
+                          }}
+                        />
+                      </Marker>
+                    );
+                  }
+                })}
+            </>
+          )}
         </MapView>
       </MapViewContainer>
 
-      {isAcolyteOrMortimer && <ArtifactInventory />}
+      {isAcolyteOrMortimer &&
+        !acolytes.find(acolyte => acolyte.has_completed_artifacts_search) && (
+          <ArtifactInventory />
+        )}
     </ScreenContainer>
   );
 };

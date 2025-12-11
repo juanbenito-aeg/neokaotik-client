@@ -1,26 +1,21 @@
-import { SocketClientToServerEvents } from '../../../constants';
+import { SocketClientToServerEvents } from '../../../constants/socket';
+import emitArtifactsSearchValidationOrReset from '../../../socket/events/artifacts-search-validation-reset';
+import { socket } from '../../../socket/socket';
 
-jest.mock('socket.io-client');
-
-let socket: any;
+let mockEmit: jest.Mock;
 
 beforeEach(() => {
-  socket = {
-    on: jest.fn(),
-    emit: jest.fn(),
-    disconnect: jest.fn(),
-  };
+  mockEmit = jest.fn();
+
+  jest.spyOn(socket, 'emit').mockImplementation(mockEmit);
 });
 
 it('should emit artifacts search validation/reset socket event', () => {
-  const isSearchValidated: boolean = false;
+  const isSearchValidated = false;
 
-  socket.emit(
-    SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET,
-    isSearchValidated,
-  );
+  emitArtifactsSearchValidationOrReset(isSearchValidated);
 
-  expect(socket.emit).toHaveBeenCalledWith(
+  expect(mockEmit).toHaveBeenCalledWith(
     SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET,
     isSearchValidated,
   );

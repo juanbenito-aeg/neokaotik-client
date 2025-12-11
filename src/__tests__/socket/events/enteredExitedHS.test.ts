@@ -1,24 +1,31 @@
-import { SocketClientToServerEvents } from '../../../constants';
+import { MockedPlayer, mockedPlayers } from '../../../__mocks__/mockedPlayers';
+import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../../../socket/events/entered-exited-hs';
+import { socket } from '../../../socket/socket';
 
-jest.mock('socket.io-client');
+jest.mock('../../../socket/socket', () => ({
+  socket: {
+    timeout: jest.fn(),
+    emit: jest.fn(),
+  },
+}));
 
-let socket: any;
+let mockEmit: jest.Mock;
 
 beforeEach(() => {
-  socket = {
-    on: jest.fn(),
-    emit: jest.fn(),
-    disconnect: jest.fn(),
-  };
+  mockEmit = jest.fn();
+
+  (socket.timeout as jest.Mock).mockReturnValue({
+    emit: mockEmit,
+  });
 });
 
 it('should emit an entered-exited-hs socket event', () => {
-  const isInsideHS: boolean = true;
+  const isInsideHS = true;
 
-  socket.emit(SocketClientToServerEvents.ENTERED_EXITED_HS, isInsideHS);
-
-  expect(socket.emit).toHaveBeenCalledWith(
-    SocketClientToServerEvents.ENTERED_EXITED_HS,
+  updateAcolyteOrMortimerEnteredOrExitedHS(
+    mockedPlayers[MockedPlayer.ACOLYTE]._id,
     isInsideHS,
   );
+
+  expect(mockEmit).toHaveBeenCalled();
 });
