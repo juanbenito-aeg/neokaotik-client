@@ -6,7 +6,7 @@ export async function authenticateUser(
   fcmToken: string,
 ): Promise<AuthenticateUserReturnValue> {
   const response = await fetch(
-    `https://neokaotik-server.onrender.com/user/${endpoint}`,
+    `https://neokaotik-server.onrender.com/auth/${endpoint}`,
     {
       method: 'POST',
       body: JSON.stringify({ idToken, fcmToken }),

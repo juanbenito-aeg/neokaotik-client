@@ -34,17 +34,17 @@ const Main = () => {
       // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
 
       const acolytesArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/user/get-acolytes/',
+        'https://neokaotik-server.onrender.com/players/acolytes/',
       )) as KaotikaUser[];
       setAcolytes(acolytesArray);
 
       const nonAcolyteArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/user/non-acolyte-players/',
+        'https://neokaotik-server.onrender.com/players/non-acolytes/',
       )) as KaotikaUser[];
       setNonAcolytes(nonAcolyteArray);
 
       const artifactsArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/api/artifacts/',
+        'https://neokaotik-server.onrender.com/missions/artifacts/',
       )) as Artifact[];
       setArtifacts(artifactsArray);
 

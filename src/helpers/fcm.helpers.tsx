@@ -25,7 +25,7 @@ import { SetUser } from '../interfaces/player';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(
-    `https://neokaotik-server.onrender.com/user/update/${userEmail}`,
+    `https://neokaotik-server.onrender.com/players/${userEmail}`,
     {
       method: 'PATCH',
       headers: {
