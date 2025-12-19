@@ -10,6 +10,7 @@ enum MapNavigation {
   SWAMP = 'Swamp',
   SWAMP_TOWER = 'Swamp Tower',
   OBITUARY = 'The Obituary',
+  VALLEY_SORES = 'The Valley of Sores',
 }
 
 enum OldSchoolLocation {

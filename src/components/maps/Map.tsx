@@ -27,6 +27,7 @@ import Swamp from '../Swamp';
 import { useMapStore } from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Obituary from '../Obituary';
+import ValleySores from './ValleySores';
 
 const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
@@ -152,6 +153,18 @@ const Map = ({ route }: MapProps) => {
                 backgroundImgSrc={ButtonBackgroundImgSrc.OBITUARY}
               />
             )}
+
+            <Button
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                top: '13%',
+                left: '49.5%',
+              }}
+              onPress={() => {
+                handlePress(MapNavigation.VALLEY_SORES);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.VALLEY_SORES}
+            />
           </ScreenContainer>
         );
 
@@ -194,6 +207,9 @@ const Map = ({ route }: MapProps) => {
             }}
           />
         );
+
+      case MapNavigation.VALLEY_SORES:
+        return <ValleySores />;
     }
   };
 

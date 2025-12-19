@@ -36,6 +36,7 @@ enum ButtonBackgroundImgSrc {
   SCROLL = require('../../public/images/roles/acolyte/scroll.png'),
   HALL_OF_SAGES = require('../../public/images/the-hall-of-sages-icon.png'),
   OBITUARY = require('../../public/images/obituary-icon.png'),
+  VALLEY_SORES = require('../../public/images/icons/valley-sores.png'),
 }
 
 enum ModalBackgroundImgSrc {
