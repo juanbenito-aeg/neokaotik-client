@@ -24,16 +24,13 @@ import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
-  const response = await fetch(
-    `http://10.50.0.50:6000/user/update/${userEmail}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ pushToken: fcmToken }),
+  const response = await fetch(`http://10.50.0.50:6000/players/${userEmail}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
     },
-  );
+    body: JSON.stringify({ pushToken: fcmToken }),
+  });
 
   const data = await response.json();
   if (response.ok) {

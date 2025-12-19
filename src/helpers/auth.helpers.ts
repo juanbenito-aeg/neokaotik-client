@@ -5,7 +5,7 @@ export async function authenticateUser(
   idToken: string,
   fcmToken: string,
 ): Promise<AuthenticateUserReturnValue> {
-  const response = await fetch(`http://10.50.0.50:6000/user/${endpoint}`, {
+  const response = await fetch(`http://10.50.0.50:6000/auth/${endpoint}`, {
     method: 'POST',
     body: JSON.stringify({ idToken, fcmToken }),
     headers: {
