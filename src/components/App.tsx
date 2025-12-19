@@ -51,7 +51,7 @@ const App = () => {
 
   const { ms } = useMetrics();
 
-  DEFAULT_MODAL_DATA.onPressActionButton = () => {
+  DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
     setModalData(null);
   };
 
@@ -169,8 +169,10 @@ const App = () => {
       <Modal
         fullScreen={modalData?.fullScreen}
         content={modalData?.content}
-        onPressActionButton={modalData?.onPressActionButton}
-        actionButtonText={modalData?.actionButtonText}
+        onPressActionButtonOne={modalData?.onPressActionButtonOne}
+        actionButtonTextOne={modalData?.actionButtonTextOne}
+        onPressActionButtonTwo={modalData?.onPressActionButtonTwo}
+        secondaryButtonTextTwo={modalData?.secondaryButtonTextTwo}
       />
 
       {isConfigured ? !user ? <Login /> : <Main /> : <SplashScreen />}
