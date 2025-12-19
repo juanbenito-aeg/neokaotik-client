@@ -18,4 +18,9 @@ enum OldSchoolLocation {
   HALL_OF_SAGES = 'The Hall of Sages',
 }
 
-export { Tab, MapNavigation, OldSchoolLocation };
+enum ValleySoresLocation {
+  MAP = 'Map',
+  INN_FORGOTTEN = 'The Inn of the Forgotten',
+}
+
+export { Tab, MapNavigation, OldSchoolLocation, ValleySoresLocation };
