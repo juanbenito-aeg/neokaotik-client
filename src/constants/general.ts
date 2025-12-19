@@ -10,7 +10,7 @@ enum UserRole {
 const DEFAULT_MODAL_DATA: ModalData = {
   fullScreen: false,
   content: {},
-  actionButtonText: 'Dismiss',
+  actionButtonTextOne: 'Dismiss',
 };
 
 enum AsyncStorageKey {

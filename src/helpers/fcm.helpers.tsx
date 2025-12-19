@@ -252,11 +252,11 @@ function getNotificationModalData(
             height: ms(350, 1),
           },
         },
-        onPressActionButton() {
+        onPressActionButtonOne() {
           socket.emit(SocketClientToServerEvents.REMOVE_SPELL_PRESS);
           setModalData(null);
         },
-        actionButtonText: 'Remove spell',
+        actionButtonTextOne: 'Remove spell',
       };
       break;
     }
