@@ -42,6 +42,8 @@ interface KaotikaUser {
   is_inside_hs?: boolean;
   found_artifacts?: ArtifactId[];
   location?: Location;
+  isCaptured?: boolean;
+  isGuilty?: boolean;
 }
 
 interface CommonEquipmentFields {
