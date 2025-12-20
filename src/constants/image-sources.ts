@@ -20,7 +20,7 @@ enum ScreenBackgroundImgSrc {
   SWAMP = require('../../public/images/swamp.png'),
   OBITUARY = require('../../public/images/obituary.png'),
   VALLEY_SORES = require('../../public/images/maps/valley-sores.png'),
-  INN_FORGOTTEN = require('../../public/images/inn-forgotten.png'),
+  INN_FORGOTTEN_ANGELO = require('../../public/images/inn-forgotten-angelo.png'),
   HOLLOW_LOST = require('../../public/images/hollow-lost.png'),
 }
 

@@ -6,7 +6,9 @@ import ScreenContainer from './ScreenContainer';
 
 const InnOfTheForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
-    <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.INN_FORGOTTEN}>
+    <ScreenContainer
+      backgroundImgSrc={ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
+    >
       <Header>The Inn Of The Forgotten</Header>
       <GoBackButton onPress={onPressGoBackButton}></GoBackButton>
     </ScreenContainer>
