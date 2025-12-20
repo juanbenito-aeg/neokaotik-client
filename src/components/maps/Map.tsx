@@ -28,6 +28,7 @@ import { useMapStore } from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Obituary from '../Obituary';
 import ValleySores from './ValleySores';
+import HollowOfLost from '../HollowOfLost';
 
 const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
@@ -165,6 +166,18 @@ const Map = ({ route }: MapProps) => {
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.VALLEY_SORES}
             />
+
+            <Button
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                top: '20%',
+                right: '15%',
+              }}
+              onPress={() => {
+                handlePress(MapNavigation.HOLLOW_LOST);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.HOLLOW_LOST}
+            />
           </ScreenContainer>
         );
 
@@ -210,6 +223,18 @@ const Map = ({ route }: MapProps) => {
 
       case MapNavigation.VALLEY_SORES:
         return <ValleySores />;
+
+      case MapNavigation.HOLLOW_LOST: {
+        if (user?.isBetrayer) return;
+
+        return (
+          <HollowOfLost
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
+          />
+        );
+      }
     }
   };
 
