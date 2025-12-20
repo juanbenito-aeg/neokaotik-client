@@ -41,15 +41,15 @@ function createNavigatorAdaptedToUserRole(
 
         switch (route.name) {
           case Tab.HOME:
-            tabIconSource = require('../../public/images/home-icon.png');
+            tabIconSource = require('../../public/images/icons/home.png');
             break;
 
           case Tab.MAP:
-            tabIconSource = require('../../public/images/map-icon.png');
+            tabIconSource = require('../../public/images/icons/map.png');
             break;
 
           case Tab.SETTINGS:
-            tabIconSource = require('../../public/images/settings-icon.png');
+            tabIconSource = require('../../public/images/icons/settings.png');
             break;
         }
 

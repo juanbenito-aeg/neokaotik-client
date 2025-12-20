@@ -14,11 +14,12 @@ enum ScreenBackgroundImgSrc {
   MORTIMER_SETTINGS = require('../../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../../public/images/roles/villain/home.png'),
   VILLAIN_SETTINGS = require('../../public/images/roles/villain/settings.png'),
-  MAP = require('../../public/images/map.png'),
-  OLD_SCHOOL_MAP = require('../../public/images/old-school-map.png'),
+  MAP = require('../../public/images/maps/kaotika.png'),
+  OLD_SCHOOL_MAP = require('../../public/images/maps/old-school.png'),
   HALL_OF_SAGES = require('../../public/images/hall-of-sages.png'),
   SWAMP = require('../../public/images/swamp.png'),
   OBITUARY = require('../../public/images/obituary.png'),
+  VALLEY_SORES = require('../../public/images/maps/valley-sores.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -27,14 +28,15 @@ enum ButtonBackgroundImgSrc {
   ISTVAN_THEMED = require('../../public/images/roles/istvan/button.png'),
   MORTIMER_THEMED = require('../../public/images/roles/mortimer/button.png'),
   VILLAIN_THEMED = require('../../public/images/roles/villain/button.png'),
-  OLD_SCHOOL = require('../../public/images/old-school-icon.png'),
+  OLD_SCHOOL = require('../../public/images/icons/old-school.png'),
   GO_BACK = require('../../public/images/go-back.png'),
-  ANGELO_LAB = require('../../public/images/angelo-lab-icon.png'),
-  SWAMP = require('../../public/images/swamp-icon.png'),
-  SWAMP_TOWER = require('../../public/images/swamp-tower-icon.png'),
+  ANGELO_LAB = require('../../public/images/icons/angelo-lab.png'),
+  SWAMP = require('../../public/images/icons/swamp.png'),
+  SWAMP_TOWER = require('../../public/images/icons/swamp-tower.png'),
   SCROLL = require('../../public/images/roles/acolyte/scroll.png'),
-  HALL_OF_SAGES = require('../../public/images/the-hall-of-sages-icon.png'),
-  OBITUARY = require('../../public/images/obituary-icon.png'),
+  HALL_OF_SAGES = require('../../public/images/icons/hall-sages.png'),
+  OBITUARY = require('../../public/images/icons/obituary.png'),
+  VALLEY_SORES = require('../../public/images/icons/valley-sores.png'),
 }
 
 enum ModalBackgroundImgSrc {
