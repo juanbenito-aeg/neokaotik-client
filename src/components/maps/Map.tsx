@@ -63,6 +63,7 @@ const Map = ({ route }: MapProps) => {
   }, [mapNavigation]);
 
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+
   const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
 
   useEffect(() => {
@@ -99,15 +100,20 @@ const Map = ({ route }: MapProps) => {
     updateAcolyteTowerEntranceStatus(false);
   }, []);
 
+  const isBetrayerAcolyte = user.isBetrayer && user.rol === UserRole.ACOLYTE;
+
   const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
       case MapNavigation.MAP:
         return (
           <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.MAP}>
             <Button
-              customStyleObj={buttonCustomStyleObj}
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                [isBetrayerAcolyte ? 'opacity' : 'borderRadius']: 0.5,
+              }}
               onPress={() => {
-                handlePress(MapNavigation.OLD_SCHOOL_MAP);
+                !isBetrayerAcolyte && handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
             />
@@ -167,7 +173,7 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.VALLEY_SORES}
             />
 
-            {!(user.rol === UserRole.ACOLYTE && user.isBetrayer) && (
+            {!isBetrayerAcolyte && (
               <Button
                 customStyleObj={{
                   ...buttonCustomStyleObj,
