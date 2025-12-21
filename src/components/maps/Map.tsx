@@ -37,7 +37,7 @@ const Map = ({ route }: MapProps) => {
   const mapNavigation = useMapStore(state => state.mapNavigation);
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
   const setUser = usePlayerStore(state => state.setUser);
 
   const acolytes = usePlayerStore(state => state.acolytes);
@@ -94,7 +94,7 @@ const Map = ({ route }: MapProps) => {
   };
 
   useEffect(() => {
-    const updatedUser = { ...user!, is_in_tower_entrance: false };
+    const updatedUser = { ...user, is_in_tower_entrance: false };
     setUser(updatedUser);
     updateAcolyteTowerEntranceStatus(false);
   }, []);
@@ -124,8 +124,8 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP}
             />
 
-            {(user!.rol === UserRole.ACOLYTE ||
-              user!.rol === UserRole.MORTIMER) && (
+            {(user.rol === UserRole.ACOLYTE ||
+              user.rol === UserRole.MORTIMER) && (
               <Button
                 customStyleObj={{
                   ...buttonCustomStyleObj,
@@ -167,17 +167,19 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.VALLEY_SORES}
             />
 
-            <Button
-              customStyleObj={{
-                ...buttonCustomStyleObj,
-                top: '20%',
-                right: '15%',
-              }}
-              onPress={() => {
-                handlePress(MapNavigation.HOLLOW_LOST);
-              }}
-              backgroundImgSrc={ButtonBackgroundImgSrc.HOLLOW_LOST}
-            />
+            {!(user.rol === UserRole.ACOLYTE && user.isBetrayer) && (
+              <Button
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '20%',
+                  right: '15%',
+                }}
+                onPress={() => {
+                  handlePress(MapNavigation.HOLLOW_LOST);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.HOLLOW_LOST}
+              />
+            )}
           </ScreenContainer>
         );
 
@@ -199,7 +201,7 @@ const Map = ({ route }: MapProps) => {
         );
 
       case MapNavigation.SWAMP_TOWER:
-        return user!.rol === UserRole.ACOLYTE ? (
+        return user.rol === UserRole.ACOLYTE ? (
           <AcolyteSwampTower />
         ) : (
           <AcolytesList
@@ -225,8 +227,6 @@ const Map = ({ route }: MapProps) => {
         return <ValleySores />;
 
       case MapNavigation.HOLLOW_LOST: {
-        if (user?.isBetrayer) return;
-
         return (
           <HollowOfLost
             onPressGoBackButton={() => {
