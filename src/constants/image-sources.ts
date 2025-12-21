@@ -51,6 +51,7 @@ enum ModalBackgroundImgSrc {
 enum ModalImgSrc {
   BAG_OF_ARTIFACTS = require('../../public/images/bag-of-artifacts.png'),
   WAITING_HS = require('../../public/images/waiting-for-validation.png'),
+  BETRAYER_OFFER = require('../../public/images/betrayer-offer.png'),
 }
 
 enum ArtifactRelatedImgSrc {
