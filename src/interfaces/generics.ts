@@ -4,4 +4,8 @@ interface NestedScreenProps {
   onPressGoBackButton: VoidFunction;
 }
 
-export type { VoidFunction, NestedScreenProps };
+interface Fields {
+  [key: string]: any;
+}
+
+export type { VoidFunction, NestedScreenProps, Fields };
