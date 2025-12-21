@@ -7,7 +7,7 @@ import ScreenContainer from './ScreenContainer';
 const HollowOfLost = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HOLLOW_LOST}>
-      <Header>The Hollow Of The Lost</Header>
+      <Header>The Hollow of the Lost</Header>
       <GoBackButton onPress={onPressGoBackButton}></GoBackButton>
     </ScreenContainer>
   );

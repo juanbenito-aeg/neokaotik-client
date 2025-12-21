@@ -25,7 +25,7 @@ const InnOfTheForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
     fullScreen: true,
     content: {
       message:
-        'To the wanderer who dares to defy their bloodline: Forsake your kin and pledge your loyalty to the Brotherhood of Shadows. In return, claim 50,000 gold coins and the Rotten Set of the Decrepit Betrayer. Your destiny awaits',
+        'To the wanderer who dares to defy their bloodline: Forsake your kin and pledge your loyalty to the Brotherhood of Shadows. In return, claim 50,000 gold coins and the Rotten Set of the Decrepit Betrayer. Your destiny awaits.',
       image: {
         source: ModalImgSrc.BETRAYER_OFFER,
         width: ms(250, 0.5),
@@ -55,7 +55,7 @@ const InnOfTheForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
     <ScreenContainer
       backgroundImgSrc={ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
     >
-      <Header>The Inn Of The Forgotten</Header>
+      <Header>The Inn of the Forgotten</Header>
       <GoBackButton onPress={onPressGoBackButton}></GoBackButton>
     </ScreenContainer>
   );

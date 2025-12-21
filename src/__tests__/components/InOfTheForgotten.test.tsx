@@ -24,6 +24,6 @@ describe('The Inn of the Forgotten', () => {
   it('should render InnOfTheForgotten correctly', () => {
     render(<InnOfTheForgotten onPressGoBackButton={() => {}} />);
 
-    expect(screen.getByText('The Inn Of The Forgotten')).toBeTruthy();
+    expect(screen.getByText('The Inn of the Forgotten')).toBeTruthy();
   });
 });
