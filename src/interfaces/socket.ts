@@ -2,6 +2,7 @@ import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
 } from '../constants/socket';
+import { Fields } from './generics';
 import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
@@ -32,6 +33,10 @@ interface ServerToClientEvents {
     acolytesHaveCompletedArtifactsSearch: boolean,
   ) => void;
   [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketServerToClientEvents.ACOLYTE_BECAME_BETRAYER]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

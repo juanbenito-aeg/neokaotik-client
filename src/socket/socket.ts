@@ -28,6 +28,7 @@ import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-se
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
 import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
 import { SetIsLoading } from '../interfaces/IsLoading';
+import handleAcolyteBecameBetrayer from './handlers/acolyte-became-betrayer';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -133,6 +134,19 @@ function initSocket(
       setShowArtifactsAnimation,
     );
   });
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_BECAME_BETRAYER,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleAcolyteBecameBetrayer(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+      );
+    },
+  );
 
   if (socket.disconnected) {
     socket.on(SocketGeneralEvents.CONNECT, () => {

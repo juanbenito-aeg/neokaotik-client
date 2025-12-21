@@ -11,6 +11,7 @@ enum SocketServerToClientEvents {
   ENTERED_EXITED_HS = 'player entered/exited HS',
   ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED = 'artifacts search validation/reset managed',
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
+  ACOLYTE_BECAME_BETRAYER = 'acolyte became betrayer',
 }
 
 enum SocketClientToServerEvents {
