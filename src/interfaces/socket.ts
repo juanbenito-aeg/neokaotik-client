@@ -77,6 +77,9 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
     isSearchValidated: boolean,
   ) => void;
+  [SocketClientToServerEvents.ACOLYTE_ACCEPTED_BETRAYAL]: (
+    acolyteId: string,
+  ) => void;
 }
 
 export type {
