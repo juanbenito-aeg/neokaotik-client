@@ -39,7 +39,7 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
         emitAcolyteAcceptedBetrayal(user!._id);
       }
     },
-    secondaryButtonTextTwo: 'Remain faithful',
+    actionButtonTextTwo: 'Remain faithful',
     onPressActionButtonTwo() {
       setModalData(null);
     },

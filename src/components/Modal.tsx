@@ -70,7 +70,7 @@ const Modal = ({
   onPressActionButtonOne,
   actionButtonTextOne,
   onPressActionButtonTwo,
-  secondaryButtonTextTwo,
+  actionButtonTextTwo,
 }: ModalData) => {
   const { hs, vs, ms } = useMetrics();
 
@@ -114,10 +114,10 @@ const Modal = ({
                   </ActionButtonText>
                 </ActionButton>
 
-                {secondaryButtonTextTwo && (
+                {actionButtonTextTwo && (
                   <ActionButton onPress={onPressActionButtonTwo}>
                     <ActionButtonText $hs={hs}>
-                      {secondaryButtonTextTwo}
+                      {actionButtonTextTwo}
                     </ActionButtonText>
                   </ActionButton>
                 )}

@@ -7,7 +7,7 @@ interface ModalData {
   onPressActionButtonOne?: VoidFunction;
   actionButtonTextOne?: string;
   onPressActionButtonTwo?: VoidFunction;
-  secondaryButtonTextTwo?: string;
+  actionButtonTextTwo?: string;
 }
 
 interface ModalContent {

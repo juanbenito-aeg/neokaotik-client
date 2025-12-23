@@ -172,7 +172,7 @@ const App = () => {
         onPressActionButtonOne={modalData?.onPressActionButtonOne}
         actionButtonTextOne={modalData?.actionButtonTextOne}
         onPressActionButtonTwo={modalData?.onPressActionButtonTwo}
-        secondaryButtonTextTwo={modalData?.secondaryButtonTextTwo}
+        actionButtonTextTwo={modalData?.actionButtonTextTwo}
       />
 
       {isConfigured ? !user ? <Login /> : <Main /> : <SplashScreen />}
