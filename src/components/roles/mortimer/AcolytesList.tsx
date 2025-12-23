@@ -38,6 +38,7 @@ const AcolytesList = ({
           >
             {acolytes.map(acolyte => {
               return (
+                !acolyte.isBetrayer &&
                 acolyte[fieldToFilterAcolytesBy as keyof KaotikaUser] && (
                   <AcolytesListItem
                     key={acolyte._id}
