@@ -22,6 +22,7 @@ enum ScreenBackgroundImgSrc {
   VALLEY_SORES = require('../../public/images/maps/valley-sores.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/inn-forgotten-angelo.png'),
   HOLLOW_LOST = require('../../public/images/hollow-lost.png'),
+  DUNGEON = require('../../public/images/dungeon.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -41,6 +42,8 @@ enum ButtonBackgroundImgSrc {
   VALLEY_SORES = require('../../public/images/icons/valley-sores.png'),
   INN_FORGOTTEN = require('../../public/images/icons/inn-forgotten.png'),
   HOLLOW_LOST = require('../../public/images/icons/hollow-lost.png'),
+  DUNGEON = require('../../public/images/icons/dungeon.png'),
+  DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
 }
 
 enum ModalBackgroundImgSrc {
