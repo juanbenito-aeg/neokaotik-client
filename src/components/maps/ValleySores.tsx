@@ -7,7 +7,7 @@ import {
 } from '../../constants/image-sources';
 import { useMapStore } from '../../store/useMapStore';
 import GoBackButton from '../GoBackButton';
-import InnOfTheForgotten from '../InnOfTheForgotten';
+import InnOfForgotten from '../InnOfForgotten';
 import Button from '../Button';
 import { ViewStyle } from 'react-native';
 import useMetrics from '../../hooks/use-metrics';
@@ -71,7 +71,7 @@ const ValleySores = () => {
         setCurrentValleySoresLocation(ValleySoresLocation.MAP);
       };
 
-      content = <InnOfTheForgotten onPressGoBackButton={onPressGoBackButton} />;
+      content = <InnOfForgotten onPressGoBackButton={onPressGoBackButton} />;
 
       break;
     }
