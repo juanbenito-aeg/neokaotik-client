@@ -14,7 +14,7 @@ import useMetrics from '../hooks/use-metrics';
 import { UserRole } from '../constants/general';
 import { emitAcolyteAcceptedBetrayal } from '../socket/events/acolyte-accepted-betrayal';
 
-const InnOfTheForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
+const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   const user = usePlayerStore(state => state.user);
 
   const { ms } = useMetrics();
@@ -61,4 +61,4 @@ const InnOfTheForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   );
 };
 
-export default InnOfTheForgotten;
+export default InnOfForgotten;
