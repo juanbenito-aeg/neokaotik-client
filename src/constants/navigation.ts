@@ -18,6 +18,7 @@ enum OldSchoolLocation {
   MAP = 'Map',
   ANGELO_LAB = 'Angelo Lab',
   HALL_OF_SAGES = 'The Hall of Sages',
+  DUNGEON = 'Dungeon',
 }
 
 enum ValleySoresLocation {

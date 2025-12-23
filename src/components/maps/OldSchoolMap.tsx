@@ -17,6 +17,7 @@ import HallOfSages from '../HallOfSages';
 import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
 import { useMapStore } from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
+import Dungeon from '../Dungeon';
 
 const OldSchoolMap = ({
   initialLocation,
@@ -33,6 +34,10 @@ const OldSchoolMap = ({
     } else {
       setCurrentOldSchoolLocation(newLocation as OldSchoolLocation);
     }
+  };
+
+  const onPressGoBackButton = () => {
+    setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
   };
 
   useEffect(() => {
@@ -93,6 +98,27 @@ const OldSchoolMap = ({
     );
   };
 
+  const getDungeonButton = () => {
+    const buttonFixedSize: number = 75;
+    const scaleFactor: number = 1;
+    const buttonCustomStyleObj: ViewStyle = {
+      width: ms(buttonFixedSize, scaleFactor),
+      height: ms(buttonFixedSize, scaleFactor),
+      position: 'absolute',
+      bottom: '30%',
+    };
+
+    return (
+      <Button
+        customStyleObj={buttonCustomStyleObj}
+        onPress={() => {
+          handlePress(OldSchoolLocation.DUNGEON);
+        }}
+        backgroundImgSrc={ButtonBackgroundImgSrc.DUNGEON}
+      />
+    );
+  };
+
   const getContent = () => {
     let content;
 
@@ -108,6 +134,7 @@ const OldSchoolMap = ({
               }}
             />
 
+            {getDungeonButton()}
             {getAngeloLabButton()}
             {getHallOfSagesButton()}
           </ScreenContainer>
@@ -116,10 +143,6 @@ const OldSchoolMap = ({
       }
 
       case OldSchoolLocation.ANGELO_LAB: {
-        const onPressGoBackButton = () => {
-          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
-        };
-
         content =
           user!.rol === UserRole.ACOLYTE ? (
             <AcolyteAngeloLab onPressGoBackButton={onPressGoBackButton} />
@@ -137,11 +160,12 @@ const OldSchoolMap = ({
         break;
       }
       case OldSchoolLocation.HALL_OF_SAGES: {
-        const onPressGoBackButton = () => {
-          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
-        };
-
         content = <HallOfSages onPressGoBackButton={onPressGoBackButton} />;
+
+        break;
+      }
+      case OldSchoolLocation.DUNGEON: {
+        content = <Dungeon onPressGoBackButton={onPressGoBackButton} />;
 
         break;
       }
