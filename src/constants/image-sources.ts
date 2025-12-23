@@ -5,6 +5,7 @@ enum ScreenBackgroundImgSrc {
   ACOLYTE_SWAMP_TOWER_ENTRANCE = require('../../public/images/roles/acolyte/swamp-tower-entrance.png'),
   ACOLYTE_SWAMP_TOWER_INTERIOR = require('../../public/images/roles/acolyte/swamp-tower-interior.png'),
   ACOLYTE_SETTINGS = require('../../public/images/roles/acolyte/settings.png'),
+  ACOLYTE_HOLLOW_LOST_SETTINGS = require('../../public/images/roles/acolyte/hollow-lost-settings.png'),
   ISTVAN_HOME = require('../../public/images/roles/istvan/home.png'),
   SCAN_QR = require('../../public/images/roles/istvan/scan-qr.png'),
   ISTVAN_SETTINGS = require('../../public/images/roles/istvan/settings.png'),

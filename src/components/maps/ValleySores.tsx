@@ -5,7 +5,7 @@ import {
   ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
 } from '../../constants/image-sources';
-import { useMapStore } from '../../store/useMapStore';
+import useMapStore from '../../store/useMapStore';
 import GoBackButton from '../GoBackButton';
 import InnOfForgotten from '../InnOfForgotten';
 import Button from '../Button';

@@ -15,7 +15,7 @@ import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 import HallOfSages from '../HallOfSages';
 import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
-import { useMapStore } from '../../store/useMapStore';
+import useMapStore from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Dungeon from '../Dungeon';
 
