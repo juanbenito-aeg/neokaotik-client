@@ -116,6 +116,7 @@ const Map = ({ route }: MapProps) => {
                 !isBetrayerAcolyte && handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
+              testID="old-school-button"
             />
 
             <Button
