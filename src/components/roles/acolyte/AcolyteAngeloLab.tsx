@@ -13,7 +13,7 @@ import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
 import Header from '../../Header';
 import usePlayerStore from '../../../store/usePlayerStore';
-import { useMapStore } from '../../../store/useMapStore';
+import useMapStore from '../../../store/useMapStore';
 
 const ScannerContainer = styled.View`
   height: 100%;

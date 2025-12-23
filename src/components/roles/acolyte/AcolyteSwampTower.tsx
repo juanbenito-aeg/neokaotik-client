@@ -17,7 +17,7 @@ import * as Animatable from 'react-native-animatable';
 import { handleAcolyteScrollAction } from '../../../socket/events/scroll-press';
 import Header from '../../Header';
 import { MS } from '../../../interfaces/Metrics';
-import { useMapStore } from '../../../store/useMapStore';
+import useMapStore from '../../../store/useMapStore';
 import usePlayerStore from '../../../store/usePlayerStore';
 
 const TextWrapper = styled.View<{ $ms: MS }>`

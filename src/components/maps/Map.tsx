@@ -24,7 +24,7 @@ import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 import Swamp from '../Swamp';
-import { useMapStore } from '../../store/useMapStore';
+import useMapStore from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Obituary from '../Obituary';
 import ValleySores from './ValleySores';
