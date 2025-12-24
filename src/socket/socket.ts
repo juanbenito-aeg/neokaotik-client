@@ -29,6 +29,7 @@ import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifac
 import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
 import { SetIsLoading } from '../interfaces/IsLoading';
 import handleAcolyteBecameBetrayer from './handlers/acolyte-became-betrayer';
+import handleAngeloSubdued from './handlers/angelo-subdued';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -147,6 +148,9 @@ function initSocket(
       );
     },
   );
+  socket.on(SocketServerToClientEvents.ANGELO_SUBDUED, () => {
+    handleAngeloSubdued(setNonAcolytes);
+  });
 
   if (socket.disconnected) {
     socket.on(SocketGeneralEvents.CONNECT, () => {

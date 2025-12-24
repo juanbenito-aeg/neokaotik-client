@@ -2,7 +2,7 @@ import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
 } from '../constants/socket';
-import { Fields } from './generics';
+import { Fields, VoidFunction } from './generics';
 import { Location } from './geolocalization';
 
 // Declaration of the events used when receiving events from the server
@@ -37,6 +37,7 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteUpdatedFields: Fields,
   ) => void;
+  [SocketServerToClientEvents.ANGELO_SUBDUED]: VoidFunction;
 }
 
 interface AcolyteDataAfterAccessExitLab {
