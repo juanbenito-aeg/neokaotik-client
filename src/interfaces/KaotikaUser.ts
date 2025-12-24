@@ -1,3 +1,7 @@
+import {
+  OldSchoolLocation,
+  ValleySoresLocation,
+} from '../constants/navigation';
 import { ArtifactId } from './Artifact';
 import { Location } from './geolocalization';
 
@@ -41,7 +45,7 @@ interface KaotikaUser {
   has_completed_artifacts_search?: boolean;
   is_inside_hs?: boolean;
   found_artifacts?: ArtifactId[];
-  location?: Location;
+  location?: Location | OldSchoolLocation | ValleySoresLocation;
   isCaptured?: boolean;
   isGuilty?: boolean;
 }

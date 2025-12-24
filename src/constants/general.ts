@@ -5,6 +5,7 @@ enum UserRole {
   ISTVAN = 'istvan',
   MORTIMER = 'mortimer',
   VILLAIN = 'villain',
+  ANGELO = 'angelo',
 }
 
 const DEFAULT_MODAL_DATA: ModalData = {
