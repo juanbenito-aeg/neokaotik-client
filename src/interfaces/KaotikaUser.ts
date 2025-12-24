@@ -22,7 +22,7 @@ interface KaotikaUser {
   rol: string;
   socketId: string;
   isInside: boolean;
-  attributes: CommonAttributesAndModifiers;
+  attributes: CommonAttributesAndModifiers & { resistance?: number };
   equipment: Equipment;
   inventory: Inventory;
   name: string;
@@ -48,6 +48,8 @@ interface KaotikaUser {
   location?: Location | OldSchoolLocation | ValleySoresLocation;
   isCaptured?: boolean;
   isGuilty?: boolean;
+  diseases?: string[];
+  isCursed?: boolean;
 }
 
 interface CommonEquipmentFields {
