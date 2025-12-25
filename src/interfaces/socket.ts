@@ -86,6 +86,7 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.ACOLYTE_ACCEPTED_BETRAYAL]: (
     acolyteId: string,
   ) => void;
+  [SocketClientToServerEvents.ANGELO_SUBDUED]: () => void;
 }
 
 export type {
