@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import {
+  ButtonBackgroundImgSrc,
   ModalImgSrc,
   ScreenBackgroundImgSrc,
 } from '../constants/image-sources';
@@ -13,6 +14,11 @@ import { ModalData } from '../interfaces/Modal';
 import useMetrics from '../hooks/use-metrics';
 import { UserRole } from '../constants/general';
 import { emitAcolyteAcceptedBetrayal } from '../socket/events/acolyte-accepted-betrayal';
+import Button from './Button';
+import { ViewStyle } from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import { ValleySoresLocation } from '../constants/navigation';
+import { emitAngeloSubdued } from '../socket/events/angelo-subdued';
 
 const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   const user = usePlayerStore(state => state.user);
@@ -20,6 +26,24 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   const { ms } = useMetrics();
 
   const setModalData = useModalStore(state => state.setModalData);
+
+  const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+
+  const angelo = nonAcolytes.find(
+    nonAcolyte => nonAcolyte.nickname === 'Angelo di Mortis',
+  );
+
+  const canPressAngelo =
+    user!.rol === UserRole.ACOLYTE &&
+    !user!.isBetrayer &&
+    angelo!.location === ValleySoresLocation.INN_FORGOTTEN;
+
+  const buttonFixedSize: number = 110;
+  const scaleFactor: number = 1;
+  const buttonCustomStyleObj: ViewStyle = {
+    width: ms(buttonFixedSize, scaleFactor),
+    height: ms(buttonFixedSize, scaleFactor),
+  };
 
   const modalData: ModalData = {
     fullScreen: true,
@@ -53,10 +77,35 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   return (
     <ScreenContainer
-      backgroundImgSrc={ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
+      backgroundImgSrc={
+        angelo?.location !== ValleySoresLocation.INN_FORGOTTEN
+          ? ScreenBackgroundImgSrc.INN_FORGOTTEN
+          : ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO
+      }
     >
       <Header>The Inn of the Forgotten</Header>
       <GoBackButton onPress={onPressGoBackButton}></GoBackButton>
+
+      {canPressAngelo && (
+        <Animatable.View
+          animation="pulse"
+          iterationCount="infinite"
+          easing="ease-in-out"
+          duration={800}
+          style={{
+            transform: [{ scale: 1.1 }],
+            position: 'absolute',
+            top: '30.5%',
+            right: '15.5%',
+          }}
+        >
+          <Button
+            customStyleObj={buttonCustomStyleObj}
+            onPress={emitAngeloSubdued}
+            backgroundImgSrc={ButtonBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
+          />
+        </Animatable.View>
+      )}
     </ScreenContainer>
   );
 };
