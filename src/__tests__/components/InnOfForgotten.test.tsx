@@ -17,6 +17,12 @@ jest.mock('../../store/usePlayerStore', () => {
       selector({
         ...actualState,
         user: mockedPlayers[MockedPlayer.ACOLYTE],
+        nonAcolytes: [
+          {
+            nickname: 'Angelo di Mortis',
+            location: 'The Inn of the Forgotten',
+          },
+        ],
       }),
     ),
   };
