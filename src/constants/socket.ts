@@ -26,6 +26,7 @@ enum SocketClientToServerEvents {
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
   ARTIFACTS_SEARCH_VALIDATION_RESET = 'artifacts search validated/reset',
   ACOLYTE_ACCEPTED_BETRAYAL = 'acolyte accepted betrayal',
+  ANGELO_SUBDUED = 'Angelo subdued',
 }
 
 export {
