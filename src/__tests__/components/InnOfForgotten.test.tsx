@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import InnOfForgotten from '../../components/InnOfForgotten';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { useModalStore } from '../../store/useModalStore';
 import { emitAcolyteAcceptedBetrayal } from '../../socket/events/acolyte-accepted-betrayal';
+import { emitAngeloSubdued } from '../../socket/events/angelo-subdued';
 
 jest.mock('../../store/usePlayerStore', () => {
   const actualState = jest
@@ -37,6 +38,10 @@ jest.mock('../../socket/events/acolyte-accepted-betrayal', () => ({
   emitAcolyteAcceptedBetrayal: jest.fn(),
 }));
 
+jest.mock('../../socket/events/angelo-subdued', () => ({
+  emitAngeloSubdued: jest.fn(),
+}));
+
 describe('The Inn of the Forgotten', () => {
   const setModalDataMock = jest.fn();
 
@@ -68,7 +73,7 @@ describe('The Inn of the Forgotten', () => {
     );
   });
 
-  it('should emit a socket event is acolyte accepts the offer', () => {
+  it('should emit a socket event if acolyte accepts the offer', () => {
     render(<InnOfForgotten onPressGoBackButton={() => {}} />);
 
     const passedModalData = setModalDataMock.mock.calls[0][0];
@@ -78,5 +83,15 @@ describe('The Inn of the Forgotten', () => {
     expect(emitAcolyteAcceptedBetrayal).toHaveBeenCalledWith(
       mockedPlayers[MockedPlayer.ACOLYTE]._id,
     );
+  });
+
+  it('should emit a socket event if the acolyte presses on Angelo', () => {
+    render(<InnOfForgotten onPressGoBackButton={() => {}} />);
+
+    const angeloButton = screen.getByTestId('angelo-pressed');
+
+    fireEvent.press(angeloButton);
+
+    expect(emitAngeloSubdued).toHaveBeenCalled();
   });
 });

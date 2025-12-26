@@ -100,6 +100,7 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
           }}
         >
           <Button
+            testID="angelo-pressed"
             customStyleObj={buttonCustomStyleObj}
             onPress={emitAngeloSubdued}
             backgroundImgSrc={ButtonBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
