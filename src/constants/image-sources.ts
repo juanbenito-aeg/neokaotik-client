@@ -47,6 +47,10 @@ enum ButtonBackgroundImgSrc {
   DUNGEON = require('../../public/images/icons/dungeon.png'),
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/angelo-pressable.png'),
+  PUTRID_PLAGUE = require('../../public/images/icons/putrid-plague.png'),
+  EPIC_WEAKNESS = require('../../public/images/icons/epic-weakness.png'),
+  MEDULAR_APOCALYPSE = require('../../public/images/icons/medular-apocalypse.png'),
+  ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
 }
 
 enum ModalBackgroundImgSrc {
@@ -58,6 +62,9 @@ enum ModalImgSrc {
   BAG_OF_ARTIFACTS = require('../../public/images/bag-of-artifacts.png'),
   WAITING_HS = require('../../public/images/waiting-for-validation.png'),
   BETRAYER_OFFER = require('../../public/images/betrayer-offer.png'),
+  TIRED_ACOLYTE = require('../../public/images/roles/acolyte/tired-acolyte.png'),
+  ILL_ACOLYTE = require('../../public/images/roles/acolyte/ill-acolyte.png'),
+  CURSED_ACOLYTE = require('../../public/images/roles/acolyte/cursed-acolyte.png'),
 }
 
 enum ArtifactRelatedImgSrc {
