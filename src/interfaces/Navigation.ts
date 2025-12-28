@@ -15,6 +15,7 @@ interface Screens {
   AngeloLab?: Element;
   ScanQr?: Element;
   Map?: Element;
+  AcolytePanel?: Element;
 }
 
 export type { AdaptiveNavigatorData };

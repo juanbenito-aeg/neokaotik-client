@@ -17,6 +17,7 @@ import { UserRole } from '../constants/general';
 import { Tab } from '../constants/navigation';
 import useMetrics from './use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
+import EnchantedMirror from '../components/roles/acolyte/EnchantedMirror';
 
 const TabIcon = styled.Image<{
   $widthHeight: number;
@@ -46,6 +47,10 @@ function createNavigatorAdaptedToUserRole(
 
           case Tab.MAP:
             tabIconSource = require('../../public/images/icons/map.png');
+            break;
+
+          case Tab.ACOLYTE_PANEL:
+            tabIconSource = require('../../public/images/icons/acolyte-panel.png');
             break;
 
           case Tab.SETTINGS:
@@ -106,6 +111,9 @@ export default function useAdaptiveNavigation() {
     switch (user?.rol) {
       case UserRole.ACOLYTE:
         adaptiveNavigatorData.screens.Home = AcolyteHome;
+        if (!user?.isBetrayer) {
+          adaptiveNavigatorData.screens.AcolytePanel = EnchantedMirror;
+        }
         adaptiveNavigatorData.screens.Map = MapScreenData;
         adaptiveNavigatorData.screens.Settings = AcolyteSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(191 170 132 / 0.15)';

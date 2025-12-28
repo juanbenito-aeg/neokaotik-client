@@ -1,6 +1,7 @@
 enum Tab {
   HOME = 'Home',
   MAP = 'Map',
+  ACOLYTE_PANEL = 'AcolytePanel',
   SETTINGS = 'Settings',
 }
 
