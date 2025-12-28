@@ -25,6 +25,7 @@ enum ScreenBackgroundImgSrc {
   INN_FORGOTTEN = require('../../public/images/inn-forgotten.png'),
   HOLLOW_LOST = require('../../public/images/hollow-lost.png'),
   DUNGEON = require('../../public/images/dungeon.png'),
+  ENCHANTED_MIRROR = require('../../public/images/roles/acolyte/enchanted-mirror.png'),
 }
 
 enum ButtonBackgroundImgSrc {
