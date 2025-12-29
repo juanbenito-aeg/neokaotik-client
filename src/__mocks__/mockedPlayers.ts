@@ -21,6 +21,7 @@ const mockedPlayers: KaotikaUser[] = [
       constitution: 12,
       strength: 8,
       insanity: 4,
+      resistance: 100,
     },
     equipment: {
       helmet: {
