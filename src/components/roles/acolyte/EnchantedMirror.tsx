@@ -1,18 +1,23 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import * as Animatable from 'react-native-animatable';
-import { ScreenBackgroundImgSrc } from '../../../constants/image-sources';
+import {
+  ButtonBackgroundImgSrc,
+  ScreenBackgroundImgSrc,
+} from '../../../constants/image-sources';
 import usePlayerStore from '../../../store/usePlayerStore';
 import ScreenContainer from '../../ScreenContainer';
 import useMetrics from '../../../hooks/use-metrics';
 import { MS } from '../../../interfaces/Metrics';
 import Text from '../../Text';
+import { emitAcolyteRested } from '../../../socket/events/acolyte-rested';
+import Button from '../../Button';
 
 const Center = styled.View<{ $ms: MS }>`
   flex: 1;
   align-items: center;
   justify-content: center;
-  padding-bottom: ${({ $ms }) => $ms(80, 0.6)}px;
+  padding-bottom: ${({ $ms }) => $ms(40, 0.6)}px;
 `;
 
 const Avatar = styled(Animatable.Image)<{ $ms: MS }>`
@@ -73,30 +78,35 @@ const DynamicText = styled(Text)<{
 `;
 
 const EnchantedMirror = () => {
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
 
   const { ms } = useMetrics();
 
-  const resistance = user!.attributes.resistance || 0;
-  const percentage = Math.max(0, Math.min(100, resistance));
+  const resistance = user.attributes.resistance!;
 
   const barColor =
-    percentage > 60 ? '#3cff9e' : percentage > 30 ? '#ffb84d' : '#ff4d4d';
+    resistance > 60 ? '#3cff9e' : resistance > 30 ? '#ffb84d' : '#ff4d4d';
 
   const attributes = [
-    ['INT', user!.attributes.intelligence],
-    ['DEX', user!.attributes.dexterity],
-    ['CHA', user!.attributes.charisma],
-    ['STR', user!.attributes.strength],
-    ['CON', user!.attributes.constitution],
-    ['INS', user!.attributes.insanity],
+    ['INT', user.attributes.intelligence],
+    ['DEX', user.attributes.dexterity],
+    ['CHA', user.attributes.charisma],
+    ['STR', user.attributes.strength],
+    ['CON', user.attributes.constitution],
+    ['INS', user.attributes.insanity],
   ];
+
+  const restButtonCustomStyleObj = { width: ms(170, 0.75) };
+
+  function handlePress() {
+    emitAcolyteRested(user._id);
+  }
 
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.ENCHANTED_MIRROR}>
       <Center $ms={ms}>
         <Avatar
-          source={{ uri: user!.avatar }}
+          source={{ uri: user.avatar }}
           $ms={ms}
           animation="pulse"
           iterationCount="infinite"
@@ -107,7 +117,7 @@ const EnchantedMirror = () => {
           <BarFrame>
             <BarFill
               style={{
-                width: `${percentage}%`,
+                width: `${resistance}%`,
                 backgroundColor: barColor,
               }}
             />
@@ -119,7 +129,7 @@ const EnchantedMirror = () => {
             $color="#ffd25f"
             style={{ marginTop: 6 }}
           >
-            RESISTANCE {percentage}%
+            RESISTANCE {resistance}%
           </DynamicText>
         </BarWrapper>
 
@@ -129,12 +139,20 @@ const EnchantedMirror = () => {
               <DynamicText $ms={ms} $size={14} $color="#bfae84">
                 {label}
               </DynamicText>
+
               <DynamicText $ms={ms} $size={24} $color="white" $weight="600">
                 {value}
               </DynamicText>
             </AttributeRune>
           ))}
         </AttributesGrid>
+
+        <Button
+          customStyleObj={restButtonCustomStyleObj}
+          onPress={handlePress}
+          backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+          text="Rest"
+        />
       </Center>
     </ScreenContainer>
   );

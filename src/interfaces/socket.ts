@@ -32,7 +32,7 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED]: (
     acolytesHaveCompletedArtifactsSearch: boolean,
   ) => void;
-  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: VoidFunction;
   [SocketServerToClientEvents.ACOLYTE_BECAME_BETRAYER]: (
     acolyteId: string,
     acolyteUpdatedFields: Fields,
@@ -62,7 +62,7 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.INSIDE_OUTSIDE_TOWER_ENTRANCE]: (
     AcolyteisInTowerEntrance: boolean,
   ) => void;
-  [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: () => void;
+  [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: VoidFunction;
   [SocketClientToServerEvents.SCROLL_PRESS]: (isPressed: boolean) => void;
   [SocketClientToServerEvents.ENTERED_EXITED_HS]: (
     acolyteOrMortimerId: string,
@@ -79,14 +79,15 @@ interface ClientToServerEvents {
     artifactId: string,
     handleEventNotReceivedInServer: (error: any) => void,
   ) => void;
-  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: VoidFunction;
   [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
     isSearchValidated: boolean,
   ) => void;
   [SocketClientToServerEvents.ACOLYTE_ACCEPTED_BETRAYAL]: (
     acolyteId: string,
   ) => void;
-  [SocketClientToServerEvents.ANGELO_SUBDUED]: () => void;
+  [SocketClientToServerEvents.ANGELO_SUBDUED]: VoidFunction;
+  [SocketClientToServerEvents.ACOLYTE_RESTED]: (acolyteId: string) => void;
 }
 
 export type {
