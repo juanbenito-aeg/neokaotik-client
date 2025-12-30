@@ -319,6 +319,8 @@ const mockedPlayers: KaotikaUser[] = [
     has_completed_artifacts_search: false,
     is_inside_hs: false,
     found_artifacts: [],
+    diseases: [],
+    isCursed: false,
   },
   {
     _id: '1234567890abc999',
