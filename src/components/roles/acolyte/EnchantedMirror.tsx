@@ -147,12 +147,14 @@ const EnchantedMirror = () => {
           ))}
         </AttributesGrid>
 
-        <Button
-          customStyleObj={restButtonCustomStyleObj}
-          onPress={handlePress}
-          backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-          text="Rest"
-        />
+        {resistance < 100 && (
+          <Button
+            customStyleObj={restButtonCustomStyleObj}
+            onPress={handlePress}
+            backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+            text="Rest"
+          />
+        )}
       </Center>
     </ScreenContainer>
   );
