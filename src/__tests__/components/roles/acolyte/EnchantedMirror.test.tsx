@@ -29,6 +29,9 @@ describe("'EnchantedMirror' component", () => {
   });
 
   it("should emit 'acolyte rested' when 'Rest' is pressed", async () => {
+    // Ensure the "Rest" button is displayed
+    mockedNonBetrayerAcolyte.attributes.resistance = 99;
+
     render(<EnchantedMirror />);
 
     const restButton = screen.getByText('Rest');
