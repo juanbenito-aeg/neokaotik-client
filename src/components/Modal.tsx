@@ -100,6 +100,7 @@ const Modal = ({
 
             {content?.image && (
               <Image
+                resizeMode="contain"
                 source={content.image.source}
                 $width={content.image.width}
                 $height={content.image.height}

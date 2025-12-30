@@ -16,7 +16,7 @@ interface ModalContent {
 }
 
 interface ModalImage {
-  source: ImageSourcePropType;
+  source?: ImageSourcePropType;
   width: number;
   height: number;
 }
@@ -28,4 +28,4 @@ interface ModalStore {
 
 type SetModalData = (modalData: ModalData | null) => void;
 
-export type { ModalData, SetModalData, ModalStore };
+export type { ModalData, ModalImage, ModalStore, SetModalData };

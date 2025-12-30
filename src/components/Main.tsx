@@ -7,7 +7,7 @@ import { navigationRef } from '../RootNavigation';
 import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
-import { DEFAULT_MODAL_DATA } from '../constants/general';
+import { DEFAULT_MODAL_DATA, UserRole } from '../constants/general';
 import { useEffect } from 'react';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { Artifact } from '../interfaces/Artifact';
@@ -31,6 +31,7 @@ const Main = () => {
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
 
+  const diseases = useDiseaseStore(state => state.diseases);
   const setDiseases = useDiseaseStore(state => state.setDiseases);
 
   useEffect(() => {
@@ -77,11 +78,11 @@ const Main = () => {
     return xArray;
   }
 
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
 
   const setModalData = useModalStore(state => state.setModalData);
 
-  handleNotificationPermission(user!.email).then(permissionDeniedMessage => {
+  handleNotificationPermission(user.email).then(permissionDeniedMessage => {
     if (permissionDeniedMessage) {
       setModalData({
         ...DEFAULT_MODAL_DATA,
@@ -91,6 +92,44 @@ const Main = () => {
       });
     }
   });
+
+  // Display the corresponding modal (tiredness/disease(s)/curse) to non-betrayer acolytes when conditions are met
+  useEffect(() => {
+    if (!user.isBetrayer && user.rol === UserRole.ACOLYTE) {
+      let message = '';
+      const image: ModalImage = { width: ms(250), height: ms(375) };
+
+      const userDiseases = user.diseases!;
+
+      if (user.attributes.resistance! <= 30) {
+        message =
+          'Feeling a bit tired? That is what happens when you are loyal to Kaotika.';
+
+        image.source = ModalImgSrc.TIRED_ACOLYTE;
+      } else if (userDiseases.length > 0) {
+        message =
+          'You are sick, bad luck. That means one or more of your attributes have been reduced:';
+
+        userDiseases.forEach(userDisease => {
+          diseases.forEach(disease => {
+            if (userDisease === disease._id) {
+              message += `\n-> ${disease.penalty}`;
+            }
+          });
+        });
+
+        image.source = ModalImgSrc.ILL_ACOLYTE;
+      } else if (user.isCursed) {
+        message =
+          'The Ethazium curse corrupts your entire being. It must have been Istvan up to his old tricks...';
+
+        image.source = ModalImgSrc.CURSED_ACOLYTE;
+      }
+
+      message &&
+        setModalData({ fullScreen: true, content: { message, image } });
+    }
+  }, [user, diseases]);
 
   const Navigation = useAdaptiveNavigation();
 
