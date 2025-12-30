@@ -4,6 +4,7 @@ import {
 } from '../constants/socket';
 import { Fields, VoidFunction } from './generics';
 import { Location } from './geolocalization';
+import { KaotikaUserAttributes } from './KaotikaUser';
 
 // Declaration of the events used when receiving events from the server
 interface ServerToClientEvents {
@@ -38,6 +39,10 @@ interface ServerToClientEvents {
     acolyteUpdatedFields: Fields,
   ) => void;
   [SocketServerToClientEvents.ANGELO_SUBDUED]: VoidFunction;
+  [SocketServerToClientEvents.ACOLYTE_RESISTANCE_RESTORED]: (
+    acolyteId: string,
+    acolyteUpdatedAttributes: KaotikaUserAttributes,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

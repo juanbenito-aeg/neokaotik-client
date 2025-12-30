@@ -13,6 +13,7 @@ enum SocketServerToClientEvents {
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
   ACOLYTE_BECAME_BETRAYER = 'acolyte became betrayer',
   ANGELO_SUBDUED = 'Angelo subdued',
+  ACOLYTE_RESISTANCE_RESTORED = 'acolyte resistance restored',
 }
 
 enum SocketClientToServerEvents {
