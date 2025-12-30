@@ -14,6 +14,10 @@ interface CommonAttributesAndModifiers {
   insanity: number;
 }
 
+interface KaotikaUserAttributes extends CommonAttributesAndModifiers {
+  resistance?: number;
+}
+
 interface KaotikaUser {
   _id: string;
   is_in_tower_entrance: boolean;
@@ -22,7 +26,7 @@ interface KaotikaUser {
   rol: string;
   socketId: string;
   isInside: boolean;
-  attributes: CommonAttributesAndModifiers & { resistance?: number };
+  attributes: KaotikaUserAttributes;
   equipment: Equipment;
   inventory: Inventory;
   name: string;
@@ -193,4 +197,4 @@ interface Skill {
   activeLevels: any[];
 }
 
-export default KaotikaUser;
+export type { KaotikaUserAttributes, KaotikaUser as default };
