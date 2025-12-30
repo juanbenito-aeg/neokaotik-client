@@ -45,7 +45,11 @@ describe("'Main' component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    const mockedUser = { ...mockedPlayers[MockedPlayer.ACOLYTE] };
+    // Create a deep copy of "mockedPlayers[MockedPlayer.ACOLYTE]" to avoid directly modifying its nested properties (e.g., "attributes")
+    const mockedUser = JSON.parse(
+      JSON.stringify(mockedPlayers[MockedPlayer.ACOLYTE]),
+    );
+
     mockedPlayerStore.user = mockedUser;
   });
 
