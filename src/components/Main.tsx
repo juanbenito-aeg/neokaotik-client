@@ -13,6 +13,10 @@ import KaotikaUser from '../interfaces/KaotikaUser';
 import { Artifact } from '../interfaces/Artifact';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import useArtifactStore from '../store/useArtifactStore';
+import { ModalImage } from '../interfaces/Modal';
+import { ModalImgSrc } from '../constants/image-sources';
+import { useDiseaseStore } from '../store/useDiseaseStore';
+import { Disease } from '../interfaces/disease-store';
 
 const Container = styled.View`
   height: 100%;
@@ -27,11 +31,13 @@ const Main = () => {
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
 
+  const setDiseases = useDiseaseStore(state => state.setDiseases);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
 
-      // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
+      // Make calls to the API to get acolytes, non-acolytes, artifacts & diseases & save them locally
 
       const acolytesArray = (await getXArray(
         'https://neokaotik-server.onrender.com/players/acolytes/',
@@ -48,11 +54,18 @@ const Main = () => {
       )) as Artifact[];
       setArtifacts(artifactsArray);
 
+      const diseasesArray = (await getXArray(
+        'https://neokaotik-server.onrender.com/missions/diseases/',
+      )) as Disease[];
+      setDiseases(diseasesArray);
+
       setIsLoading(false);
     })();
   }, []);
 
-  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
+  async function getXArray(
+    url: string,
+  ): Promise<KaotikaUser[] | Artifact[] | Disease[]> {
     const response = await fetch(url);
 
     let xArray = [];

@@ -11,4 +11,4 @@ interface Disease {
 
 type SetDiseases = (diseases: Disease[]) => void;
 
-export type { DiseaseStore };
+export type { DiseaseStore, Disease };
