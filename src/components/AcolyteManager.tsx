@@ -1,0 +1,3 @@
+const AcolyteManager = () => {};
+
+export { AcolyteManager };

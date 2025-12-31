@@ -1,7 +1,8 @@
 enum Tab {
   HOME = 'Home',
+  ENCHANTED_MIRROR = 'EnchantedMirror',
+  ACOLYTE_MANAGER = 'AcolyteManager',
   MAP = 'Map',
-  ACOLYTE_PANEL = 'AcolytePanel',
   SETTINGS = 'Settings',
 }
 
