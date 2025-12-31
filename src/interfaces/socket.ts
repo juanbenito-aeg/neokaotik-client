@@ -43,6 +43,10 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteUpdatedAttributes: KaotikaUserAttributes,
   ) => void;
+  [SocketServerToClientEvents.CRON_TASK_EXECUTED]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

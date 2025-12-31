@@ -31,6 +31,7 @@ import { SetIsLoading } from '../interfaces/IsLoading';
 import handleAcolyteBecameBetrayer from './handlers/acolyte-became-betrayer';
 import handleAngeloSubdued from './handlers/angelo-subdued';
 import { handleAcolyteResistanceRestored } from './handlers/acolyte-resistance-restored';
+import handleCronTask from './handlers/cron-task-executed';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -157,6 +158,19 @@ function initSocket(
     SocketServerToClientEvents.ACOLYTE_RESISTANCE_RESTORED,
     (acolyteId, acolyteUpdatedAttributes) => {
       handleAcolyteResistanceRestored(
+        acolyteId,
+        acolyteUpdatedAttributes,
+        user,
+        setUser,
+        setAcolytes,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.CRON_TASK_EXECUTED,
+    (acolyteId, acolyteUpdatedAttributes) => {
+      handleCronTask(
         acolyteId,
         acolyteUpdatedAttributes,
         user,
