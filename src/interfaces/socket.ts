@@ -93,6 +93,10 @@ interface ClientToServerEvents {
   ) => void;
   [SocketClientToServerEvents.ANGELO_SUBDUED]: VoidFunction;
   [SocketClientToServerEvents.ACOLYTE_RESTED]: (acolyteId: string) => void;
+  [SocketClientToServerEvents.ACOLYTE_INFECTED]: (
+    acolyteId: string,
+    diseaseId: string,
+  ) => void;
 }
 
 export type {
