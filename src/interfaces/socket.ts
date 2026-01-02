@@ -101,6 +101,7 @@ interface ClientToServerEvents {
     acolyteId: string,
     diseaseId: string,
   ) => void;
+  [SocketClientToServerEvents.ACOLYTE_CURSED]: (acolyteId: string) => void;
 }
 
 export type {
