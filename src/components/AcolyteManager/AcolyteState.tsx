@@ -3,15 +3,19 @@ import { useDiseaseStore } from '../../store/useDiseaseStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Text from '../Text';
 import styled from 'styled-components/native';
-import { DiseaseImgSrc } from '../../constants/image-sources';
+import {
+  ButtonBackgroundImgSrc,
+  DiseaseImgSrc,
+} from '../../constants/image-sources';
 import { MS } from '../../interfaces/Metrics';
 import useMetrics from '../../hooks/use-metrics';
 import { AcolyteStateProps } from '../../interfaces/AcolyteManager';
 
-const Container = styled.View`
+const Container = styled.View<{ $isUserIstvan: boolean }>`
   flex-grow: 1;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: ${({ $isUserIstvan }) =>
+    $isUserIstvan ? 'flex-end' : 'space-between'};
 `;
 
 const PieceContainer = styled.View<{ $isApplicable: boolean }>`
@@ -70,9 +74,31 @@ const AcolyteState = ({ acolyte }: AcolyteStateProps) => {
 
       break;
     }
+
+    case UserRole.ISTVAN: {
+      content = (
+        <PieceContainer $isApplicable={!acolyte.isCursed}>
+          <Icon
+            source={ButtonBackgroundImgSrc.ETHAZIUM_CURSE}
+            resizeMode="contain"
+            $ms={ms}
+          />
+
+          <StyledText $ms={ms}>
+            {acolyte.isCursed ? 'Already\nCursed' : 'Curse\nApplicable'}
+          </StyledText>
+        </PieceContainer>
+      );
+
+      break;
+    }
   }
 
-  return <Container>{content}</Container>;
+  return (
+    <Container $isUserIstvan={user.rol === UserRole.ISTVAN}>
+      {content}
+    </Container>
+  );
 };
 
 export { AcolyteState };

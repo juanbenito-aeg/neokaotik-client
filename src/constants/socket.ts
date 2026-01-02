@@ -33,6 +33,7 @@ enum SocketClientToServerEvents {
   ANGELO_SUBDUED = 'Angelo subdued',
   ACOLYTE_RESTED = 'acolyte rested',
   ACOLYTE_INFECTED = 'acolyte infected',
+  ACOLYTE_CURSED = 'acolyte cursed',
 }
 
 export {

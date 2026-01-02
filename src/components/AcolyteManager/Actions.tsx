@@ -11,12 +11,17 @@ import { Action, ActionsProps } from '../../interfaces/AcolyteManager';
 import { emitAcolyteInfected } from '../../socket/events/acolyte-infected';
 import { ViewStyle } from 'react-native';
 import { VoidFunction } from '../../interfaces/generics';
+import { emitAcolyteCursed } from '../../socket/events/acolyte-cursed';
 
-const Container = styled.View<{ $isActiveAcolyteDefined: boolean; $ms: MS }>`
+const Container = styled.View<{
+  $isUserIstvan: boolean;
+  $isActiveAcolyteDefined: boolean;
+  $ms: MS;
+}>`
   height: ${({ $isActiveAcolyteDefined }) =>
     $isActiveAcolyteDefined ? 50 : 20}%;
-  justify-content: ${({ $isActiveAcolyteDefined }) =>
-    $isActiveAcolyteDefined ? 'space-between' : 'center'};
+  justify-content: ${({ $isUserIstvan, $isActiveAcolyteDefined }) =>
+    $isUserIstvan || !$isActiveAcolyteDefined ? 'center' : 'space-between'};
   margin: auto;
   border-radius: 25px;
   padding: ${({ $isActiveAcolyteDefined, $ms }) =>
@@ -85,10 +90,33 @@ const Actions = ({ activeAcolyte }: ActionsProps) => {
 
       break;
     }
+
+    case UserRole.ISTVAN: {
+      selectAcolyteText += 'to apply them the fearsome Ethazium curse.';
+
+      if (activeAcolyte) {
+        buttonsBackgroundImgSrc = ButtonBackgroundImgSrc.ISTVAN_THEMED;
+
+        actions.push({
+          text: 'Apply Ethazium Curse',
+          isDisabled: activeAcolyte.isCursed!,
+          onPress: () => {
+            !activeAcolyte.isCursed && emitAcolyteCursed(activeAcolyte._id);
+          },
+          style: activeAcolyte.isCursed ? { opacity: 0.65 } : undefined,
+        });
+      }
+
+      break;
+    }
   }
 
   return (
-    <Container $isActiveAcolyteDefined={!!activeAcolyte} $ms={ms}>
+    <Container
+      $isUserIstvan={user.rol === UserRole.ISTVAN}
+      $isActiveAcolyteDefined={!!activeAcolyte}
+      $ms={ms}
+    >
       {activeAcolyte ? (
         actions.map(action => (
           <Button

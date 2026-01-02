@@ -17,10 +17,13 @@ const AcolytesActionsContainer = styled.View<{ $ms: MS }>`
   padding-bottom: ${({ $ms }) => $ms(67.5, 0.6)}px;
 `;
 
-const AcolytesContainer = styled.View<{ $ms: MS }>`
+const AcolytesContainer = styled.View<{ $isUserIstvan: boolean; $ms: MS }>`
+  width: ${({ $isUserIstvan, $ms }) =>
+    $isUserIstvan ? `${$ms(225)}px` : '100%'};
   height: 50%;
   justify-content: flex-start;
   gap: ${({ $ms }) => $ms(17.5)}px;
+  margin-inline: auto;
 `;
 
 const AcolyteContainer = styled.Pressable<{ $isActive: boolean; $ms: MS }>`
@@ -61,7 +64,7 @@ const AcolyteManager = () => {
 
   const screenContainerBackgroundImgSrc =
     user.rol === UserRole.ISTVAN
-      ? ScreenBackgroundImgSrc.ISTVAN_HOME /* TODO: Specify the correct image source */
+      ? ScreenBackgroundImgSrc.ISTVAN_ACOLYTE_MANAGER
       : user.rol === UserRole.MORTIMER
       ? ScreenBackgroundImgSrc.MORTIMER_HOME /* TODO: Specify the correct image source */
       : ScreenBackgroundImgSrc.VILLAIN_ACOLYTE_MANAGER;
@@ -85,7 +88,10 @@ const AcolyteManager = () => {
   return (
     <ScreenContainer backgroundImgSrc={screenContainerBackgroundImgSrc}>
       <AcolytesActionsContainer $ms={ms}>
-        <AcolytesContainer $ms={ms}>
+        <AcolytesContainer
+          $isUserIstvan={user.rol === UserRole.ISTVAN}
+          $ms={ms}
+        >
           {nonBetrayerAcolytes.map(nonBetrayerAcolyte => (
             <AcolyteContainer
               key={nonBetrayerAcolyte._id}

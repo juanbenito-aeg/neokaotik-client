@@ -7,6 +7,7 @@ enum ScreenBackgroundImgSrc {
   ACOLYTE_SETTINGS = require('../../public/images/roles/acolyte/settings.png'),
   ACOLYTE_HOLLOW_LOST_SETTINGS = require('../../public/images/roles/acolyte/hollow-lost-settings.png'),
   ISTVAN_HOME = require('../../public/images/roles/istvan/home.png'),
+  ISTVAN_ACOLYTE_MANAGER = require('../../public/images/roles/istvan/acolyte-manager.png'),
   SCAN_QR = require('../../public/images/roles/istvan/scan-qr.png'),
   ISTVAN_SETTINGS = require('../../public/images/roles/istvan/settings.png'),
   MORTIMER_HOME = require('../../public/images/roles/mortimer/home.png'),
