@@ -14,6 +14,7 @@ enum ScreenBackgroundImgSrc {
   MORTIMER_SWAMP_TOWER = require('../../public/images/roles/mortimer/swamp-tower.png'),
   MORTIMER_SETTINGS = require('../../public/images/roles/mortimer/settings.png'),
   VILLAIN_HOME = require('../../public/images/roles/villain/home.png'),
+  VILLAIN_ACOLYTE_MANAGER = require('../../public/images/roles/villain/acolyte-manager.png'),
   VILLAIN_SETTINGS = require('../../public/images/roles/villain/settings.png'),
   MAP = require('../../public/images/maps/kaotika.png'),
   OLD_SCHOOL_MAP = require('../../public/images/maps/old-school.png'),
@@ -48,9 +49,6 @@ enum ButtonBackgroundImgSrc {
   DUNGEON = require('../../public/images/icons/dungeon.png'),
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/angelo-pressable.png'),
-  PUTRID_PLAGUE = require('../../public/images/icons/putrid-plague.png'),
-  EPIC_WEAKNESS = require('../../public/images/icons/epic-weakness.png'),
-  MEDULAR_APOCALYPSE = require('../../public/images/icons/medular-apocalypse.png'),
   ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
 }
 
@@ -82,6 +80,12 @@ enum ArtifactImgSrc {
   'The Stoneheart Sigil' = require('../../public/images/artifacts/amulet.png'),
 }
 
+enum DiseaseImgSrc {
+  'Putrid Plague' = require('../../public/images/icons/putrid-plague.png'),
+  'Epic Weakness' = require('../../public/images/icons/epic-weakness.png'),
+  'Medular Apocalypse' = require('../../public/images/icons/medular-apocalypse.png'),
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -89,4 +93,5 @@ export {
   ModalImgSrc,
   ArtifactImgSrc,
   ArtifactRelatedImgSrc,
+  DiseaseImgSrc,
 };

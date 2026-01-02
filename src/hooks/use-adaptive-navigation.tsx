@@ -18,7 +18,7 @@ import { Tab } from '../constants/navigation';
 import useMetrics from './use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import EnchantedMirror from '../components/roles/acolyte/EnchantedMirror';
-import { AcolyteManager } from '../components/AcolyteManager';
+import { AcolyteManager } from '../components/AcolyteManager/AcolyteManager';
 
 const TabIcon = styled.Image<{
   $widthHeight: number;

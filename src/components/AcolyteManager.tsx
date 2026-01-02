@@ -1,3 +1,0 @@
-const AcolyteManager = () => {};
-
-export { AcolyteManager };
