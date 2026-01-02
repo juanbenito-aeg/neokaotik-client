@@ -15,6 +15,7 @@ enum SocketServerToClientEvents {
   ANGELO_SUBDUED = 'Angelo subdued',
   ACOLYTE_RESISTANCE_RESTORED = 'acolyte resistance restored',
   CRON_TASK_EXECUTED = 'cron task executed',
+  ACOLYTE_INFECTED = 'acolyte infected',
 }
 
 enum SocketClientToServerEvents {

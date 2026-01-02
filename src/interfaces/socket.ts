@@ -47,6 +47,10 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteUpdatedFields: Fields,
   ) => void;
+  [SocketServerToClientEvents.ACOLYTE_INFECTED]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
