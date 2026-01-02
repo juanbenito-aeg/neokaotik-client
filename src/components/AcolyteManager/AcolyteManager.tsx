@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { UserRole } from '../../constants/general';
+import { MortimerModeState, UserRole } from '../../constants/general';
 import { ScreenBackgroundImgSrc } from '../../constants/image-sources';
 import usePlayerStore from '../../store/usePlayerStore';
 import ScreenContainer from '../ScreenContainer';
@@ -9,6 +9,7 @@ import { AcolyteState } from './AcolyteState';
 import { useEffect, useState } from 'react';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import { Actions } from './Actions';
+import { MortimerMode } from '../../interfaces/AcolyteManager';
 
 const AcolytesActionsContainer = styled.View<{ $ms: MS }>`
   width: 100%;
@@ -62,11 +63,15 @@ const AcolyteManager = () => {
 
   const { ms } = useMetrics();
 
+  const [mortimerMode, setMortimerMode] = useState<MortimerMode>(
+    MortimerModeState.DEFAULT,
+  );
+
   const screenContainerBackgroundImgSrc =
     user.rol === UserRole.ISTVAN
       ? ScreenBackgroundImgSrc.ISTVAN_ACOLYTE_MANAGER
       : user.rol === UserRole.MORTIMER
-      ? ScreenBackgroundImgSrc.MORTIMER_HOME /* TODO: Specify the correct image source */
+      ? ScreenBackgroundImgSrc.MORTIMER_ACOLYTE_MANAGER
       : ScreenBackgroundImgSrc.VILLAIN_ACOLYTE_MANAGER;
 
   function handlePress(acolyte: KaotikaUser) {
@@ -104,13 +109,20 @@ const AcolyteManager = () => {
               <AcolyteRow $ms={ms}>
                 <Avatar source={{ uri: nonBetrayerAcolyte.avatar }} $ms={ms} />
 
-                <AcolyteState acolyte={nonBetrayerAcolyte} />
+                <AcolyteState
+                  acolyte={nonBetrayerAcolyte}
+                  mortimerMode={mortimerMode}
+                />
               </AcolyteRow>
             </AcolyteContainer>
           ))}
         </AcolytesContainer>
 
-        <Actions activeAcolyte={activeAcolyte} />
+        <Actions
+          activeAcolyte={activeAcolyte}
+          mortimerMode={mortimerMode}
+          setMortimerMode={setMortimerMode}
+        />
       </AcolytesActionsContainer>
     </ScreenContainer>
   );

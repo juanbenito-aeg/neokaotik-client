@@ -6,12 +6,13 @@ import { MS } from '../../interfaces/Metrics';
 import Text from '../Text';
 import Button from '../Button';
 import { ButtonBackgroundImgSrc } from '../../constants/image-sources';
-import { UserRole } from '../../constants/general';
+import { AidType, MortimerModeState, UserRole } from '../../constants/general';
 import { Action, ActionsProps } from '../../interfaces/AcolyteManager';
 import { emitAcolyteInfected } from '../../socket/events/acolyte-infected';
 import { ViewStyle } from 'react-native';
 import { VoidFunction } from '../../interfaces/generics';
 import { emitAcolyteCursed } from '../../socket/events/acolyte-cursed';
+import emitMortimerAidedAcolyte from '../../socket/events/mortimer-aided-acolyte';
 
 const Container = styled.View<{
   $isUserIstvan: boolean;
@@ -37,7 +38,11 @@ const SelectAcolyteText = styled(Text)`
   color: rgb(191 245 205);
 `;
 
-const Actions = ({ activeAcolyte }: ActionsProps) => {
+const Actions = ({
+  activeAcolyte,
+  mortimerMode,
+  setMortimerMode,
+}: ActionsProps) => {
   const user = usePlayerStore(state => state.user)!;
 
   const diseases = useDiseaseStore(state => state.diseases);
@@ -109,6 +114,67 @@ const Actions = ({ activeAcolyte }: ActionsProps) => {
 
       break;
     }
+
+    case UserRole.MORTIMER:
+      {
+        selectAcolyteText += 'to heal them.';
+
+        if (!activeAcolyte) break;
+
+        buttonsBackgroundImgSrc = ButtonBackgroundImgSrc.MORTIMER_THEMED;
+
+        const hasLowResistance = activeAcolyte.attributes.resistance! < 30;
+
+        if (mortimerMode === MortimerModeState.DEFAULT) {
+          actions.push({
+            text: 'Apply Cataplasma',
+            isDisabled: !hasLowResistance,
+            onPress: () => {
+              emitMortimerAidedAcolyte(activeAcolyte._id, AidType.CATAPLASMA);
+            },
+            style: !hasLowResistance ? { opacity: 0.65 } : undefined,
+          });
+
+          actions.push({
+            text: 'Remove Ethazium',
+            isDisabled: !activeAcolyte.isCursed,
+            onPress: () => {
+              emitMortimerAidedAcolyte(activeAcolyte._id, AidType.ETHAZIUM);
+            },
+            style: !activeAcolyte.isCursed ? { opacity: 0.65 } : undefined,
+          });
+
+          actions.push({
+            text: 'Treat Disease',
+            isDisabled: false,
+            onPress: () =>
+              setMortimerMode!(MortimerModeState.DISEASE_SELECTION),
+          });
+        }
+      }
+
+      if (mortimerMode === MortimerModeState.DISEASE_SELECTION) {
+        diseases.forEach(disease => {
+          const hasDisease = activeAcolyte.diseases!.includes(disease._id);
+
+          actions.push({
+            text: `Cure ${disease.name}`,
+            isDisabled: !hasDisease,
+            onPress: () => {
+              if (!hasDisease) return;
+              emitMortimerAidedAcolyte(
+                activeAcolyte._id,
+                AidType.DISEASE,
+                disease._id,
+              );
+              setMortimerMode!(MortimerModeState.DEFAULT);
+            },
+            style: { opacity: hasDisease ? 1 : 0.65 },
+          });
+        });
+
+        break;
+      }
   }
 
   return (
