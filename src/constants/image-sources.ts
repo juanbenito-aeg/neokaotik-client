@@ -10,6 +10,7 @@ enum ScreenBackgroundImgSrc {
   ISTVAN_ACOLYTE_MANAGER = require('../../public/images/roles/istvan/acolyte-manager.png'),
   SCAN_QR = require('../../public/images/roles/istvan/scan-qr.png'),
   ISTVAN_SETTINGS = require('../../public/images/roles/istvan/settings.png'),
+  MORTIMER_ACOLYTE_MANAGER = require('../../public/images/roles/mortimer/acolyte-manager.png'),
   MORTIMER_HOME = require('../../public/images/roles/mortimer/home.png'),
   MORTIMER_ANGELO_LAB = require('../../public/images/roles/mortimer/angelo-lab.png'),
   MORTIMER_SWAMP_TOWER = require('../../public/images/roles/mortimer/swamp-tower.png'),
@@ -51,6 +52,7 @@ enum ButtonBackgroundImgSrc {
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/angelo-pressable.png'),
   ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
+  RESISTANCE = require('../../public/images/icons/resistance.png'),
 }
 
 enum ModalBackgroundImgSrc {

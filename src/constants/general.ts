@@ -23,4 +23,15 @@ enum ArtifactState {
   COLLECTED = 'collected',
 }
 
-export { UserRole, DEFAULT_MODAL_DATA, AsyncStorageKey, ArtifactState };
+enum MortimerModeState {
+  DEFAULT = 'default',
+  DISEASE_SELECTION = 'disease selection',
+}
+
+export {
+  UserRole,
+  DEFAULT_MODAL_DATA,
+  AsyncStorageKey,
+  ArtifactState,
+  MortimerModeState,
+};
