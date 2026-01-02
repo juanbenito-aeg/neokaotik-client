@@ -6,7 +6,7 @@ import ScreenContainer from '../ScreenContainer';
 import useMetrics from '../../hooks/use-metrics';
 import { MS } from '../../interfaces/Metrics';
 import { AcolyteState } from './AcolyteState';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import KaotikaUser from '../../interfaces/KaotikaUser';
 import { Actions } from './Actions';
 
@@ -71,6 +71,16 @@ const AcolyteManager = () => {
 
     setActiveAcolyte(nextActiveAcolyte);
   }
+
+  useEffect(() => {
+    if (!activeAcolyte) return;
+
+    const updateAcolyte = nonBetrayerAcolytes.find(
+      acolyte => acolyte._id === activeAcolyte._id,
+    );
+
+    setActiveAcolyte(updateAcolyte!);
+  }, [nonBetrayerAcolytes]);
 
   return (
     <ScreenContainer backgroundImgSrc={screenContainerBackgroundImgSrc}>
