@@ -28,10 +28,17 @@ enum MortimerModeState {
   DISEASE_SELECTION = 'disease selection',
 }
 
+enum AidType {
+  CATAPLASMA,
+  ETHAZIUM,
+  DISEASE,
+}
+
 export {
   UserRole,
   DEFAULT_MODAL_DATA,
   AsyncStorageKey,
   ArtifactState,
   MortimerModeState,
+  AidType,
 };

@@ -1,3 +1,4 @@
+import { AidType } from '../constants/general';
 import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
@@ -106,6 +107,11 @@ interface ClientToServerEvents {
     diseaseId: string,
   ) => void;
   [SocketClientToServerEvents.ACOLYTE_CURSED]: (acolyteId: string) => void;
+  [SocketClientToServerEvents.MORTIMER_AIDED_ACOLYTE]: (
+    acolyteId: string,
+    aidType: AidType,
+    diseaseId?: string,
+  ) => void;
 }
 
 export type {
