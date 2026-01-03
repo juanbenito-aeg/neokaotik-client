@@ -13,6 +13,7 @@ import { ViewStyle } from 'react-native';
 import { VoidFunction } from '../../interfaces/generics';
 import { emitAcolyteCursed } from '../../socket/events/acolyte-cursed';
 import emitMortimerAidedAcolyte from '../../socket/events/mortimer-aided-acolyte';
+import { useIsLoadingStore } from '../../store/useIsLoadingStore';
 
 const Container = styled.View<{
   $isUserIstvan: boolean;
@@ -46,6 +47,8 @@ const Actions = ({
   const user = usePlayerStore(state => state.user)!;
 
   const diseases = useDiseaseStore(state => state.diseases);
+
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
 
   const { ms } = useMetrics();
 
@@ -177,6 +180,14 @@ const Actions = ({
       }
   }
 
+  function handlePress(action: Action) {
+    if (!action.isDisabled && action.text !== 'Treat Disease') {
+      setIsLoading(true);
+    }
+
+    action.onPress();
+  }
+
   return (
     <Container
       $isUserIstvan={user.rol === UserRole.ISTVAN}
@@ -188,7 +199,9 @@ const Actions = ({
           <Button
             key={action.text}
             customStyleObj={{ ...buttonsCustomStyleObj, ...action.style }}
-            onPress={action.onPress}
+            onPress={() => {
+              handlePress(action);
+            }}
             backgroundImgSrc={buttonsBackgroundImgSrc!}
             text={action.text}
           />

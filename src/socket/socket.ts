@@ -191,6 +191,7 @@ function initSocket(
         user,
         setUser,
         setAcolytes,
+        setIsLoading,
       );
     },
   );
@@ -204,6 +205,7 @@ function initSocket(
         user,
         setUser,
         setAcolytes,
+        setIsLoading,
       );
     },
   );
