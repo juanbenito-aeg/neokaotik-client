@@ -56,6 +56,10 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteUpdatedFields: Fields,
   ) => void;
+  [SocketServerToClientEvents.MORTIMER_AIDED_ACOLYTE]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

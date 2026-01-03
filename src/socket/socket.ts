@@ -34,6 +34,7 @@ import { handleAcolyteResistanceRestored } from './handlers/acolyte-resistance-r
 import handleCronTask from './handlers/cron-task-executed';
 import handleAcolyteInfected from './handlers/acolyte-infected';
 import { handleAcolyteCursed } from './handlers/acolyte-cursed';
+import { handleMortimerAidedAcolyte } from './handlers/mortimer-aided-acolyte';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -206,6 +207,19 @@ function initSocket(
         setUser,
         setAcolytes,
         setIsLoading,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.MORTIMER_AIDED_ACOLYTE,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleMortimerAidedAcolyte(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
       );
     },
   );

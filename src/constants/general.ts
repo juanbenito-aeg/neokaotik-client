@@ -29,9 +29,15 @@ enum MortimerModeState {
 }
 
 enum AidType {
-  CATAPLASMA,
+  POULTICE,
   ETHAZIUM,
   DISEASE,
+}
+
+enum AngeloTrialState {
+  INACTIVE,
+  ACTIVE,
+  FINISHED,
 }
 
 export {
@@ -41,4 +47,5 @@ export {
   ArtifactState,
   MortimerModeState,
   AidType,
+  AngeloTrialState,
 };
