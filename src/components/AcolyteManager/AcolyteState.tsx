@@ -94,20 +94,20 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
     }
 
     case UserRole.MORTIMER: {
-      const firstDiseaseId = acolyte.diseases?.[0];
-      const firstDisease = diseases.find(
-        disease => disease._id === firstDiseaseId,
-      );
-
       const isCursed = acolyte.isCursed!;
 
-      const hasLowResistance = acolyte.attributes.resistance! < 30;
+      const hasLowResistance = acolyte.attributes.resistance! <= 30;
 
       if (mortimerMode === MortimerModeState.DISEASE_SELECTION) {
         content = (
           <>
             {diseases.map(disease => {
               const hasDisease = acolyte.diseases!.includes(disease._id);
+
+              const diseaseNameChunks = disease.name.split(' ');
+
+              const diseaseName =
+                diseaseNameChunks[0] + '\n' + diseaseNameChunks[1];
 
               return (
                 <PieceContainer key={disease._id} $isApplicable={hasDisease}>
@@ -118,7 +118,7 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
                     resizeMode="contain"
                     $ms={ms}
                   />
-                  <StyledText $ms={ms}>{disease.name}</StyledText>
+                  <StyledText $ms={ms}>{diseaseName}</StyledText>
                 </PieceContainer>
               );
             })}
@@ -131,25 +131,21 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
         <>
           <PieceContainer $isApplicable={hasLowResistance}>
             <Icon
-              source={ButtonBackgroundImgSrc.RESISTANCE}
+              source={ButtonBackgroundImgSrc.TIRED}
               resizeMode="contain"
               $ms={ms}
             />
-            <StyledText $ms={ms}>Resistance</StyledText>
+            <StyledText $ms={ms}>Tired</StyledText>
           </PieceContainer>
 
-          {firstDisease && (
-            <PieceContainer $isApplicable={true}>
-              <Icon
-                source={
-                  DiseaseImgSrc[firstDisease.name as keyof typeof DiseaseImgSrc]
-                }
-                resizeMode="contain"
-                $ms={ms}
-              />
-              <StyledText $ms={ms}>{firstDisease.name}</StyledText>
-            </PieceContainer>
-          )}
+          <PieceContainer $isApplicable={true}>
+            <Icon
+              source={ButtonBackgroundImgSrc.ILL}
+              resizeMode="contain"
+              $ms={ms}
+            />
+            <StyledText $ms={ms}>Ill</StyledText>
+          </PieceContainer>
 
           <PieceContainer $isApplicable={isCursed}>
             <Icon

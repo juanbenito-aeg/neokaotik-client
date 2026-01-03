@@ -123,32 +123,38 @@ const Actions = ({
 
         buttonsBackgroundImgSrc = ButtonBackgroundImgSrc.MORTIMER_THEMED;
 
-        const hasLowResistance = activeAcolyte.attributes.resistance! < 30;
+        const hasLowResistance = activeAcolyte.attributes.resistance! <= 30;
 
         if (mortimerMode === MortimerModeState.DEFAULT) {
           actions.push({
-            text: 'Apply Cataplasma',
+            text: 'Apply Poultice',
             isDisabled: !hasLowResistance,
             onPress: () => {
-              emitMortimerAidedAcolyte(activeAcolyte._id, AidType.CATAPLASMA);
+              hasLowResistance &&
+                emitMortimerAidedAcolyte(activeAcolyte._id, AidType.POULTICE);
             },
             style: !hasLowResistance ? { opacity: 0.65 } : undefined,
           });
 
           actions.push({
-            text: 'Remove Ethazium',
+            text: 'Remove Curse',
             isDisabled: !activeAcolyte.isCursed,
             onPress: () => {
-              emitMortimerAidedAcolyte(activeAcolyte._id, AidType.ETHAZIUM);
+              activeAcolyte.isCursed &&
+                emitMortimerAidedAcolyte(activeAcolyte._id, AidType.ETHAZIUM);
             },
             style: !activeAcolyte.isCursed ? { opacity: 0.65 } : undefined,
           });
 
+          const hasAnyDisease = activeAcolyte.diseases!.length > 0;
+
           actions.push({
             text: 'Treat Disease',
-            isDisabled: false,
+            isDisabled: !hasAnyDisease,
             onPress: () =>
+              hasAnyDisease &&
               setMortimerMode!(MortimerModeState.DISEASE_SELECTION),
+            style: !hasAnyDisease ? { opacity: 0.65 } : undefined,
           });
         }
       }
