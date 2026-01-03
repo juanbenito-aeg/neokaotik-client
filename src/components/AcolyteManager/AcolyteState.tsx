@@ -127,6 +127,8 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
         break;
       }
 
+      const hasAnyDisease = acolyte.diseases!.length > 0;
+
       content = (
         <>
           <PieceContainer $isApplicable={hasLowResistance}>
@@ -138,7 +140,7 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
             <StyledText $ms={ms}>Tired</StyledText>
           </PieceContainer>
 
-          <PieceContainer $isApplicable={true}>
+          <PieceContainer $isApplicable={hasAnyDisease}>
             <Icon
               source={ButtonBackgroundImgSrc.ILL}
               resizeMode="contain"
