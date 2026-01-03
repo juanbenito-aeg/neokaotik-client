@@ -33,6 +33,7 @@ import handleAngeloSubdued from './handlers/angelo-subdued';
 import { handleAcolyteResistanceRestored } from './handlers/acolyte-resistance-restored';
 import handleCronTask from './handlers/cron-task-executed';
 import handleAcolyteInfected from './handlers/acolyte-infected';
+import { handleAcolyteCursed } from './handlers/acolyte-cursed';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -185,6 +186,19 @@ function initSocket(
     SocketServerToClientEvents.ACOLYTE_INFECTED,
     (acolyteId, acolyteUpdatedFields) => {
       handleAcolyteInfected(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_CURSED,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleAcolyteCursed(
         acolyteId,
         acolyteUpdatedFields,
         user,

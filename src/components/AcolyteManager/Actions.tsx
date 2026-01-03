@@ -123,7 +123,7 @@ const Actions = ({
 
         buttonsBackgroundImgSrc = ButtonBackgroundImgSrc.MORTIMER_THEMED;
 
-        const hasLowResistance = activeAcolyte.attributes.resistance! < 30;
+        const hasLowResistance = activeAcolyte.attributes.resistance! <= 30;
 
         if (mortimerMode === MortimerModeState.DEFAULT) {
           actions.push({

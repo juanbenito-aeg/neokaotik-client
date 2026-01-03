@@ -16,6 +16,7 @@ enum SocketServerToClientEvents {
   ACOLYTE_RESISTANCE_RESTORED = 'acolyte resistance restored',
   CRON_TASK_EXECUTED = 'cron task executed',
   ACOLYTE_INFECTED = 'acolyte infected',
+  ACOLYTE_CURSED = 'acolyte cursed',
 }
 
 enum SocketClientToServerEvents {

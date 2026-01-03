@@ -101,7 +101,7 @@ const AcolyteState = ({ acolyte, mortimerMode }: AcolyteStateProps) => {
 
       const isCursed = acolyte.isCursed!;
 
-      const hasLowResistance = acolyte.attributes.resistance! < 30;
+      const hasLowResistance = acolyte.attributes.resistance! <= 30;
 
       if (mortimerMode === MortimerModeState.DISEASE_SELECTION) {
         content = (
