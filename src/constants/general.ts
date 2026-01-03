@@ -34,6 +34,12 @@ enum AidType {
   DISEASE,
 }
 
+enum AngeloTrialState {
+  INACTIVE,
+  ACTIVE,
+  FINISHED,
+}
+
 export {
   UserRole,
   DEFAULT_MODAL_DATA,
@@ -41,4 +47,5 @@ export {
   ArtifactState,
   MortimerModeState,
   AidType,
+  AngeloTrialState,
 };

@@ -1,5 +1,5 @@
 import ScreenContainer from './ScreenContainer';
-import { UserRole } from '../constants/general';
+import { AngeloTrialState, UserRole } from '../constants/general';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -50,15 +50,15 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     state => state.showArtifactsAnimation,
   );
 
+  const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+
   useFocusEffect(
     useCallback(() => {
-      if (user!.rol === UserRole.ACOLYTE || user!.rol === UserRole.MORTIMER) {
-        updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, true);
+      updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, true);
 
-        return () => {
-          updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, false);
-        };
-      }
+      return () => {
+        updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, false);
+      };
     }, []),
   );
 
@@ -120,7 +120,20 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
         <>
           <AvatarsContainer>
             {players.map((player, index) => {
-              if (user!._id !== player._id && player.is_inside_hs) {
+              if (user!._id === player._id) return null;
+
+              const isInside = player.is_inside_hs;
+              const isSpecialRole =
+                player.rol === UserRole.ISTVAN ||
+                player.rol === UserRole.VILLAIN;
+              const canShowSpecialRole =
+                angeloTrialState === AngeloTrialState.ACTIVE ||
+                angeloTrialState === AngeloTrialState.FINISHED;
+
+              if (
+                isInside &&
+                (!isSpecialRole || (isSpecialRole && canShowSpecialRole))
+              ) {
                 return (
                   <Animatable.View
                     key={index}
