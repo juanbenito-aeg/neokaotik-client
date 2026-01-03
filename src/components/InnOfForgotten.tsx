@@ -19,24 +19,35 @@ import { ViewStyle } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { ValleySoresLocation } from '../constants/navigation';
 import { emitAngeloSubdued } from '../socket/events/angelo-subdued';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
-  const user = usePlayerStore(state => state.user);
-
-  const { ms } = useMetrics();
-
-  const setModalData = useModalStore(state => state.setModalData);
+  const user = usePlayerStore(state => state.user)!;
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
 
   const angelo = nonAcolytes.find(
     nonAcolyte => nonAcolyte.nickname === 'Angelo di Mortis',
-  );
+  )!;
+
+  const setModalData = useModalStore(state => state.setModalData);
+
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
+  const { ms } = useMetrics();
+
+  const isUserNonBetrayerAcolyte =
+    !user.isBetrayer && user.rol === UserRole.ACOLYTE;
+
+  const screenContainerBackgroundImgSrc =
+    isUserNonBetrayerAcolyte ||
+    angelo.location !== ValleySoresLocation.INN_FORGOTTEN
+      ? ScreenBackgroundImgSrc.INN_FORGOTTEN
+      : ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO;
 
   const canPressAngelo =
-    user!.rol === UserRole.ACOLYTE &&
-    !user!.isBetrayer &&
-    angelo!.location === ValleySoresLocation.INN_FORGOTTEN;
+    isUserNonBetrayerAcolyte &&
+    angelo.location === ValleySoresLocation.INN_FORGOTTEN;
 
   const buttonFixedSize: number = 110;
   const scaleFactor: number = 1;
@@ -52,15 +63,17 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
         'To the wanderer who dares to defy their bloodline: Forsake your kin and pledge your loyalty to the Brotherhood of Shadows. In return, claim 50,000 gold coins and the Rotten Set of the Decrepit Betrayer. Your destiny awaits.',
       image: {
         source: ModalImgSrc.BETRAYER_OFFER,
-        width: ms(250, 0.5),
-        height: ms(350, 0.5),
+        width: ms(250),
+        height: ms(350),
       },
     },
     actionButtonTextOne: 'Swear loyalty to the Brotherhood',
     onPressActionButtonOne() {
       setModalData(null);
-      if (user!.rol === UserRole.ACOLYTE) {
-        emitAcolyteAcceptedBetrayal(user!._id);
+
+      if (user.rol === UserRole.ACOLYTE) {
+        setIsLoading(true);
+        emitAcolyteAcceptedBetrayal(user._id);
       }
     },
     actionButtonTextTwo: 'Remain faithful',
@@ -70,21 +83,16 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
   };
 
   useEffect(() => {
-    if (!user!.isBetrayer) {
+    if (!user.isBetrayer) {
       setModalData(modalData);
     }
   }, []);
 
   return (
-    <ScreenContainer
-      backgroundImgSrc={
-        angelo?.location !== ValleySoresLocation.INN_FORGOTTEN
-          ? ScreenBackgroundImgSrc.INN_FORGOTTEN
-          : ScreenBackgroundImgSrc.INN_FORGOTTEN_ANGELO
-      }
-    >
+    <ScreenContainer backgroundImgSrc={screenContainerBackgroundImgSrc}>
       <Header>The Inn of the Forgotten</Header>
-      <GoBackButton onPress={onPressGoBackButton}></GoBackButton>
+
+      <GoBackButton onPress={onPressGoBackButton} />
 
       {canPressAngelo && (
         <Animatable.View

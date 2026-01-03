@@ -149,6 +149,7 @@ function initSocket(
         user,
         setUser,
         setAcolytes,
+        setIsLoading,
       );
     },
   );
