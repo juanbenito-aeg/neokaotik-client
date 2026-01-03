@@ -29,7 +29,7 @@ enum MortimerModeState {
 }
 
 enum AidType {
-  CATAPLASMA,
+  POULTICE,
   ETHAZIUM,
   DISEASE,
 }
