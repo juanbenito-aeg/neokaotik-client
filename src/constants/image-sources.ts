@@ -52,7 +52,8 @@ enum ButtonBackgroundImgSrc {
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/angelo-pressable.png'),
   ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
-  RESISTANCE = require('../../public/images/icons/resistance.png'),
+  TIRED = require('../../public/images/icons/tired.png'),
+  ILL = require('../../public/images/icons/ill.png'),
 }
 
 enum ModalBackgroundImgSrc {
