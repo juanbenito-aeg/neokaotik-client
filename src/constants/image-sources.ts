@@ -54,6 +54,7 @@ enum ButtonBackgroundImgSrc {
   ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
   TIRED = require('../../public/images/icons/tired.png'),
   ILL = require('../../public/images/icons/ill.png'),
+  CHAINS = require('../../public/images/icons/chains.png'),
 }
 
 enum ModalBackgroundImgSrc {
