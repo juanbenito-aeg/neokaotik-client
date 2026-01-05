@@ -158,7 +158,7 @@ export default function useAdaptiveNavigation() {
     const Navigation = createStaticNavigation(Navigator);
 
     return Navigation;
-  }, []);
+  }, [user.isBetrayer]);
 
   return Navigation;
 }
