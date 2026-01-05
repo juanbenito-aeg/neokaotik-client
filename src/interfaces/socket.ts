@@ -120,6 +120,8 @@ interface ClientToServerEvents {
     aidType: AidType,
     diseaseId?: string,
   ) => void;
+  [SocketClientToServerEvents.MORTIMER_NOTIFIED_FOR_ANGELO_DELIVERY]: () => void;
+  [SocketClientToServerEvents.ANGELO_DELIVERED]: () => void;
 }
 
 export type {

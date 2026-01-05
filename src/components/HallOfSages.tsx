@@ -21,6 +21,7 @@ import ArtifactsPanel from './ArtifactsPanel';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 import * as Animatable from 'react-native-animatable';
 import { OldSchoolLocation } from '../constants/navigation';
+import emitNotifyMortimerOrDeliverAngelo from '../socket/events/notify-mortimer-or-deliver-angelo';
 
 const AvatarsContainer = styled.View`
   flex-direction: row;
@@ -225,7 +226,9 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
           {allAcolytesInside && angelo && (
             <Button
               customStyleObj={{ marginTop: ms(10) }}
-              onPress={() => {}}
+              onPress={() => {
+                emitNotifyMortimerOrDeliverAngelo(mortimerInside);
+              }}
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
               text={mortimerInside ? 'Deliver Angelo' : 'Notify Mortimer'}
             />
