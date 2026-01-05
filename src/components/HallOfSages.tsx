@@ -22,6 +22,7 @@ import { useHallOfSageStore } from '../store/useHallOfSageStore';
 import * as Animatable from 'react-native-animatable';
 import { OldSchoolLocation } from '../constants/navigation';
 import emitNotifyMortimerOrDeliverAngelo from '../socket/events/notify-mortimer-or-deliver-angelo';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const AvatarsContainer = styled.View`
   flex-direction: row;
@@ -65,6 +66,8 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   );
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
 
   useFocusEffect(
     useCallback(() => {
@@ -227,6 +230,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
             <Button
               customStyleObj={{ marginTop: ms(10) }}
               onPress={() => {
+                setIsLoading(true);
                 emitNotifyMortimerOrDeliverAngelo(mortimerInside);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
