@@ -11,7 +11,7 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
 import { useFocusEffect } from '@react-navigation/native';
 import Button from './Button';
@@ -147,6 +147,12 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     }
   });
 
+  useEffect(() => {
+    if (mortimerInside) {
+      setIsLoading(false);
+    }
+  }, [mortimerInside]);
+
   return (
     <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
       <Header>The Hall of Sages</Header>
@@ -157,7 +163,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
         <ArtifactsPanel />
       ) : (
         <>
-          {angelo && (
+          {allAcolytesInside && angelo && (
             <AngeloContainer>
               <Animatable.View
                 animation="fadeInDown"
