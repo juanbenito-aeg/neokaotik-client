@@ -35,6 +35,7 @@ import handleCronTask from './handlers/cron-task-executed';
 import handleAcolyteInfected from './handlers/acolyte-infected';
 import { handleAcolyteCursed } from './handlers/acolyte-cursed';
 import { handleMortimerAidedAcolyte } from './handlers/mortimer-aided-acolyte';
+import handleAngeloDelivered from './handlers/angelo-delivered';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -219,6 +220,13 @@ function initSocket(
         setUser,
         setAcolytes,
       );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ANGELO_DELIVERED,
+    angeloUpdatedFields => {
+      handleAngeloDelivered(angeloUpdatedFields, setNonAcolytes, setIsLoading);
     },
   );
 

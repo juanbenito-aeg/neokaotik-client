@@ -60,6 +60,9 @@ interface ServerToClientEvents {
     acolyteId: string,
     acolyteUpdatedFields: Fields,
   ) => void;
+  [SocketServerToClientEvents.ANGELO_DELIVERED]: (
+    angeloUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {

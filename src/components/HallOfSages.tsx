@@ -131,6 +131,8 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
       player.location === OldSchoolLocation.HALL_OF_SAGES,
   );
 
+  const isAcolyteUser = user!.rol === UserRole.ACOLYTE && !user!.isBetrayer;
+
   let allAcolytesInside = true;
 
   acolytes.forEach(acolyte => {
@@ -232,7 +234,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
             })}
           </AvatarsContainer>
 
-          {allAcolytesInside && angelo && (
+          {isAcolyteUser && allAcolytesInside && angelo && (
             <Button
               customStyleObj={{ marginTop: ms(10) }}
               onPress={() => {
