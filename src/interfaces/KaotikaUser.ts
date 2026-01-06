@@ -1,3 +1,4 @@
+import { VoteAngeloTrialType } from '../constants/general';
 import {
   OldSchoolLocation,
   ValleySoresLocation,
@@ -54,6 +55,7 @@ interface KaotikaUser {
   isGuilty?: boolean;
   diseases?: string[];
   isCursed?: boolean;
+  voteAngeloTrial?: VoteAngeloTrialType;
 }
 
 interface CommonEquipmentFields {

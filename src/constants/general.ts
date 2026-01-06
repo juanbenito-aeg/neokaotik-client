@@ -40,6 +40,12 @@ enum AngeloTrialState {
   FINISHED,
 }
 
+enum VoteAngeloTrialType {
+  INNOCENT = 'Innocent',
+  GUILTY = 'Guilty',
+  NULL = 'null',
+}
+
 export {
   UserRole,
   DEFAULT_MODAL_DATA,
@@ -48,4 +54,5 @@ export {
   MortimerModeState,
   AidType,
   AngeloTrialState,
+  VoteAngeloTrialType,
 };
