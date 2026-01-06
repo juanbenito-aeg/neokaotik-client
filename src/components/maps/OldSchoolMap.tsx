@@ -49,6 +49,12 @@ const OldSchoolMap = ({
 
   const user = usePlayerStore(state => state.user);
 
+  const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+
+  const angelo = nonAcolytes.find(
+    nonAcolyte => nonAcolyte.rol === UserRole.ANGELO,
+  )!;
+
   const { ms } = useMetrics();
 
   const getAngeloLabButton = () => {
@@ -114,7 +120,11 @@ const OldSchoolMap = ({
         onPress={() => {
           handlePress(OldSchoolLocation.DUNGEON);
         }}
-        backgroundImgSrc={ButtonBackgroundImgSrc.DUNGEON}
+        backgroundImgSrc={
+          angelo.isCaptured || angelo.isGuilty
+            ? ButtonBackgroundImgSrc.DUNGEON_ANGELO
+            : ButtonBackgroundImgSrc.DUNGEON
+        }
       />
     );
   };
