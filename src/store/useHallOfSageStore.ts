@@ -9,4 +9,8 @@ export const useHallOfSageStore = create<HallSagesStore>()(set => ({
 
   angeloTrialState: AngeloTrialState.INACTIVE,
   setAngeloTrialState: angeloTrialState => set(() => ({ angeloTrialState })),
+
+  showAngeloAnimation: false,
+  setShowAngeloAnimation: showAngeloAnimation =>
+    set(() => ({ showAngeloAnimation })),
 }));

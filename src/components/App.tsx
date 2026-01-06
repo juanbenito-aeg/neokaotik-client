@@ -49,6 +49,10 @@ const App = () => {
     state => state.setShowArtifactsAnimation,
   );
 
+  const setShowAngeloAnimation = useHallOfSageStore(
+    state => state.setShowAngeloAnimation,
+  );
+
   const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
@@ -74,6 +78,7 @@ const App = () => {
         setArtifacts,
         setShowArtifactsAnimation,
         setIsLoading,
+        setShowAngeloAnimation,
       );
 
       return () => {

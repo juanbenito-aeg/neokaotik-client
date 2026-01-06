@@ -5,10 +5,18 @@ interface HallSagesStore {
   setShowArtifactsAnimation: SetShowArtifactsAnimation;
   angeloTrialState: AngeloTrialState;
   setAngeloTrialState: SetAngeloTrialState;
+  showAngeloAnimation: boolean;
+  setShowAngeloAnimation: SetShowAngeloAnimation;
 }
 
 type SetShowArtifactsAnimation = (showArtifactsAnimation: boolean) => void;
 
 type SetAngeloTrialState = (angeloTrialState: AngeloTrialState) => void;
 
-export type { HallSagesStore, SetShowArtifactsAnimation };
+type SetShowAngeloAnimation = (showAngeloAnimation: boolean) => void;
+
+export type {
+  HallSagesStore,
+  SetShowArtifactsAnimation,
+  SetShowAngeloAnimation,
+};

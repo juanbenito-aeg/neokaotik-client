@@ -1,5 +1,6 @@
 import { UserRole } from '../../constants/general';
 import { Fields } from '../../interfaces/generics';
+import { SetShowAngeloAnimation } from '../../interfaces/HallSages';
 import { SetIsLoading } from '../../interfaces/IsLoading';
 import { SetNonAcolytes } from '../../interfaces/player';
 
@@ -7,6 +8,7 @@ function handleAngeloDelivered(
   angeloUpdatedFields: Fields,
   setNonAcolytes: SetNonAcolytes,
   setIsLoading: SetIsLoading,
+  setShowAngeloAnimation: SetShowAngeloAnimation,
 ) {
   setIsLoading(false);
 
@@ -19,6 +21,8 @@ function handleAngeloDelivered(
       return prevNonAcolyte;
     }),
   );
+
+  setShowAngeloAnimation(true);
 }
 
 export default handleAngeloDelivered;

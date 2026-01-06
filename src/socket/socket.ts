@@ -26,7 +26,10 @@ import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
 import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
-import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
+import {
+  SetShowAngeloAnimation,
+  SetShowArtifactsAnimation,
+} from '../interfaces/HallSages';
 import { SetIsLoading } from '../interfaces/IsLoading';
 import handleAcolyteBecameBetrayer from './handlers/acolyte-became-betrayer';
 import handleAngeloSubdued from './handlers/angelo-subdued';
@@ -53,6 +56,7 @@ function initSocket(
   setArtifacts: SetArtifacts,
   setShowArtifactsAnimation: SetShowArtifactsAnimation,
   setIsLoading: SetIsLoading,
+  setShowAngeloAnimation: SetShowAngeloAnimation,
 ) {
   // Listen for events
 
@@ -226,7 +230,12 @@ function initSocket(
   socket.on(
     SocketServerToClientEvents.ANGELO_DELIVERED,
     angeloUpdatedFields => {
-      handleAngeloDelivered(angeloUpdatedFields, setNonAcolytes, setIsLoading);
+      handleAngeloDelivered(
+        angeloUpdatedFields,
+        setNonAcolytes,
+        setIsLoading,
+        setShowAngeloAnimation,
+      );
     },
   );
 
