@@ -28,6 +28,7 @@ enum ScreenBackgroundImgSrc {
   INN_FORGOTTEN = require('../../public/images/inn-forgotten.png'),
   HOLLOW_LOST = require('../../public/images/hollow-lost.png'),
   DUNGEON = require('../../public/images/dungeon.png'),
+  DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   ENCHANTED_MIRROR = require('../../public/images/roles/acolyte/enchanted-mirror.png'),
 }
 
@@ -49,12 +50,13 @@ enum ButtonBackgroundImgSrc {
   INN_FORGOTTEN = require('../../public/images/icons/inn-forgotten.png'),
   HOLLOW_LOST = require('../../public/images/icons/hollow-lost.png'),
   DUNGEON = require('../../public/images/icons/dungeon.png'),
-  DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
+  DUNGEON_ANGELO = require('../../public/images/icons/dungeon-angelo.png'),
   INN_FORGOTTEN_ANGELO = require('../../public/images/angelo-pressable.png'),
   ETHAZIUM_CURSE = require('../../public/images/icons/ethazium-curse.png'),
   TIRED = require('../../public/images/icons/tired.png'),
   ILL = require('../../public/images/icons/ill.png'),
   CHAINS = require('../../public/images/icons/chains.png'),
+  ANGELO_CAPTURED = require('../../public/images/angelo-captured.png'),
 }
 
 enum ModalBackgroundImgSrc {
