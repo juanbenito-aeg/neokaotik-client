@@ -125,6 +125,7 @@ interface ClientToServerEvents {
   ) => void;
   [SocketClientToServerEvents.MORTIMER_NOTIFIED_FOR_ANGELO_DELIVERY]: () => void;
   [SocketClientToServerEvents.ANGELO_DELIVERED]: () => void;
+  [SocketClientToServerEvents.ANGELO_TRIAL_BEGAN]: () => void;
 }
 
 export type {
