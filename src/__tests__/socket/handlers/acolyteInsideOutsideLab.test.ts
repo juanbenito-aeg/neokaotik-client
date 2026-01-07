@@ -12,6 +12,8 @@ const setAcolytes = jest.fn();
 const setNonAcolytes = jest.fn();
 const setArtifacts = jest.fn();
 const setShowArtifactsAnimation = jest.fn();
+const setIsLoading = jest.fn();
+const setShowAngeloAnimation = jest.fn();
 
 const acolyte = mockedPlayers[MockedPlayer.ACOLYTE];
 const acolyteData: AcolyteDataAfterAccessExitLab = {
@@ -47,6 +49,8 @@ describe("'handleAcolyteInsideOutsideLab' socket event handler", () => {
       setNonAcolytes,
       setArtifacts,
       setShowArtifactsAnimation,
+      setIsLoading,
+      setShowAngeloAnimation,
     );
 
     const modalMessage = `The acolyte named ${acolyteData.nickname} has just ${
@@ -74,6 +78,8 @@ describe("'handleAcolyteInsideOutsideLab' socket event handler", () => {
       setNonAcolytes,
       setArtifacts,
       setShowArtifactsAnimation,
+      setIsLoading,
+      setShowAngeloAnimation,
     );
 
     expect(setAcolytes).toHaveBeenCalledWith([
@@ -94,6 +100,8 @@ describe("'handleAcolyteInsideOutsideLab' socket event handler", () => {
       setNonAcolytes,
       setArtifacts,
       setShowArtifactsAnimation,
+      setIsLoading,
+      setShowAngeloAnimation,
     );
 
     const setUserUpdaterFunctionReturnValue =
