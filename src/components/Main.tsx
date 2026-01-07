@@ -126,8 +126,11 @@ const Main = () => {
         image.source = ModalImgSrc.CURSED_ACOLYTE;
       }
 
-      message &&
-        setModalData({ fullScreen: true, content: { message, image } });
+      const modalData = message
+        ? { fullScreen: true, content: { message, image } }
+        : null;
+
+      setModalData(modalData);
     }
   }, [user, diseases]);
 
