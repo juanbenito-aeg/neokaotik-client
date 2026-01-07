@@ -36,7 +36,7 @@ const Dungeon = ({ onPressGoBackButton }: NestedScreenProps) => {
       nonAcolyte.rol === UserRole.MORTIMER ||
       nonAcolyte.rol === UserRole.ANGELO;
 
-    if (isExcluded && !nonAcolyte.is_inside_hs) {
+    if (!isExcluded && !nonAcolyte.is_inside_hs) {
       allNonAcolytesInside = false;
     }
   });
