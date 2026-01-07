@@ -28,6 +28,8 @@ describe("'EnchantedMirror' component", () => {
     jest.clearAllMocks();
   });
 
+  jest.useFakeTimers();
+
   it("should emit 'acolyte rested' when 'Rest' is pressed", async () => {
     // Ensure the "Rest" button is displayed
     mockedNonBetrayerAcolyte.attributes.resistance = 99;
