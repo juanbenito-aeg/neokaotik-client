@@ -43,7 +43,7 @@ enum AngeloTrialState {
 enum VoteAngeloTrialType {
   INNOCENT = 'Innocent',
   GUILTY = 'Guilty',
-  NULL = 'null',
+  NONE = 'None',
 }
 
 export {
