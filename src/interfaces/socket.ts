@@ -126,6 +126,10 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.MORTIMER_NOTIFIED_FOR_ANGELO_DELIVERY]: () => void;
   [SocketClientToServerEvents.ANGELO_DELIVERED]: () => void;
   [SocketClientToServerEvents.ANGELO_TRIAL_BEGAN]: () => void;
+  [SocketClientToServerEvents.PLAYER_VOTED_IN_ANGELO_TRIAL]: (
+    playerId: string,
+    playerVote: string,
+  ) => void;
 }
 
 export type {
