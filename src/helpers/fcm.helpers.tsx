@@ -119,7 +119,9 @@ function handleForegroundNotification(
 
     case NotificationTitle.SUMMONED_HALL_SAGES: {
       updateAcolyteHasBeenSummonedToHOS(setUser);
-      updateAngeloLocation(setNonAcolytes, setAngeloTrialState);
+      if (remoteMessage.data?.angeloLocation) {
+        updateAngeloLocation(setNonAcolytes, setAngeloTrialState);
+      }
       break;
     }
   }
