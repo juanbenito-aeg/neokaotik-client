@@ -229,38 +229,29 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
               )}
 
               <AvatarsContainer>
-                {players.map((player, index) => {
-                  if (user!._id === player._id) return null;
-
-                  const isInside = player.is_inside_hs;
-
-                  const isSpecialRole =
-                    player.rol === UserRole.ISTVAN ||
-                    player.rol === UserRole.VILLAIN;
-
-                  const canShowSpecialRole =
-                    angeloTrialState === AngeloTrialState.ACTIVE ||
-                    angeloTrialState === AngeloTrialState.FINISHED;
-
-                  if (
-                    isInside &&
-                    (!isSpecialRole || (isSpecialRole && canShowSpecialRole))
-                  ) {
-                    return (
-                      <Animatable.View
-                        key={index}
-                        animation="zoomIn"
-                        duration={500}
-                      >
-                        <Avatar
+                {angeloTrialState === AngeloTrialState.INACTIVE &&
+                  players.map((player, index) => {
+                    if (
+                      user!._id !== player._id &&
+                      player.is_inside_hs &&
+                      player.rol !== UserRole.VILLAIN &&
+                      player.rol !== UserRole.ISTVAN
+                    ) {
+                      return (
+                        <Animatable.View
                           key={index}
-                          source={{ uri: player.avatar }}
-                          $ms={ms}
-                        />
-                      </Animatable.View>
-                    );
-                  }
-                })}
+                          animation="zoomIn"
+                          duration={500}
+                        >
+                          <Avatar
+                            key={index}
+                            source={{ uri: player.avatar }}
+                            $ms={ms}
+                          />
+                        </Animatable.View>
+                      );
+                    }
+                  })}
               </AvatarsContainer>
 
               {isAcolyteUser &&
