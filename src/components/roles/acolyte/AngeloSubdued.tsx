@@ -9,6 +9,8 @@ import useMetrics from '../../../hooks/use-metrics';
 import { TextAnimationState } from '../../../constants/angelo-subdued';
 import { navigate } from '../../../RootNavigation';
 import { MapNavigation, Tab } from '../../../constants/navigation';
+import useMapStore from '../../../store/useMapStore';
+import { useNavigation } from '@react-navigation/native';
 
 const AnimatedText = Animated.createAnimatedComponent(Text);
 
@@ -32,8 +34,6 @@ const AngeloSubdued = () => {
   const [textAnimationState, setTextAnimationState] =
     useState<TextAnimationState>(TextAnimationState.INACTIVE);
 
-  const { ms } = useMetrics();
-
   useEffect(() => {
     setTimeout(() => {
       setTextAnimationState(TextAnimationState.ACTIVE);
@@ -54,10 +54,25 @@ const AngeloSubdued = () => {
     }, 1000);
   }, []);
 
+  const navigation = useNavigation();
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
+
+  useEffect(() => {
+    // Hide tab bar
+    navigation.setOptions({ tabBarStyle: { display: 'none' } });
+
+    return () => {
+      // Display tab bar
+      navigation.setOptions({ tabBarStyle });
+    };
+  }, [navigation]);
+
   const screenContainerBackgroundImgSrc =
     textAnimationState === TextAnimationState.FINISHED
       ? ScreenBackgroundImgSrc.ANGELO_SUBDUED
       : undefined;
+
+  const { ms } = useMetrics();
 
   return (
     <ScreenContainer backgroundImgSrc={screenContainerBackgroundImgSrc}>
