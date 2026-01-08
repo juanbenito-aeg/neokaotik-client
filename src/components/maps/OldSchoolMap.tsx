@@ -121,7 +121,8 @@ const OldSchoolMap = ({
           handlePress(OldSchoolLocation.DUNGEON);
         }}
         backgroundImgSrc={
-          angelo.isCaptured || angelo.isGuilty
+          angelo.location !== OldSchoolLocation.HALL_OF_SAGES &&
+          (angelo.isCaptured || angelo.isGuilty)
             ? ButtonBackgroundImgSrc.DUNGEON_ANGELO
             : ButtonBackgroundImgSrc.DUNGEON
         }

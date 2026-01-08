@@ -55,7 +55,8 @@ const Dungeon = ({ onPressGoBackButton }: NestedScreenProps) => {
   return (
     <ScreenContainer
       backgroundImgSrc={
-        angelo.isCaptured || angelo.isGuilty
+        angelo.location === OldSchoolLocation.DUNGEON &&
+        (angelo.isCaptured || angelo.isGuilty)
           ? ScreenBackgroundImgSrc.DUNGEON_ANGELO
           : ScreenBackgroundImgSrc.DUNGEON
       }
@@ -63,22 +64,24 @@ const Dungeon = ({ onPressGoBackButton }: NestedScreenProps) => {
       <GoBackButton onPress={onPressGoBackButton} />
       <Header>Dungeon</Header>
 
-      {user.rol === UserRole.MORTIMER && playersInsideHS && (
-        <Button
-          customStyleObj={buttonCustomStyleObj}
-          backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-          onPress={() => {
-            emitAngeloTrialBegin();
-            navigate(Tab.MAP, {
-              screenChangingNotificationData: {
-                destination: MapNavigation.OLD_SCHOOL_MAP,
-                specificLocation: OldSchoolLocation.HALL_OF_SAGES,
-              },
-            });
-          }}
-          text="Begin Angelo's trial"
-        />
-      )}
+      {user.rol === UserRole.MORTIMER &&
+        playersInsideHS &&
+        angelo.location === OldSchoolLocation.DUNGEON && (
+          <Button
+            customStyleObj={buttonCustomStyleObj}
+            backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+            onPress={() => {
+              emitAngeloTrialBegin();
+              navigate(Tab.MAP, {
+                screenChangingNotificationData: {
+                  destination: MapNavigation.OLD_SCHOOL_MAP,
+                  specificLocation: OldSchoolLocation.HALL_OF_SAGES,
+                },
+              });
+            }}
+            text="Begin Angelo's trial"
+          />
+        )}
     </ScreenContainer>
   );
 };
