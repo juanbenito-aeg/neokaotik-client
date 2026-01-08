@@ -11,9 +11,9 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Button from './Button';
 import { ViewStyle } from 'react-native';
 import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
@@ -24,6 +24,8 @@ import { OldSchoolLocation } from '../constants/navigation';
 import emitNotifyMortimerOrDeliverAngelo from '../socket/events/notify-mortimer-or-deliver-angelo';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import AngeloAnimation from './AngeloAnimation';
+import useMapStore from '../store/useMapStore';
+import AngeloTrial from './AngeloTrial';
 
 const AvatarsContainer = styled.View`
   flex-direction: row;
@@ -72,7 +74,19 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
 
-  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+  const [notifyPressed, setNotifyPressed] = useState(false);
+
+  const navigation = useNavigation();
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
+
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle:
+        angeloTrialState === AngeloTrialState.ACTIVE || showAngeloAnimation
+          ? { display: 'none' }
+          : tabBarStyle,
+    });
+  }, [navigation, angeloTrialState, showAngeloAnimation]);
 
   useFocusEffect(
     useCallback(() => {
@@ -156,7 +170,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
 
   useEffect(() => {
     if (mortimerInside) {
-      setIsLoading(false);
+      setNotifyPressed(false);
     }
   }, [mortimerInside]);
 
@@ -170,7 +184,11 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
         >
           <Header>The Hall of Sages</Header>
 
-          <GoBackButton onPress={onPressGoBackButton} />
+          {angeloTrialState === AngeloTrialState.ACTIVE && <AngeloTrial />}
+
+          {angeloTrialState === AngeloTrialState.INACTIVE && (
+            <GoBackButton onPress={onPressGoBackButton} />
+          )}
 
           {showArtifactsAnimation ? (
             <ArtifactsPanel />
@@ -245,17 +263,20 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
                 })}
               </AvatarsContainer>
 
-              {isAcolyteUser && allAcolytesInside && angelo && (
-                <Button
-                  customStyleObj={{ marginTop: ms(10) }}
-                  onPress={() => {
-                    setIsLoading(true);
-                    emitNotifyMortimerOrDeliverAngelo(mortimerInside);
-                  }}
-                  backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-                  text={mortimerInside ? 'Deliver Angelo' : 'Notify Mortimer'}
-                />
-              )}
+              {isAcolyteUser &&
+                allAcolytesInside &&
+                angelo &&
+                (!notifyPressed || mortimerInside) && (
+                  <Button
+                    customStyleObj={{ marginTop: ms(10) }}
+                    onPress={() => {
+                      setNotifyPressed(true);
+                      emitNotifyMortimerOrDeliverAngelo(mortimerInside);
+                    }}
+                    backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+                    text={mortimerInside ? 'Deliver Angelo' : 'Notify Mortimer'}
+                  />
+                )}
 
               {isShowArtifactsButtonVisible && (
                 <Button
