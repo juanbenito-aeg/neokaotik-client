@@ -30,6 +30,7 @@ enum ScreenBackgroundImgSrc {
   DUNGEON = require('../../public/images/dungeon.png'),
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   ENCHANTED_MIRROR = require('../../public/images/roles/acolyte/enchanted-mirror.png'),
+  ANGELO_SUBDUED = require('../../public/images/roles/acolyte/angelo-subdued.png'),
 }
 
 enum ButtonBackgroundImgSrc {
