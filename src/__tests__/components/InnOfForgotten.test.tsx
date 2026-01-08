@@ -5,6 +5,14 @@ import { useModalStore } from '../../store/useModalStore';
 import { emitAcolyteAcceptedBetrayal } from '../../socket/events/acolyte-accepted-betrayal';
 import { emitAngeloSubdued } from '../../socket/events/angelo-subdued';
 
+// Mock problematic package
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(() => ({
+    setOptions: jest.fn(),
+  })),
+  createNavigationContainerRef: jest.fn(),
+}));
+
 jest.mock('../../store/usePlayerStore', () => {
   const actualState = jest
     .requireActual<typeof import('../../store/usePlayerStore')>(
