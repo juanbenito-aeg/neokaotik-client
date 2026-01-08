@@ -53,6 +53,10 @@ const App = () => {
     state => state.setShowAngeloAnimation,
   );
 
+  const setAngeloTrialState = useHallOfSageStore(
+    state => state.setAngeloTrialState,
+  );
+
   const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
@@ -97,6 +101,8 @@ const App = () => {
         ms,
         user,
         setUser,
+        setNonAcolytes,
+        setAngeloTrialState,
       );
 
       messaging()

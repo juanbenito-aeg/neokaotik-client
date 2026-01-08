@@ -19,4 +19,5 @@ export type {
   HallSagesStore,
   SetShowArtifactsAnimation,
   SetShowAngeloAnimation,
+  SetAngeloTrialState,
 };
