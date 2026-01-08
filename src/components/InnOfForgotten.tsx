@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ButtonBackgroundImgSrc,
   ModalImgSrc,
@@ -20,8 +20,11 @@ import * as Animatable from 'react-native-animatable';
 import { ValleySoresLocation } from '../constants/navigation';
 import { emitAngeloSubdued } from '../socket/events/angelo-subdued';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
+import { AngeloSubdued } from './roles/acolyte/AngeloSubdued';
 
 const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
+  const [isAngeloSubdued, setIsAngeloSubdued] = useState(false);
+
   const user = usePlayerStore(state => state.user)!;
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
@@ -88,7 +91,15 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
     }
   }, []);
 
-  return (
+  function handlePress() {
+    emitAngeloSubdued();
+
+    setIsAngeloSubdued(true);
+  }
+
+  return isAngeloSubdued ? (
+    <AngeloSubdued />
+  ) : (
     <ScreenContainer backgroundImgSrc={screenContainerBackgroundImgSrc}>
       <Header>The Inn of the Forgotten</Header>
 
@@ -110,7 +121,7 @@ const InnOfForgotten = ({ onPressGoBackButton }: NestedScreenProps) => {
           <Button
             testID="angelo-pressed"
             customStyleObj={buttonCustomStyleObj}
-            onPress={emitAngeloSubdued}
+            onPress={handlePress}
             backgroundImgSrc={ButtonBackgroundImgSrc.INN_FORGOTTEN_ANGELO}
           />
         </Animatable.View>
