@@ -9,9 +9,13 @@ import {
 import { MS } from '../interfaces/Metrics';
 import { useEffect, useState } from 'react';
 import Button from './Button';
-import { ButtonBackgroundImgSrc } from '../constants/image-sources';
+import {
+  ButtonBackgroundImgSrc,
+  ScreenBackgroundImgSrc,
+} from '../constants/image-sources';
 import * as Animatable from 'react-native-animatable';
 import emitPlayerVoteInAngeloTrial from '../socket/events/player-voted-in-angelo-trial';
+import Text from './Text';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
 const Wrapper = styled.View<{ position: number }>`
@@ -44,6 +48,22 @@ const ButtonContainer = styled.View`
   gap: 20px;
 `;
 
+const TextPanel = styled.Image<{ $ms: MS }>`
+  width: ${({ $ms }) => $ms(350, 1)}px;
+  height: ${({ $ms }) => $ms(180, 1)}px;
+  position: absolute;
+  top: 66%;
+`;
+
+const TextContainer = styled(Text)<{ $ms: MS }>`
+  font-size: ${({ $ms }) => $ms(25, 1)}px;
+  color: white;
+  position: absolute;
+  top: ${({ $ms }) => $ms(625, 0.4)}px;
+  text-align: center;
+  width: 70%;
+`;
+
 const AngeloTrial = () => {
   const { ms } = useMetrics();
 
@@ -58,6 +78,8 @@ const AngeloTrial = () => {
   const [hasVote, setHasVote] = useState(false);
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+
+  const [vote, setVote] = useState('');
 
   useEffect(() => {
     if (
@@ -124,6 +146,7 @@ const AngeloTrial = () => {
                   user._id,
                   VoteAngeloTrialType.INNOCENT,
                 );
+                setVote(VoteAngeloTrialType.INNOCENT);
               }}
               text={VoteAngeloTrialType.INNOCENT}
             />
@@ -136,11 +159,21 @@ const AngeloTrial = () => {
                   user._id,
                   VoteAngeloTrialType.GUILTY,
                 );
+                setVote(VoteAngeloTrialType.GUILTY);
               }}
               text={VoteAngeloTrialType.GUILTY}
             />
           </Animatable.View>
         </ButtonContainer>
+      )}
+
+      {hasVote && (
+        <>
+          <TextPanel $ms={ms} source={ScreenBackgroundImgSrc.TEXT_PANEL} />
+          <TextContainer $ms={ms}>
+            {user.nickname} has voted that Angelo is {vote}
+          </TextContainer>
+        </>
       )}
     </>
   );

@@ -39,6 +39,7 @@ import handleAcolyteInfected from './handlers/acolyte-infected';
 import { handleAcolyteCursed } from './handlers/acolyte-cursed';
 import { handleMortimerAidedAcolyte } from './handlers/mortimer-aided-acolyte';
 import handleAngeloDelivered from './handlers/angelo-delivered';
+import handlePLayerVotedAngeloTrial from './handlers/player-voted-angelo-trial';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -240,6 +241,13 @@ function initSocket(
         setIsLoading,
         setShowAngeloAnimation,
       );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.PLAYER_VOTED_ANGELO_TRIAL,
+    (playerId, vote) => {
+      handlePLayerVotedAngeloTrial(playerId, vote, setAcolytes, setNonAcolytes);
     },
   );
 
