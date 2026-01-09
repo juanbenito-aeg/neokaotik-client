@@ -1,14 +1,18 @@
 import styled from 'styled-components/native';
 import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
-import { UserRole, VoteAngeloTrialType } from '../constants/general';
+import {
+  AngeloTrialState,
+  UserRole,
+  VoteAngeloTrialType,
+} from '../constants/general';
 import { MS } from '../interfaces/Metrics';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from './Button';
-import { ViewStyle } from 'react-native';
 import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import * as Animatable from 'react-native-animatable';
 import emitPlayerVoteInAngeloTrial from '../socket/events/player-voted-in-angelo-trial';
+import { useHallOfSageStore } from '../store/useHallOfSageStore';
 
 const Wrapper = styled.View<{ position: number }>`
   position: absolute;
@@ -53,6 +57,23 @@ const AngeloTrial = () => {
 
   const [hasVote, setHasVote] = useState(false);
 
+  const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+
+  useEffect(() => {
+    if (
+      angeloTrialState === AngeloTrialState.ACTIVE &&
+      !hasVote &&
+      user.rol === UserRole.ACOLYTE &&
+      (user.attributes.resistance! <= 30 ||
+        user.diseases!.length > 0 ||
+        user.isCursed)
+    ) {
+      // If full-screen modal has been activated due to tiredness, new disease(s) and/or curse, emit a "scratch" vote
+      emitPlayerVoteInAngeloTrial(user._id, VoteAngeloTrialType.NONE);
+      setHasVote(true);
+    }
+  }, [user]);
+
   return (
     <>
       {players.map(player => {
@@ -91,6 +112,7 @@ const AngeloTrial = () => {
           return null;
         })}
       </JuryContainer>
+
       {!hasVote && user.rol !== UserRole.MORTIMER && !user.isBetrayer && (
         <ButtonContainer>
           <Animatable.View animation="fadeInUp" duration={900}>
@@ -105,6 +127,7 @@ const AngeloTrial = () => {
               }}
               text={VoteAngeloTrialType.INNOCENT}
             />
+
             <Button
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
               onPress={() => {
