@@ -20,7 +20,7 @@ import useMetrics from '../../../hooks/use-metrics';
 import { socket } from '../../../socket/socket';
 import GoBackButton from '../../GoBackButton';
 import { NestedScreenProps } from '../../../interfaces/generics';
-import { useMapStore } from '../../../store/useMapStore';
+import useMapStore from '../../../store/useMapStore';
 import { useModalStore } from '../../../store/useModalStore';
 
 const ScanQr = ({ onPressGoBackButton }: NestedScreenProps) => {

@@ -17,6 +17,8 @@ import { UserRole } from '../constants/general';
 import { Tab } from '../constants/navigation';
 import useMetrics from './use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
+import EnchantedMirror from '../components/roles/acolyte/EnchantedMirror';
+import { AcolyteManager } from '../components/AcolyteManager/AcolyteManager';
 
 const TabIcon = styled.Image<{
   $widthHeight: number;
@@ -41,15 +43,23 @@ function createNavigatorAdaptedToUserRole(
 
         switch (route.name) {
           case Tab.HOME:
-            tabIconSource = require('../../public/images/home-icon.png');
+            tabIconSource = require('../../public/images/icons/home.png');
+            break;
+
+          case Tab.ENCHANTED_MIRROR:
+            tabIconSource = require('../../public/images/icons/enchanted-mirror.png');
+            break;
+
+          case Tab.ACOLYTE_MANAGER:
+            tabIconSource = require('../../public/images/icons/acolyte-manager.png');
             break;
 
           case Tab.MAP:
-            tabIconSource = require('../../public/images/map-icon.png');
+            tabIconSource = require('../../public/images/icons/map.png');
             break;
 
           case Tab.SETTINGS:
-            tabIconSource = require('../../public/images/settings-icon.png');
+            tabIconSource = require('../../public/images/icons/settings.png');
             break;
         }
 
@@ -80,7 +90,7 @@ function createNavigatorAdaptedToUserRole(
 }
 
 export default function useAdaptiveNavigation() {
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
 
   const { ms } = useMetrics();
 
@@ -103,9 +113,12 @@ export default function useAdaptiveNavigation() {
       initialParams: { tabBarStyle: adaptiveNavigatorData.tabBarStyle },
     };
 
-    switch (user?.rol) {
+    switch (user.rol) {
       case UserRole.ACOLYTE:
         adaptiveNavigatorData.screens.Home = AcolyteHome;
+        if (!user.isBetrayer) {
+          adaptiveNavigatorData.screens.EnchantedMirror = EnchantedMirror;
+        }
         adaptiveNavigatorData.screens.Map = MapScreenData;
         adaptiveNavigatorData.screens.Settings = AcolyteSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(191 170 132 / 0.15)';
@@ -114,6 +127,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.ISTVAN:
         adaptiveNavigatorData.screens.Home = IstvanHome;
+        adaptiveNavigatorData.screens.AcolyteManager = AcolyteManager;
         adaptiveNavigatorData.screens.Map = MapScreenData;
         adaptiveNavigatorData.screens.Settings = IstvanSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(38 37 35 / 0.5)';
@@ -122,6 +136,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.MORTIMER:
         adaptiveNavigatorData.screens.Home = MortimerHome;
+        adaptiveNavigatorData.screens.AcolyteManager = AcolyteManager;
         adaptiveNavigatorData.screens.Map = MapScreenData;
         adaptiveNavigatorData.screens.Settings = MortimerSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(191 245 205 / 0.15)';
@@ -130,6 +145,7 @@ export default function useAdaptiveNavigation() {
 
       case UserRole.VILLAIN:
         adaptiveNavigatorData.screens.Home = VillainHome;
+        adaptiveNavigatorData.screens.AcolyteManager = AcolyteManager;
         adaptiveNavigatorData.screens.Map = MapScreenData;
         adaptiveNavigatorData.screens.Settings = VillainSettings;
         adaptiveNavigatorData.thematicColor = 'rgba(57 89 68 / 0.25)';
@@ -142,7 +158,7 @@ export default function useAdaptiveNavigation() {
     const Navigation = createStaticNavigation(Navigator);
 
     return Navigation;
-  }, []);
+  }, [user.isBetrayer]);
 
   return Navigation;
 }

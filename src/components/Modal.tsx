@@ -56,11 +56,21 @@ const ActionButtonText = styled(Message)`
   color: rgb(177 164 144);
 `;
 
+const ButtonsContainer = styled.View<{ $fullScreen: boolean }>`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: ${({ $fullScreen }) => ($fullScreen ? '100%' : '70%')};
+  gap: 5px;
+`;
+
 const Modal = ({
   fullScreen,
   content,
-  onPressActionButton,
-  actionButtonText,
+  onPressActionButtonOne,
+  actionButtonTextOne,
+  onPressActionButtonTwo,
+  actionButtonTextTwo,
 }: ModalData) => {
   const { hs, vs, ms } = useMetrics();
 
@@ -90,16 +100,29 @@ const Modal = ({
 
             {content?.image && (
               <Image
+                resizeMode="contain"
                 source={content.image.source}
                 $width={content.image.width}
                 $height={content.image.height}
               />
             )}
 
-            {actionButtonText && (
-              <ActionButton onPress={onPressActionButton}>
-                <ActionButtonText $hs={hs}>{actionButtonText}</ActionButtonText>
-              </ActionButton>
+            {actionButtonTextOne && (
+              <ButtonsContainer $fullScreen={!!fullScreen}>
+                <ActionButton onPress={onPressActionButtonOne}>
+                  <ActionButtonText $hs={hs}>
+                    {actionButtonTextOne}
+                  </ActionButtonText>
+                </ActionButton>
+
+                {actionButtonTextTwo && (
+                  <ActionButton onPress={onPressActionButtonTwo}>
+                    <ActionButtonText $hs={hs}>
+                      {actionButtonTextTwo}
+                    </ActionButtonText>
+                  </ActionButton>
+                )}
+              </ButtonsContainer>
             )}
           </Content>
         </BackgroundImage>

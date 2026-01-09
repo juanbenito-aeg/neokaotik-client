@@ -24,9 +24,11 @@ import AcolyteSwampTower from '../roles/acolyte/AcolyteSwampTower';
 import AcolytesList from '../roles/mortimer/AcolytesList';
 import { updateAcolyteTowerEntranceStatus } from '../../socket/events/tower-entrance';
 import Swamp from '../Swamp';
-import { useMapStore } from '../../store/useMapStore';
+import useMapStore from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Obituary from '../Obituary';
+import ValleySores from './ValleySores';
+import HollowOfLost from '../HollowOfLost';
 
 const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
@@ -35,7 +37,7 @@ const Map = ({ route }: MapProps) => {
   const mapNavigation = useMapStore(state => state.mapNavigation);
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
   const setUser = usePlayerStore(state => state.setUser);
 
   const acolytes = usePlayerStore(state => state.acolytes);
@@ -61,6 +63,7 @@ const Map = ({ route }: MapProps) => {
   }, [mapNavigation]);
 
   const { screenChangingNotificationData, tabBarStyle } = route.params;
+
   const setTabBarStyle = useMapStore(state => state.setTabBarStyle);
 
   useEffect(() => {
@@ -92,10 +95,12 @@ const Map = ({ route }: MapProps) => {
   };
 
   useEffect(() => {
-    const updatedUser = { ...user!, is_in_tower_entrance: false };
+    const updatedUser = { ...user, is_in_tower_entrance: false };
     setUser(updatedUser);
     updateAcolyteTowerEntranceStatus(false);
   }, []);
+
+  const isBetrayerAcolyte = user.isBetrayer && user.rol === UserRole.ACOLYTE;
 
   const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
@@ -103,11 +108,15 @@ const Map = ({ route }: MapProps) => {
         return (
           <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.MAP}>
             <Button
-              customStyleObj={buttonCustomStyleObj}
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                [isBetrayerAcolyte ? 'opacity' : 'borderRadius']: 0.5,
+              }}
               onPress={() => {
-                handlePress(MapNavigation.OLD_SCHOOL_MAP);
+                !isBetrayerAcolyte && handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
+              testID="old-school-button"
             />
 
             <Button
@@ -122,8 +131,8 @@ const Map = ({ route }: MapProps) => {
               backgroundImgSrc={ButtonBackgroundImgSrc.SWAMP}
             />
 
-            {(user!.rol === UserRole.ACOLYTE ||
-              user!.rol === UserRole.MORTIMER) && (
+            {(user.rol === UserRole.ACOLYTE ||
+              user.rol === UserRole.MORTIMER) && (
               <Button
                 customStyleObj={{
                   ...buttonCustomStyleObj,
@@ -152,6 +161,32 @@ const Map = ({ route }: MapProps) => {
                 backgroundImgSrc={ButtonBackgroundImgSrc.OBITUARY}
               />
             )}
+
+            <Button
+              customStyleObj={{
+                ...buttonCustomStyleObj,
+                top: '13%',
+                left: '49.5%',
+              }}
+              onPress={() => {
+                handlePress(MapNavigation.VALLEY_SORES);
+              }}
+              backgroundImgSrc={ButtonBackgroundImgSrc.VALLEY_SORES}
+            />
+
+            {!isBetrayerAcolyte && (
+              <Button
+                customStyleObj={{
+                  ...buttonCustomStyleObj,
+                  top: '20%',
+                  right: '15%',
+                }}
+                onPress={() => {
+                  handlePress(MapNavigation.HOLLOW_LOST);
+                }}
+                backgroundImgSrc={ButtonBackgroundImgSrc.HOLLOW_LOST}
+              />
+            )}
           </ScreenContainer>
         );
 
@@ -173,7 +208,7 @@ const Map = ({ route }: MapProps) => {
         );
 
       case MapNavigation.SWAMP_TOWER:
-        return user!.rol === UserRole.ACOLYTE ? (
+        return user.rol === UserRole.ACOLYTE ? (
           <AcolyteSwampTower />
         ) : (
           <AcolytesList
@@ -194,6 +229,19 @@ const Map = ({ route }: MapProps) => {
             }}
           />
         );
+
+      case MapNavigation.VALLEY_SORES:
+        return <ValleySores />;
+
+      case MapNavigation.HOLLOW_LOST: {
+        return (
+          <HollowOfLost
+            onPressGoBackButton={() => {
+              handlePress(MapNavigation.MAP);
+            }}
+          />
+        );
+      }
     }
   };
 

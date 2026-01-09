@@ -7,6 +7,7 @@ interface ButtonProps {
   onPress: VoidFunction;
   backgroundImgSrc: ButtonBackgroundImgSrc;
   text?: string;
+  testID?: string;
 }
 
 interface GoBackButtonProps {

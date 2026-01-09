@@ -6,6 +6,7 @@ const BackgroundImage = styled.ImageBackground`
   height: 100%;
   justify-content: center;
   align-items: center;
+  background-color: rgb(0, 0, 0);
 `;
 
 const ScreenContainer = ({

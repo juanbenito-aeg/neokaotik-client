@@ -1,7 +1,15 @@
 import { render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
-import { NavigationContainer } from '@react-navigation/native';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
+
+// Mock problematic package
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(() => ({
+    setOptions: jest.fn(),
+  })),
+  createNavigationContainerRef: jest.fn(),
+  useFocusEffect: jest.fn(),
+}));
 
 jest.mock('socket.io-client', () => {
   const originalModule = jest.requireActual('socket.io-client');
@@ -46,11 +54,7 @@ jest.useFakeTimers();
 
 describe('Hall of Sages', () => {
   it('should render Hall of Sages component correctly', () => {
-    render(
-      <NavigationContainer>
-        <HallOfSages onPressGoBackButton={() => {}} />
-      </NavigationContainer>,
-    );
+    render(<HallOfSages onPressGoBackButton={() => {}} />);
 
     expect(screen.getByText('The Hall of Sages')).toBeTruthy();
   });
@@ -58,11 +62,7 @@ describe('Hall of Sages', () => {
   it('should not display the Show Artifacts button when conditions are not met', () => {
     const allArtifactsCollected = false;
 
-    render(
-      <NavigationContainer>
-        <HallOfSages onPressGoBackButton={() => {}} />
-      </NavigationContainer>,
-    );
+    render(<HallOfSages onPressGoBackButton={() => {}} />);
 
     if (!allArtifactsCollected) {
       const showArtifactsButton = screen.queryByText('Show Artifacts');
@@ -71,11 +71,7 @@ describe('Hall of Sages', () => {
   });
 
   it('should display an ArtifactPanel if showArtifactsAnimation is true', () => {
-    render(
-      <NavigationContainer>
-        <HallOfSages onPressGoBackButton={() => {}} />
-      </NavigationContainer>,
-    );
+    render(<HallOfSages onPressGoBackButton={() => {}} />);
 
     const artifactsPanel = screen.findByTestId('artifacts-panel');
     expect(artifactsPanel).toBeTruthy();

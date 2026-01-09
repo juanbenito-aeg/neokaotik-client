@@ -24,6 +24,7 @@ const Button = ({
   onPress,
   backgroundImgSrc,
   text,
+  testID,
 }: ButtonProps) => {
   const [isPressed, setIsPressed] = useState(false);
 
@@ -52,6 +53,7 @@ const Button = ({
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={onPress}
+        testID={testID}
       >
         <ButtonBackgroundImage
           source={backgroundImgSrc}

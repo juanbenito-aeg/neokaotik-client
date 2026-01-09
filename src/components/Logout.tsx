@@ -10,7 +10,7 @@ import {
 } from '../helpers/fcm.helpers';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
-import { useMapStore } from '../store/useMapStore';
+import useMapStore from '../store/useMapStore';
 
 const Container = styled.View`
   flex: 1;

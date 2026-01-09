@@ -4,8 +4,10 @@ import { ImageSourcePropType } from 'react-native';
 interface ModalData {
   fullScreen?: boolean;
   content?: ModalContent;
-  onPressActionButton?: VoidFunction;
-  actionButtonText?: string;
+  onPressActionButtonOne?: VoidFunction;
+  actionButtonTextOne?: string;
+  onPressActionButtonTwo?: VoidFunction;
+  actionButtonTextTwo?: string;
 }
 
 interface ModalContent {
@@ -14,7 +16,7 @@ interface ModalContent {
 }
 
 interface ModalImage {
-  source: ImageSourcePropType;
+  source?: ImageSourcePropType;
   width: number;
   height: number;
 }
@@ -26,4 +28,4 @@ interface ModalStore {
 
 type SetModalData = (modalData: ModalData | null) => void;
 
-export type { ModalData, SetModalData, ModalStore };
+export type { ModalData, ModalImage, ModalStore, SetModalData };

@@ -1,5 +1,7 @@
 enum Tab {
   HOME = 'Home',
+  ENCHANTED_MIRROR = 'EnchantedMirror',
+  ACOLYTE_MANAGER = 'AcolyteManager',
   MAP = 'Map',
   SETTINGS = 'Settings',
 }
@@ -10,12 +12,20 @@ enum MapNavigation {
   SWAMP = 'Swamp',
   SWAMP_TOWER = 'Swamp Tower',
   OBITUARY = 'The Obituary',
+  VALLEY_SORES = 'The Valley of Sores',
+  HOLLOW_LOST = 'The Hollow Of The lost',
 }
 
 enum OldSchoolLocation {
   MAP = 'Map',
   ANGELO_LAB = 'Angelo Lab',
   HALL_OF_SAGES = 'The Hall of Sages',
+  DUNGEON = 'Dungeon',
 }
 
-export { Tab, MapNavigation, OldSchoolLocation };
+enum ValleySoresLocation {
+  MAP = 'Map',
+  INN_FORGOTTEN = 'The Inn of the Forgotten',
+}
+
+export { Tab, MapNavigation, OldSchoolLocation, ValleySoresLocation };

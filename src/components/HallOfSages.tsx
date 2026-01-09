@@ -1,5 +1,5 @@
 import ScreenContainer from './ScreenContainer';
-import { UserRole } from '../constants/general';
+import { AngeloTrialState, UserRole } from '../constants/general';
 import {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -11,15 +11,20 @@ import usePlayerStore from '../store/usePlayerStore';
 import styled from 'styled-components/native';
 import { MS } from '../interfaces/Metrics';
 import useMetrics from '../hooks/use-metrics';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { updateAcolyteOrMortimerEnteredOrExitedHS } from '../socket/events/entered-exited-hs';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import Button from './Button';
 import { ViewStyle } from 'react-native';
 import emitToRequestedToShowArtifacts from '../socket/events/requested-to-show-artifacts';
 import ArtifactsPanel from './ArtifactsPanel';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 import * as Animatable from 'react-native-animatable';
+import { OldSchoolLocation } from '../constants/navigation';
+import emitNotifyMortimerOrDeliverAngelo from '../socket/events/notify-mortimer-or-deliver-angelo';
+import AngeloAnimation from './AngeloAnimation';
+import useMapStore from '../store/useMapStore';
+import AngeloTrial from './AngeloTrial';
 
 const AvatarsContainer = styled.View`
   flex-direction: row;
@@ -33,6 +38,18 @@ const Avatar = styled.Image<{ $ms: MS }>`
   margin: ${({ $ms }) => $ms(10, 0.5)}px;
   border-radius: 9999px;
   filter: drop-shadow(0 0px 10px rgb(191 245 205));
+`;
+
+const AngeloContainer = styled.View`
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+`;
+
+const AngeloAvatarWrapper = styled.View`
+  position: relative;
+  align-items: center;
+  justify-content: center;
 `;
 
 const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
@@ -50,15 +67,33 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     state => state.showArtifactsAnimation,
   );
 
+  const showAngeloAnimation = useHallOfSageStore(
+    state => state.showAngeloAnimation,
+  );
+
+  const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+
+  const [notifyPressed, setNotifyPressed] = useState(false);
+
+  const navigation = useNavigation();
+  const tabBarStyle = useMapStore(state => state.tabBarStyle);
+
+  useEffect(() => {
+    navigation.setOptions({
+      tabBarStyle:
+        angeloTrialState === AngeloTrialState.ACTIVE || showAngeloAnimation
+          ? { display: 'none' }
+          : tabBarStyle,
+    });
+  }, [navigation, angeloTrialState, showAngeloAnimation]);
+
   useFocusEffect(
     useCallback(() => {
-      if (user!.rol === UserRole.ACOLYTE || user!.rol === UserRole.MORTIMER) {
-        updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, true);
+      updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, true);
 
-        return () => {
-          updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, false);
-        };
-      }
+      return () => {
+        updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, false);
+      };
     }, []),
   );
 
@@ -108,47 +143,144 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
     top: '60%',
   };
 
+  const angelo = players.find(
+    player =>
+      player.rol === UserRole.ANGELO &&
+      player.location === OldSchoolLocation.HALL_OF_SAGES,
+  );
+
+  const isAcolyteUser = user!.rol === UserRole.ACOLYTE && !user!.isBetrayer;
+
+  let allAcolytesInside = true;
+
+  acolytes.forEach(acolyte => {
+    if (!acolyte.isBetrayer && !acolyte.is_inside_hs) {
+      allAcolytesInside = false;
+    }
+  });
+
+  let mortimerInside = false;
+
+  players.forEach(player => {
+    if (player.rol === UserRole.MORTIMER && player.is_inside_hs) {
+      mortimerInside = true;
+    }
+  });
+
+  useEffect(() => {
+    if (mortimerInside) {
+      setNotifyPressed(false);
+    }
+  }, [mortimerInside]);
+
   return (
-    <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}>
-      <Header>The Hall of Sages</Header>
-
-      <GoBackButton onPress={onPressGoBackButton} />
-
-      {showArtifactsAnimation ? (
-        <ArtifactsPanel />
+    <>
+      {showAngeloAnimation ? (
+        <AngeloAnimation />
       ) : (
-        <>
-          <AvatarsContainer>
-            {players.map((player, index) => {
-              if (user!._id !== player._id && player.is_inside_hs) {
-                return (
-                  <Animatable.View
-                    key={index}
-                    animation="zoomIn"
-                    duration={500}
-                  >
-                    <Avatar
-                      key={index}
-                      source={{ uri: player.avatar }}
-                      $ms={ms}
-                    />
-                  </Animatable.View>
-                );
-              }
-            })}
-          </AvatarsContainer>
+        <ScreenContainer
+          backgroundImgSrc={ScreenBackgroundImgSrc.HALL_OF_SAGES}
+        >
+          <Header>The Hall of Sages</Header>
 
-          {isShowArtifactsButtonVisible && (
-            <Button
-              customStyleObj={buttonCustomStyleObj}
-              onPress={emitToRequestedToShowArtifacts}
-              backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-              text="Show artifacts"
-            />
+          {angeloTrialState === AngeloTrialState.ACTIVE && <AngeloTrial />}
+
+          {angeloTrialState === AngeloTrialState.INACTIVE && (
+            <GoBackButton onPress={onPressGoBackButton} />
           )}
-        </>
+
+          {showArtifactsAnimation ? (
+            <ArtifactsPanel />
+          ) : (
+            <>
+              {allAcolytesInside && angelo && (
+                <AngeloContainer>
+                  <Animatable.View
+                    animation="fadeInDown"
+                    duration={500}
+                    easing="ease-out"
+                  >
+                    <Animatable.View
+                      animation="shake"
+                      iterationCount="infinite"
+                      duration={4200}
+                      easing="ease-in-out"
+                    >
+                      <AngeloAvatarWrapper>
+                        <Avatar source={{ uri: angelo.avatar }} $ms={ms} />
+                        <Animatable.Image
+                          source={ButtonBackgroundImgSrc.CHAINS}
+                          animation="pulse"
+                          iterationCount="infinite"
+                          duration={2200}
+                          style={{
+                            position: 'absolute',
+                            width: ms(67, 1),
+                            height: ms(90, 1),
+                            opacity: 0.6,
+                          }}
+                          resizeMode="contain"
+                        />
+                      </AngeloAvatarWrapper>
+                    </Animatable.View>
+                  </Animatable.View>
+                </AngeloContainer>
+              )}
+
+              <AvatarsContainer>
+                {angeloTrialState === AngeloTrialState.INACTIVE &&
+                  players.map((player, index) => {
+                    if (
+                      user!._id !== player._id &&
+                      player.is_inside_hs &&
+                      player.rol !== UserRole.VILLAIN &&
+                      player.rol !== UserRole.ISTVAN
+                    ) {
+                      return (
+                        <Animatable.View
+                          key={index}
+                          animation="zoomIn"
+                          duration={500}
+                        >
+                          <Avatar
+                            key={index}
+                            source={{ uri: player.avatar }}
+                            $ms={ms}
+                          />
+                        </Animatable.View>
+                      );
+                    }
+                  })}
+              </AvatarsContainer>
+
+              {isAcolyteUser &&
+                allAcolytesInside &&
+                angelo &&
+                (!notifyPressed || mortimerInside) && (
+                  <Button
+                    customStyleObj={{ marginTop: ms(10) }}
+                    onPress={() => {
+                      setNotifyPressed(true);
+                      emitNotifyMortimerOrDeliverAngelo(mortimerInside);
+                    }}
+                    backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+                    text={mortimerInside ? 'Deliver Angelo' : 'Notify Mortimer'}
+                  />
+                )}
+
+              {isShowArtifactsButtonVisible && (
+                <Button
+                  customStyleObj={buttonCustomStyleObj}
+                  onPress={emitToRequestedToShowArtifacts}
+                  backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+                  text="Show artifacts"
+                />
+              )}
+            </>
+          )}
+        </ScreenContainer>
       )}
-    </ScreenContainer>
+    </>
   );
 };
 

@@ -49,9 +49,17 @@ const App = () => {
     state => state.setShowArtifactsAnimation,
   );
 
+  const setShowAngeloAnimation = useHallOfSageStore(
+    state => state.setShowAngeloAnimation,
+  );
+
+  const setAngeloTrialState = useHallOfSageStore(
+    state => state.setAngeloTrialState,
+  );
+
   const { ms } = useMetrics();
 
-  DEFAULT_MODAL_DATA.onPressActionButton = () => {
+  DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
     setModalData(null);
   };
 
@@ -74,6 +82,7 @@ const App = () => {
         setArtifacts,
         setShowArtifactsAnimation,
         setIsLoading,
+        setShowAngeloAnimation,
       );
 
       return () => {
@@ -92,6 +101,8 @@ const App = () => {
         ms,
         user,
         setUser,
+        setNonAcolytes,
+        setAngeloTrialState,
       );
 
       messaging()
@@ -169,8 +180,10 @@ const App = () => {
       <Modal
         fullScreen={modalData?.fullScreen}
         content={modalData?.content}
-        onPressActionButton={modalData?.onPressActionButton}
-        actionButtonText={modalData?.actionButtonText}
+        onPressActionButtonOne={modalData?.onPressActionButtonOne}
+        actionButtonTextOne={modalData?.actionButtonTextOne}
+        onPressActionButtonTwo={modalData?.onPressActionButtonTwo}
+        actionButtonTextTwo={modalData?.actionButtonTextTwo}
       />
 
       {isConfigured ? !user ? <Login /> : <Main /> : <SplashScreen />}

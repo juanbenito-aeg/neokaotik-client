@@ -1,8 +1,11 @@
+import { AidType } from '../constants/general';
 import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
 } from '../constants/socket';
+import { Fields, VoidFunction } from './generics';
 import { Location } from './geolocalization';
+import { KaotikaUserAttributes } from './KaotikaUser';
 
 // Declaration of the events used when receiving events from the server
 interface ServerToClientEvents {
@@ -31,7 +34,35 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED]: (
     acolytesHaveCompletedArtifactsSearch: boolean,
   ) => void;
-  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketServerToClientEvents.REQUESTED_TO_SHOW_ARTIFACTS]: VoidFunction;
+  [SocketServerToClientEvents.ACOLYTE_BECAME_BETRAYER]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.ANGELO_SUBDUED]: VoidFunction;
+  [SocketServerToClientEvents.ACOLYTE_RESISTANCE_RESTORED]: (
+    acolyteId: string,
+    acolyteUpdatedAttributes: KaotikaUserAttributes,
+  ) => void;
+  [SocketServerToClientEvents.CRON_TASK_EXECUTED]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.ACOLYTE_INFECTED]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.ACOLYTE_CURSED]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.MORTIMER_AIDED_ACOLYTE]: (
+    acolyteId: string,
+    acolyteUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.ANGELO_DELIVERED]: (
+    angeloUpdatedFields: Fields,
+  ) => void;
 }
 
 interface AcolyteDataAfterAccessExitLab {
@@ -56,7 +87,7 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.INSIDE_OUTSIDE_TOWER_ENTRANCE]: (
     AcolyteisInTowerEntrance: boolean,
   ) => void;
-  [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: () => void;
+  [SocketClientToServerEvents.REMOVE_SPELL_PRESS]: VoidFunction;
   [SocketClientToServerEvents.SCROLL_PRESS]: (isPressed: boolean) => void;
   [SocketClientToServerEvents.ENTERED_EXITED_HS]: (
     acolyteOrMortimerId: string,
@@ -73,9 +104,31 @@ interface ClientToServerEvents {
     artifactId: string,
     handleEventNotReceivedInServer: (error: any) => void,
   ) => void;
-  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: () => void;
+  [SocketClientToServerEvents.REQUESTED_TO_SHOW_ARTIFACTS]: VoidFunction;
   [SocketClientToServerEvents.ARTIFACTS_SEARCH_VALIDATION_RESET]: (
     isSearchValidated: boolean,
+  ) => void;
+  [SocketClientToServerEvents.ACOLYTE_ACCEPTED_BETRAYAL]: (
+    acolyteId: string,
+  ) => void;
+  [SocketClientToServerEvents.ANGELO_SUBDUED]: VoidFunction;
+  [SocketClientToServerEvents.ACOLYTE_RESTED]: (acolyteId: string) => void;
+  [SocketClientToServerEvents.ACOLYTE_INFECTED]: (
+    acolyteId: string,
+    diseaseId: string,
+  ) => void;
+  [SocketClientToServerEvents.ACOLYTE_CURSED]: (acolyteId: string) => void;
+  [SocketClientToServerEvents.MORTIMER_AIDED_ACOLYTE]: (
+    acolyteId: string,
+    aidType: AidType,
+    diseaseId?: string,
+  ) => void;
+  [SocketClientToServerEvents.MORTIMER_NOTIFIED_FOR_ANGELO_DELIVERY]: () => void;
+  [SocketClientToServerEvents.ANGELO_DELIVERED]: () => void;
+  [SocketClientToServerEvents.ANGELO_TRIAL_BEGAN]: () => void;
+  [SocketClientToServerEvents.PLAYER_VOTED_IN_ANGELO_TRIAL]: (
+    playerId: string,
+    playerVote: string,
   ) => void;
 }
 

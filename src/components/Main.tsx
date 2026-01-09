@@ -7,12 +7,16 @@ import { navigationRef } from '../RootNavigation';
 import useMetrics from '../hooks/use-metrics';
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
-import { DEFAULT_MODAL_DATA } from '../constants/general';
+import { DEFAULT_MODAL_DATA, UserRole } from '../constants/general';
 import { useEffect } from 'react';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { Artifact } from '../interfaces/Artifact';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import useArtifactStore from '../store/useArtifactStore';
+import { ModalImage } from '../interfaces/Modal';
+import { ModalImgSrc } from '../constants/image-sources';
+import { useDiseaseStore } from '../store/useDiseaseStore';
+import { Disease } from '../interfaces/disease-store';
 
 const Container = styled.View`
   height: 100%;
@@ -27,11 +31,14 @@ const Main = () => {
 
   const setArtifacts = useArtifactStore(state => state.setArtifacts);
 
+  const diseases = useDiseaseStore(state => state.diseases);
+  const setDiseases = useDiseaseStore(state => state.setDiseases);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
 
-      // Make calls to the API to get acolytes, non-acolytes & artifacts & save them locally
+      // Make calls to the API to get acolytes, non-acolytes, artifacts & diseases & save them locally
 
       const acolytesArray = (await getXArray(
         'http://10.50.0.50:6000/players/acolytes/',
@@ -48,11 +55,18 @@ const Main = () => {
       )) as Artifact[];
       setArtifacts(artifactsArray);
 
+      const diseasesArray = (await getXArray(
+        'http://10.50.0.50:6000/missions/diseases/',
+      )) as Disease[];
+      setDiseases(diseasesArray);
+
       setIsLoading(false);
     })();
   }, []);
 
-  async function getXArray(url: string): Promise<KaotikaUser[] | Artifact[]> {
+  async function getXArray(
+    url: string,
+  ): Promise<KaotikaUser[] | Artifact[] | Disease[]> {
     const response = await fetch(url);
 
     let xArray = [];
@@ -64,11 +78,11 @@ const Main = () => {
     return xArray;
   }
 
-  const user = usePlayerStore(state => state.user);
+  const user = usePlayerStore(state => state.user)!;
 
   const setModalData = useModalStore(state => state.setModalData);
 
-  handleNotificationPermission(user!.email).then(permissionDeniedMessage => {
+  handleNotificationPermission(user.email).then(permissionDeniedMessage => {
     if (permissionDeniedMessage) {
       setModalData({
         ...DEFAULT_MODAL_DATA,
@@ -78,6 +92,47 @@ const Main = () => {
       });
     }
   });
+
+  // Display the corresponding modal (tiredness/disease(s)/curse) to non-betrayer acolytes when conditions are met
+  useEffect(() => {
+    if (!user.isBetrayer && user.rol === UserRole.ACOLYTE) {
+      let message = '';
+      const image: ModalImage = { width: ms(250), height: ms(375) };
+
+      const userDiseases = user.diseases!;
+
+      if (user.attributes.resistance! <= 30) {
+        message =
+          'Feeling a bit tired? That is what happens when you are loyal to Kaotika.';
+
+        image.source = ModalImgSrc.TIRED_ACOLYTE;
+      } else if (userDiseases.length > 0) {
+        message =
+          'You are sick, bad luck. That means one or more of your attributes have been reduced:';
+
+        userDiseases.forEach(userDisease => {
+          diseases.forEach(disease => {
+            if (userDisease === disease._id) {
+              message += `\n-> ${disease.penalty}`;
+            }
+          });
+        });
+
+        image.source = ModalImgSrc.ILL_ACOLYTE;
+      } else if (user.isCursed) {
+        message =
+          'The Ethazium curse corrupts your entire being. It must have been Istvan up to his old tricks...';
+
+        image.source = ModalImgSrc.CURSED_ACOLYTE;
+      }
+
+      const modalData = message
+        ? { fullScreen: true, content: { message, image } }
+        : null;
+
+      setModalData(modalData);
+    }
+  }, [user, diseases]);
 
   const Navigation = useAdaptiveNavigation();
 

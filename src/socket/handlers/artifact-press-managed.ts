@@ -90,8 +90,8 @@ function setAllArtifactsGatheredModalData(ms: MS, setModalData: SetModalData) {
         height: ms(350, 1),
       },
     },
-    actionButtonText: 'Return to The Old School',
-    onPressActionButton() {
+    actionButtonTextOne: 'Return to The Old School',
+    onPressActionButtonOne() {
       navigate(Tab.MAP, {
         screenChangingNotificationData: {
           destination: MapNavigation.OLD_SCHOOL_MAP,
@@ -111,8 +111,8 @@ function showErrorModal(setModalData: SetModalData) {
     content: {
       message: 'You are too far away from the artifact to collect it!',
     },
-    actionButtonText: 'Dismiss',
-    onPressActionButton() {
+    actionButtonTextOne: 'Dismiss',
+    onPressActionButtonOne() {
       setModalData(null);
     },
   };

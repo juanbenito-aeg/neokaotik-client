@@ -5,12 +5,13 @@ enum UserRole {
   ISTVAN = 'istvan',
   MORTIMER = 'mortimer',
   VILLAIN = 'villain',
+  ANGELO = 'angelo',
 }
 
 const DEFAULT_MODAL_DATA: ModalData = {
   fullScreen: false,
   content: {},
-  actionButtonText: 'Dismiss',
+  actionButtonTextOne: 'Dismiss',
 };
 
 enum AsyncStorageKey {
@@ -22,4 +23,36 @@ enum ArtifactState {
   COLLECTED = 'collected',
 }
 
-export { UserRole, DEFAULT_MODAL_DATA, AsyncStorageKey, ArtifactState };
+enum MortimerModeState {
+  DEFAULT = 'default',
+  DISEASE_SELECTION = 'disease selection',
+}
+
+enum AidType {
+  POULTICE,
+  ETHAZIUM,
+  DISEASE,
+}
+
+enum AngeloTrialState {
+  INACTIVE,
+  ACTIVE,
+  FINISHED,
+}
+
+enum VoteAngeloTrialType {
+  INNOCENT = 'Innocent',
+  GUILTY = 'Guilty',
+  NONE = 'None',
+}
+
+export {
+  UserRole,
+  DEFAULT_MODAL_DATA,
+  AsyncStorageKey,
+  ArtifactState,
+  MortimerModeState,
+  AidType,
+  AngeloTrialState,
+  VoteAngeloTrialType,
+};

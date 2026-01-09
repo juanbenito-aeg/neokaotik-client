@@ -26,8 +26,19 @@ import handleEnteredExitedHS from './handlers/entered-exited-hs';
 import { SetArtifacts } from '../interfaces/Artifact';
 import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
-import { SetShowArtifactsAnimation } from '../interfaces/HallSages';
+import {
+  SetShowAngeloAnimation,
+  SetShowArtifactsAnimation,
+} from '../interfaces/HallSages';
 import { SetIsLoading } from '../interfaces/IsLoading';
+import handleAcolyteBecameBetrayer from './handlers/acolyte-became-betrayer';
+import handleAngeloSubdued from './handlers/angelo-subdued';
+import { handleAcolyteResistanceRestored } from './handlers/acolyte-resistance-restored';
+import handleCronTask from './handlers/cron-task-executed';
+import handleAcolyteInfected from './handlers/acolyte-infected';
+import { handleAcolyteCursed } from './handlers/acolyte-cursed';
+import { handleMortimerAidedAcolyte } from './handlers/mortimer-aided-acolyte';
+import handleAngeloDelivered from './handlers/angelo-delivered';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'http://10.50.0.50:6000/',
@@ -45,6 +56,7 @@ function initSocket(
   setArtifacts: SetArtifacts,
   setShowArtifactsAnimation: SetShowArtifactsAnimation,
   setIsLoading: SetIsLoading,
+  setShowAngeloAnimation: SetShowAngeloAnimation,
 ) {
   // Listen for events
 
@@ -133,6 +145,103 @@ function initSocket(
       setShowArtifactsAnimation,
     );
   });
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_BECAME_BETRAYER,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleAcolyteBecameBetrayer(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+        setIsLoading,
+      );
+    },
+  );
+  socket.on(SocketServerToClientEvents.ANGELO_SUBDUED, () => {
+    handleAngeloSubdued(setNonAcolytes);
+  });
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_RESISTANCE_RESTORED,
+    (acolyteId, acolyteUpdatedAttributes) => {
+      handleAcolyteResistanceRestored(
+        acolyteId,
+        acolyteUpdatedAttributes,
+        user,
+        setUser,
+        setAcolytes,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.CRON_TASK_EXECUTED,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleCronTask(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_INFECTED,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleAcolyteInfected(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+        setIsLoading,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ACOLYTE_CURSED,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleAcolyteCursed(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+        setIsLoading,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.MORTIMER_AIDED_ACOLYTE,
+    (acolyteId, acolyteUpdatedFields) => {
+      handleMortimerAidedAcolyte(
+        acolyteId,
+        acolyteUpdatedFields,
+        user,
+        setUser,
+        setAcolytes,
+        setIsLoading,
+      );
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ANGELO_DELIVERED,
+    angeloUpdatedFields => {
+      handleAngeloDelivered(
+        angeloUpdatedFields,
+        setNonAcolytes,
+        setIsLoading,
+        setShowAngeloAnimation,
+      );
+    },
+  );
 
   if (socket.disconnected) {
     socket.on(SocketGeneralEvents.CONNECT, () => {

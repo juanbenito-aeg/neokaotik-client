@@ -9,19 +9,24 @@ import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { VoidFunction } from '../interfaces/generics';
-import { AsyncStorageKey } from '../constants/general';
+import {
+  AngeloTrialState,
+  AsyncStorageKey,
+  UserRole,
+} from '../constants/general';
 import { DeviceState, NotificationTitle } from '../constants/fcm';
 import { Tab, MapNavigation, OldSchoolLocation } from '../constants/navigation';
 import { SocketClientToServerEvents } from '../constants/socket';
 import { ButtonBackgroundImgSrc } from '../constants/image-sources';
 import { navigate } from '../RootNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SetAcolytes } from '../interfaces/player';
+import { SetAcolytes, SetNonAcolytes } from '../interfaces/player';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
 import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
+import { SetAngeloTrialState } from '../interfaces/HallSages';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const response = await fetch(`http://10.50.0.50:6000/players/${userEmail}`, {
@@ -44,6 +49,8 @@ function setNotificationHandlers(
   ms: MS,
   user: KaotikaUser,
   setUser: SetUser,
+  setNonAcolytes: SetNonAcolytes,
+  setAngeloTrialState: SetAngeloTrialState,
 ) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
@@ -55,6 +62,9 @@ function setNotificationHandlers(
         ms,
         remoteMessage,
         setUser,
+        setNonAcolytes,
+        setAngeloTrialState,
+        user,
       );
     }),
     messaging().onNotificationOpenedApp(remoteMessage => {
@@ -83,6 +93,9 @@ function handleForegroundNotification(
   ms: MS,
   remoteMessage: FirebaseMessagingTypes.RemoteMessage,
   setUser: SetUser,
+  setNonAcolytes: SetNonAcolytes,
+  setAngeloTrialState: SetAngeloTrialState,
+  user: KaotikaUser,
 ) {
   const notificationTitle = remoteMessage.notification!.title;
 
@@ -103,9 +116,15 @@ function handleForegroundNotification(
 
     case NotificationTitle.SUMMONED_HALL_SAGES: {
       updateAcolyteHasBeenSummonedToHOS(setUser);
+      if (remoteMessage.data?.angeloLocation) {
+        updateAngeloLocation(setNonAcolytes, setAngeloTrialState);
+      }
       break;
     }
   }
+
+  if (user.rol === UserRole.MORTIMER && remoteMessage.data?.angeloLocation)
+    return;
 
   Toast.show({
     type: (remoteMessage.data?.type || 'info') as ToastType,
@@ -183,6 +202,26 @@ function updateAcolyteHasBeenSummonedToHOS(setUser: SetUser) {
   setUser(prevUser => ({ ...prevUser!, has_been_summoned_to_hos: true }));
 }
 
+function updateAngeloLocation(
+  setNonAcolytes: SetNonAcolytes,
+  setAngeloTrialState: SetAngeloTrialState,
+) {
+  setNonAcolytes(prevNonAcolytes => {
+    return prevNonAcolytes.map(prevNonAcolyte => {
+      if (prevNonAcolyte.rol === UserRole.ANGELO) {
+        return {
+          ...prevNonAcolyte,
+          location: OldSchoolLocation.HALL_OF_SAGES,
+        };
+      }
+
+      return prevNonAcolyte;
+    });
+  });
+
+  setAngeloTrialState(AngeloTrialState.ACTIVE);
+}
+
 async function moveUserToNotificationDestination(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage | null,
   deviceState: DeviceState,
@@ -249,11 +288,11 @@ function getNotificationModalData(
             height: ms(350, 1),
           },
         },
-        onPressActionButton() {
+        onPressActionButtonOne() {
           socket.emit(SocketClientToServerEvents.REMOVE_SPELL_PRESS);
           setModalData(null);
         },
-        actionButtonText: 'Remove spell',
+        actionButtonTextOne: 'Remove spell',
       };
       break;
     }

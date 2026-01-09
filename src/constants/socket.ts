@@ -11,6 +11,14 @@ enum SocketServerToClientEvents {
   ENTERED_EXITED_HS = 'player entered/exited HS',
   ARTIFACTS_SEARCH_VALIDATION_RESET_MANAGED = 'artifacts search validation/reset managed',
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
+  ACOLYTE_BECAME_BETRAYER = 'acolyte became betrayer',
+  ANGELO_SUBDUED = 'Angelo subdued',
+  ACOLYTE_RESISTANCE_RESTORED = 'acolyte resistance restored',
+  CRON_TASK_EXECUTED = 'cron task executed',
+  ACOLYTE_INFECTED = 'acolyte infected',
+  ACOLYTE_CURSED = 'acolyte cursed',
+  MORTIMER_AIDED_ACOLYTE = 'Mortimer aided acolyte',
+  ANGELO_DELIVERED = 'Angelo delivered',
 }
 
 enum SocketClientToServerEvents {
@@ -24,6 +32,16 @@ enum SocketClientToServerEvents {
   ARTIFACT_PRESSED = 'artifact pressed',
   REQUESTED_TO_SHOW_ARTIFACTS = 'requested to show artifacts',
   ARTIFACTS_SEARCH_VALIDATION_RESET = 'artifacts search validated/reset',
+  ACOLYTE_ACCEPTED_BETRAYAL = 'acolyte accepted betrayal',
+  ANGELO_SUBDUED = 'Angelo subdued',
+  ACOLYTE_RESTED = 'acolyte rested',
+  ACOLYTE_INFECTED = 'acolyte infected',
+  ACOLYTE_CURSED = 'acolyte cursed',
+  MORTIMER_AIDED_ACOLYTE = 'Mortimer aided acolyte',
+  MORTIMER_NOTIFIED_FOR_ANGELO_DELIVERY = "Mortimer notified for Angelo's delivery",
+  ANGELO_DELIVERED = 'Angelo delivered',
+  ANGELO_TRIAL_BEGAN = "Angelo's trial began",
+  PLAYER_VOTED_IN_ANGELO_TRIAL = "player voted in Angelo's trial",
 }
 
 export {

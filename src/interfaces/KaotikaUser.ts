@@ -1,3 +1,8 @@
+import { VoteAngeloTrialType } from '../constants/general';
+import {
+  OldSchoolLocation,
+  ValleySoresLocation,
+} from '../constants/navigation';
 import { ArtifactId } from './Artifact';
 import { Location } from './geolocalization';
 
@@ -10,6 +15,10 @@ interface CommonAttributesAndModifiers {
   insanity: number;
 }
 
+interface KaotikaUserAttributes extends CommonAttributesAndModifiers {
+  resistance?: number;
+}
+
 interface KaotikaUser {
   _id: string;
   is_in_tower_entrance: boolean;
@@ -18,7 +27,7 @@ interface KaotikaUser {
   rol: string;
   socketId: string;
   isInside: boolean;
-  attributes: CommonAttributesAndModifiers;
+  attributes: KaotikaUserAttributes;
   equipment: Equipment;
   inventory: Inventory;
   name: string;
@@ -41,7 +50,12 @@ interface KaotikaUser {
   has_completed_artifacts_search?: boolean;
   is_inside_hs?: boolean;
   found_artifacts?: ArtifactId[];
-  location?: Location;
+  location?: Location | OldSchoolLocation | ValleySoresLocation;
+  isCaptured?: boolean;
+  isGuilty?: boolean;
+  diseases?: string[];
+  isCursed?: boolean;
+  voteAngeloTrial?: VoteAngeloTrialType;
 }
 
 interface CommonEquipmentFields {
@@ -185,4 +199,4 @@ interface Skill {
   activeLevels: any[];
 }
 
-export default KaotikaUser;
+export type { KaotikaUserAttributes, KaotikaUser as default };

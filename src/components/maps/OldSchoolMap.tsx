@@ -15,8 +15,9 @@ import AcolytesList from '../roles/mortimer/AcolytesList';
 import GoBackButton from '../GoBackButton';
 import HallOfSages from '../HallOfSages';
 import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
-import { useMapStore } from '../../store/useMapStore';
+import useMapStore from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
+import Dungeon from '../Dungeon';
 
 const OldSchoolMap = ({
   initialLocation,
@@ -35,6 +36,10 @@ const OldSchoolMap = ({
     }
   };
 
+  const onPressGoBackButton = () => {
+    setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
+  };
+
   useEffect(() => {
     if (initialLocation) {
       setCurrentOldSchoolLocation(initialLocation);
@@ -43,6 +48,12 @@ const OldSchoolMap = ({
   }, [initialLocation]);
 
   const user = usePlayerStore(state => state.user);
+
+  const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+
+  const angelo = nonAcolytes.find(
+    nonAcolyte => nonAcolyte.rol === UserRole.ANGELO,
+  )!;
 
   const { ms } = useMetrics();
 
@@ -93,6 +104,32 @@ const OldSchoolMap = ({
     );
   };
 
+  const getDungeonButton = () => {
+    const buttonFixedSize: number = 75;
+    const scaleFactor: number = 1;
+    const buttonCustomStyleObj: ViewStyle = {
+      width: ms(buttonFixedSize, scaleFactor),
+      height: ms(buttonFixedSize, scaleFactor),
+      position: 'absolute',
+      bottom: '30%',
+    };
+
+    return (
+      <Button
+        customStyleObj={buttonCustomStyleObj}
+        onPress={() => {
+          handlePress(OldSchoolLocation.DUNGEON);
+        }}
+        backgroundImgSrc={
+          angelo.location !== OldSchoolLocation.HALL_OF_SAGES &&
+          (angelo.isCaptured || angelo.isGuilty)
+            ? ButtonBackgroundImgSrc.DUNGEON_ANGELO
+            : ButtonBackgroundImgSrc.DUNGEON
+        }
+      />
+    );
+  };
+
   const getContent = () => {
     let content;
 
@@ -108,6 +145,7 @@ const OldSchoolMap = ({
               }}
             />
 
+            {getDungeonButton()}
             {getAngeloLabButton()}
             {getHallOfSagesButton()}
           </ScreenContainer>
@@ -116,10 +154,6 @@ const OldSchoolMap = ({
       }
 
       case OldSchoolLocation.ANGELO_LAB: {
-        const onPressGoBackButton = () => {
-          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
-        };
-
         content =
           user!.rol === UserRole.ACOLYTE ? (
             <AcolyteAngeloLab onPressGoBackButton={onPressGoBackButton} />
@@ -137,11 +171,12 @@ const OldSchoolMap = ({
         break;
       }
       case OldSchoolLocation.HALL_OF_SAGES: {
-        const onPressGoBackButton = () => {
-          setCurrentOldSchoolLocation(OldSchoolLocation.MAP);
-        };
-
         content = <HallOfSages onPressGoBackButton={onPressGoBackButton} />;
+
+        break;
+      }
+      case OldSchoolLocation.DUNGEON: {
+        content = <Dungeon onPressGoBackButton={onPressGoBackButton} />;
 
         break;
       }

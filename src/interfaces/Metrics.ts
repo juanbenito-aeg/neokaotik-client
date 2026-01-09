@@ -5,6 +5,6 @@ type HS = (size: number) => number;
 type VS = (size: number) => number;
 
 // ModerateScale
-type MS = (size: number, factor: number) => number;
+type MS = (size: number, factor?: number) => number;
 
 export type { HS, VS, MS };
