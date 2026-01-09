@@ -10,7 +10,7 @@ function handlePLayerVotedAngeloTrial(
   setAcolytes(prevAcolytes => {
     return prevAcolytes.map(acolyte => {
       if (acolyte._id === playerId) {
-        return { ...acolyte, angeloTrialVote: vote };
+        return { ...acolyte, voteAngeloTrial: vote };
       }
       return acolyte;
     });
@@ -19,7 +19,7 @@ function handlePLayerVotedAngeloTrial(
   setNonAcolytes(prevNonAcolytes => {
     return prevNonAcolytes.map(nonAcolyte => {
       if (nonAcolyte._id === playerId) {
-        return { ...nonAcolyte, angeloTrialVote: vote };
+        return { ...nonAcolyte, voteAngeloTrial: vote };
       }
       return nonAcolyte;
     });
