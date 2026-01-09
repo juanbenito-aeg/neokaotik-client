@@ -1,4 +1,4 @@
-import { AidType } from '../constants/general';
+import { AidType, VoteAngeloTrialType } from '../constants/general';
 import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
@@ -62,6 +62,10 @@ interface ServerToClientEvents {
   ) => void;
   [SocketServerToClientEvents.ANGELO_DELIVERED]: (
     angeloUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.PLAYER_VOTED_ANGELO_TRIAL]: (
+    playerId: string,
+    vote: VoteAngeloTrialType,
   ) => void;
 }
 

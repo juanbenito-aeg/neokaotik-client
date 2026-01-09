@@ -19,6 +19,7 @@ enum SocketServerToClientEvents {
   ACOLYTE_CURSED = 'acolyte cursed',
   MORTIMER_AIDED_ACOLYTE = 'Mortimer aided acolyte',
   ANGELO_DELIVERED = 'Angelo delivered',
+  PLAYER_VOTED_ANGELO_TRIAL = "player voted in Angelo's trial",
 }
 
 enum SocketClientToServerEvents {
