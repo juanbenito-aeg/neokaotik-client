@@ -81,11 +81,13 @@ const TextContainer = styled(Text)<{ $ms: MS }>`
 const AngeloTrial = () => {
   const [vote, setVote] = useState<VoteAngeloTrialType | null>(null);
 
-  const acolytes = usePlayerStore(state => state.acolytes);
+  const nonBetrayerAcolytes = usePlayerStore(state => state.acolytes).filter(
+    acolyte => !acolyte.isBetrayer,
+  );
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
 
-  const players = [...acolytes, ...nonAcolytes];
+  const players = [...nonBetrayerAcolytes, ...nonAcolytes];
 
   const user = usePlayerStore(state => state.user)!;
 
@@ -158,8 +160,7 @@ const AngeloTrial = () => {
         {players.map(player => {
           if (
             player.rol !== UserRole.MORTIMER &&
-            player.rol !== UserRole.ANGELO &&
-            !player.isBetrayer
+            player.rol !== UserRole.ANGELO
           ) {
             const avatarUri =
               player._id === user._id ? user.avatar : player.avatar;
@@ -183,7 +184,7 @@ const AngeloTrial = () => {
         })}
       </JuryContainer>
 
-      {!vote && user.rol !== UserRole.MORTIMER && !user.isBetrayer && (
+      {!vote && user.rol !== UserRole.MORTIMER && (
         <ButtonContainer>
           <Animatable.View animation="fadeInUp" duration={900}>
             <Button
