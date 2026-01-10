@@ -79,7 +79,7 @@ const TextContainer = styled(Text)<{ $ms: MS }>`
 `;
 
 const AngeloTrial = () => {
-  const { ms } = useMetrics();
+  const [vote, setVote] = useState<VoteAngeloTrialType | null>(null);
 
   const acolytes = usePlayerStore(state => state.acolytes);
 
@@ -93,9 +93,7 @@ const AngeloTrial = () => {
 
   const setModalData = useModalStore(state => state.setModalData);
 
-  const [hasVote, setHasVote] = useState(false);
-
-  const [vote, setVote] = useState('');
+  const { ms } = useMetrics();
 
   useEffect(() => {
     if (user.rol === UserRole.MORTIMER) {
@@ -122,7 +120,7 @@ const AngeloTrial = () => {
   useEffect(() => {
     if (
       angeloTrialState === AngeloTrialState.ACTIVE &&
-      !hasVote &&
+      !vote &&
       user.rol === UserRole.ACOLYTE &&
       (user.attributes.resistance! <= 30 ||
         user.diseases!.length > 0 ||
@@ -130,7 +128,7 @@ const AngeloTrial = () => {
     ) {
       // If full-screen modal has been activated due to tiredness, new disease(s) and/or curse, emit a "scratch" vote
       emitPlayerVoteInAngeloTrial(user._id, VoteAngeloTrialType.NONE);
-      setHasVote(true);
+      setVote(VoteAngeloTrialType.NONE);
     }
   }, [user]);
 
@@ -185,13 +183,12 @@ const AngeloTrial = () => {
         })}
       </JuryContainer>
 
-      {!hasVote && user.rol !== UserRole.MORTIMER && !user.isBetrayer && (
+      {!vote && user.rol !== UserRole.MORTIMER && !user.isBetrayer && (
         <ButtonContainer>
           <Animatable.View animation="fadeInUp" duration={900}>
             <Button
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
               onPress={() => {
-                setHasVote(true);
                 emitPlayerVoteInAngeloTrial(
                   user._id,
                   VoteAngeloTrialType.INNOCENT,
@@ -204,7 +201,6 @@ const AngeloTrial = () => {
             <Button
               backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
               onPress={() => {
-                setHasVote(true);
                 emitPlayerVoteInAngeloTrial(
                   user._id,
                   VoteAngeloTrialType.GUILTY,
@@ -217,9 +213,10 @@ const AngeloTrial = () => {
         </ButtonContainer>
       )}
 
-      {hasVote && (
+      {vote && (
         <>
           <TextPanel $ms={ms} source={ScreenBackgroundImgSrc.TEXT_PANEL} />
+
           <TextContainer $ms={ms}>
             {user.nickname} has voted that Angelo is {vote}
           </TextContainer>
