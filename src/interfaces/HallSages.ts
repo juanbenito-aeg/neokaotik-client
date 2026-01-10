@@ -7,6 +7,8 @@ interface HallSagesStore {
   setAngeloTrialState: SetAngeloTrialState;
   showAngeloAnimation: boolean;
   setShowAngeloAnimation: SetShowAngeloAnimation;
+  angeloTrialVotes: AngeloTrialVotes | null;
+  setAngeloTrialVotes: SetAngeloTrialVotes;
 }
 
 type SetShowArtifactsAnimation = (showArtifactsAnimation: boolean) => void;
@@ -14,6 +16,13 @@ type SetShowArtifactsAnimation = (showArtifactsAnimation: boolean) => void;
 type SetAngeloTrialState = (angeloTrialState: AngeloTrialState) => void;
 
 type SetShowAngeloAnimation = (showAngeloAnimation: boolean) => void;
+
+interface AngeloTrialVotes {
+  innocent: number;
+  guilty: number;
+}
+
+type SetAngeloTrialVotes = (angeloTrialVotes: AngeloTrialVotes) => void;
 
 export type {
   HallSagesStore,

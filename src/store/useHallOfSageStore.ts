@@ -13,4 +13,7 @@ export const useHallOfSageStore = create<HallSagesStore>()(set => ({
   showAngeloAnimation: false,
   setShowAngeloAnimation: showAngeloAnimation =>
     set(() => ({ showAngeloAnimation })),
+
+  angeloTrialVotes: null,
+  setAngeloTrialVotes: angeloTrialVotes => set(() => ({ angeloTrialVotes })),
 }));
