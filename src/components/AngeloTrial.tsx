@@ -21,6 +21,7 @@ import Text from './Text';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
 import { ModalData } from '../interfaces/Modal';
 import { useModalStore } from '../store/useModalStore';
+import { emitAngeloTrialValidatedCanceled } from '../socket/events/angelo-trial-validated-canceled';
 
 const Wrapper = styled.View<{ position: number }>`
   position: absolute;
@@ -71,7 +72,7 @@ const TextPanel = styled.Image<{ $ms: MS }>`
 
 const TextContainer = styled(Text)<{ $ms: MS }>`
   font-size: ${({ $ms }) => $ms(25, 1)}px;
-  color: white;
+  color: rgb(191 245 205);
   position: absolute;
   top: ${({ $ms }) => $ms(625, 0.4)}px;
   text-align: center;
@@ -134,6 +135,69 @@ const AngeloTrial = () => {
     }
   }, [user]);
 
+  const buttonsData = getButtonsData();
+
+  function getButtonsData() {
+    const buttonsData = [];
+
+    if (user.rol === UserRole.MORTIMER) {
+      const hasEveryoneVoted = haveAllPlayersVoted();
+
+      buttonsData.push(
+        {
+          customStyleObj: { opacity: hasEveryoneVoted ? 1 : 0.65 },
+          onPress: () => {
+            hasEveryoneVoted && emitAngeloTrialValidatedCanceled(true);
+          },
+          text: 'Validate trial',
+        },
+        {
+          onPress: () => {
+            emitAngeloTrialValidatedCanceled(false);
+          },
+          text: 'Cancel trial',
+        },
+      );
+    } else {
+      buttonsData.push(
+        getInnocentOrGuiltyButtonData(VoteAngeloTrialType.INNOCENT),
+        getInnocentOrGuiltyButtonData(VoteAngeloTrialType.GUILTY),
+      );
+    }
+
+    return buttonsData;
+  }
+
+  function haveAllPlayersVoted() {
+    let haveAllPlayersVoted = true;
+
+    players.forEach(player => {
+      if (
+        player.rol !== UserRole.MORTIMER &&
+        player.rol !== UserRole.ANGELO &&
+        !player.voteAngeloTrial
+      ) {
+        haveAllPlayersVoted = false;
+      }
+    });
+
+    return haveAllPlayersVoted;
+  }
+
+  function getInnocentOrGuiltyButtonData(
+    innocentOrGuilty: VoteAngeloTrialType,
+  ) {
+    const innocentOrGuiltyButtonData = {
+      onPress: () => {
+        emitPlayerVoteInAngeloTrial(user._id, innocentOrGuilty);
+        setVote(innocentOrGuilty);
+      },
+      text: innocentOrGuilty,
+    };
+
+    return innocentOrGuiltyButtonData;
+  }
+
   return (
     <>
       {players.map(player => {
@@ -184,32 +248,17 @@ const AngeloTrial = () => {
         })}
       </JuryContainer>
 
-      {!vote && user.rol !== UserRole.MORTIMER && (
+      {((!vote && user.rol !== UserRole.MORTIMER) ||
+        user.rol === UserRole.MORTIMER) && (
         <ButtonContainer>
           <Animatable.View animation="fadeInUp" duration={900}>
-            <Button
-              backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-              onPress={() => {
-                emitPlayerVoteInAngeloTrial(
-                  user._id,
-                  VoteAngeloTrialType.INNOCENT,
-                );
-                setVote(VoteAngeloTrialType.INNOCENT);
-              }}
-              text={VoteAngeloTrialType.INNOCENT}
-            />
-
-            <Button
-              backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
-              onPress={() => {
-                emitPlayerVoteInAngeloTrial(
-                  user._id,
-                  VoteAngeloTrialType.GUILTY,
-                );
-                setVote(VoteAngeloTrialType.GUILTY);
-              }}
-              text={VoteAngeloTrialType.GUILTY}
-            />
+            {buttonsData.map(buttonData => (
+              <Button
+                key={buttonData.text}
+                {...buttonData}
+                backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
+              />
+            ))}
           </Animatable.View>
         </ButtonContainer>
       )}
@@ -219,7 +268,7 @@ const AngeloTrial = () => {
           <TextPanel $ms={ms} source={ScreenBackgroundImgSrc.TEXT_PANEL} />
 
           <TextContainer $ms={ms}>
-            {user.nickname} has voted that Angelo is {vote}
+            {user.nickname} has voted that Angelo is {vote.toLowerCase()}.
           </TextContainer>
         </>
       )}

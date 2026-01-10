@@ -43,6 +43,7 @@ enum SocketClientToServerEvents {
   ANGELO_DELIVERED = 'Angelo delivered',
   ANGELO_TRIAL_BEGAN = "Angelo's trial began",
   PLAYER_VOTED_IN_ANGELO_TRIAL = "player voted in Angelo's trial",
+  ANGELO_TRIAL_VALIDATED_CANCELED = "Angelo's trial validated/canceled",
 }
 
 export {

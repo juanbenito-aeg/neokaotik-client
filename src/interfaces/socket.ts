@@ -134,6 +134,9 @@ interface ClientToServerEvents {
     playerId: string,
     playerVote: string,
   ) => void;
+  [SocketClientToServerEvents.ANGELO_TRIAL_VALIDATED_CANCELED]: (
+    isTrialValidated: boolean,
+  ) => void;
 }
 
 export type {
