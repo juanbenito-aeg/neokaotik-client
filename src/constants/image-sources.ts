@@ -95,6 +95,12 @@ enum DiseaseImgSrc {
   'Medular Apocalypse' = require('../../public/images/icons/medular-apocalypse.png'),
 }
 
+enum VoteIndicatorImgSrc {
+  Innocent = require('../../public/images/vote-indicators/innocent.png'),
+  Guilty = require('../../public/images/vote-indicators/guilty.png'),
+  None = require('../../public/images/vote-indicators/none.png'),
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -103,4 +109,5 @@ export {
   ArtifactImgSrc,
   ArtifactRelatedImgSrc,
   DiseaseImgSrc,
+  VoteIndicatorImgSrc,
 };

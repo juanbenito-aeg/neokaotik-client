@@ -12,6 +12,7 @@ import Button from './Button';
 import {
   ButtonBackgroundImgSrc,
   ScreenBackgroundImgSrc,
+  VoteIndicatorImgSrc,
 } from '../constants/image-sources';
 import * as Animatable from 'react-native-animatable';
 import emitPlayerVoteInAngeloTrial from '../socket/events/player-voted-in-angelo-trial';
@@ -32,12 +33,22 @@ const JuryContainer = styled.View`
   align-items: center;
 `;
 
+const AvatarContainer = styled.View`
+  position: relative;
+`;
+
 const Avatar = styled.Image<{ $ms: MS; $big?: boolean }>`
   width: ${({ $ms, $big }) => ($big ? $ms(75, 1) : $ms(55, 1))}px;
   height: ${({ $ms, $big }) => ($big ? $ms(75, 1) : $ms(55, 1))}px;
   margin-right: ${({ $ms }) => $ms(12, 0.5)}px;
   border-radius: 9999px;
   filter: drop-shadow(0 0px 10px rgb(191 245 205));
+`;
+
+const VoteIndicator = styled(Avatar)`
+  position: absolute;
+  border-radius: 0;
+  filter: none;
 `;
 
 const ButtonContainer = styled.View`
@@ -128,7 +139,19 @@ const AngeloTrial = () => {
             const avatarUri =
               player._id === user._id ? user.avatar : player.avatar;
 
-            return <Avatar source={{ uri: avatarUri }} $ms={ms} />;
+            return (
+              <AvatarContainer key={player._id}>
+                <Avatar source={{ uri: avatarUri }} $ms={ms} />
+
+                {player.voteAngeloTrial && (
+                  <VoteIndicator
+                    source={VoteIndicatorImgSrc[player.voteAngeloTrial]}
+                    resizeMode="stretch"
+                    $ms={ms}
+                  />
+                )}
+              </AvatarContainer>
+            );
           }
 
           return null;
