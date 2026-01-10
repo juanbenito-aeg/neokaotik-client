@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Button from './Button';
 import {
   ButtonBackgroundImgSrc,
+  ModalImgSrc,
   ScreenBackgroundImgSrc,
   VoteIndicatorImgSrc,
 } from '../constants/image-sources';
@@ -18,6 +19,8 @@ import * as Animatable from 'react-native-animatable';
 import emitPlayerVoteInAngeloTrial from '../socket/events/player-voted-in-angelo-trial';
 import Text from './Text';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
+import { ModalData } from '../interfaces/Modal';
+import { useModalStore } from '../store/useModalStore';
 
 const Wrapper = styled.View<{ position: number }>`
   position: absolute;
@@ -86,11 +89,35 @@ const AngeloTrial = () => {
 
   const user = usePlayerStore(state => state.user)!;
 
-  const [hasVote, setHasVote] = useState(false);
-
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
 
+  const setModalData = useModalStore(state => state.setModalData);
+
+  const [hasVote, setHasVote] = useState(false);
+
   const [vote, setVote] = useState('');
+
+  useEffect(() => {
+    if (user.rol === UserRole.MORTIMER) {
+      const modalData: ModalData = {
+        fullScreen: true,
+        content: {
+          message: 'Take a look at what vote each indicator corresponds to:',
+          image: {
+            source: ModalImgSrc.VOTE_INDICATORS_LEGEND,
+            width: ms(250),
+            height: ms(350),
+          },
+        },
+        actionButtonTextOne: 'Dismiss',
+        onPressActionButtonOne: () => {
+          setModalData(null);
+        },
+      };
+
+      setModalData(modalData);
+    }
+  }, []);
 
   useEffect(() => {
     if (

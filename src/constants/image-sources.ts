@@ -73,6 +73,7 @@ enum ModalImgSrc {
   TIRED_ACOLYTE = require('../../public/images/roles/acolyte/tired-acolyte.png'),
   ILL_ACOLYTE = require('../../public/images/roles/acolyte/ill-acolyte.png'),
   CURSED_ACOLYTE = require('../../public/images/roles/acolyte/cursed-acolyte.png'),
+  VOTE_INDICATORS_LEGEND = require('../../public/images/vote-indicators-legend.png'),
 }
 
 enum ArtifactRelatedImgSrc {
