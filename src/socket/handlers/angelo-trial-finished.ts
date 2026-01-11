@@ -18,7 +18,7 @@ function handleAngeloTrialFinished(
 ) {
   setNonAcolytes(prevNonAcolytes =>
     prevNonAcolytes.map(prevNonAcolyte => {
-      if ((prevNonAcolyte.rol = UserRole.ANGELO)) {
+      if (prevNonAcolyte.rol === UserRole.ANGELO) {
         return { ...prevNonAcolyte, ...angeloUpdatedFields };
       }
 
