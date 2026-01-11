@@ -5,6 +5,7 @@ import {
 } from '../constants/socket';
 import { Fields, VoidFunction } from './generics';
 import { Location } from './geolocalization';
+import { AngeloTrialVotes } from './HallSages';
 import { KaotikaUserAttributes } from './KaotikaUser';
 
 // Declaration of the events used when receiving events from the server
@@ -66,6 +67,10 @@ interface ServerToClientEvents {
   [SocketServerToClientEvents.PLAYER_VOTED_ANGELO_TRIAL]: (
     playerId: string,
     vote: VoteAngeloTrialType,
+  ) => void;
+  [SocketServerToClientEvents.ANGELO_TRIAL_FINISHED]: (
+    angeloUpdatedFields: Fields,
+    angeloTrialVotes?: { votes: AngeloTrialVotes },
   ) => void;
 }
 

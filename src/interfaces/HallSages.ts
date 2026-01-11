@@ -29,4 +29,6 @@ export type {
   SetShowArtifactsAnimation,
   SetShowAngeloAnimation,
   SetAngeloTrialState,
+  AngeloTrialVotes,
+  SetAngeloTrialVotes,
 };

@@ -27,6 +27,8 @@ import { SetArtifacts } from '../interfaces/Artifact';
 import handleArtifactsSearchValidationResetManaged from './handlers/artifacts-search-validation-reset-managed';
 import handleRequestedToShowArtifacts from './handlers/requested-to-show-artifacts';
 import {
+  SetAngeloTrialState,
+  SetAngeloTrialVotes,
   SetShowAngeloAnimation,
   SetShowArtifactsAnimation,
 } from '../interfaces/HallSages';
@@ -40,6 +42,7 @@ import { handleAcolyteCursed } from './handlers/acolyte-cursed';
 import { handleMortimerAidedAcolyte } from './handlers/mortimer-aided-acolyte';
 import handleAngeloDelivered from './handlers/angelo-delivered';
 import handlePLayerVotedAngeloTrial from './handlers/player-voted-angelo-trial';
+import { handleAngeloTrialFinished } from './handlers/angelo-trial-finished';
 
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
   'https://neokaotik-server.onrender.com/',
@@ -58,6 +61,8 @@ function initSocket(
   setShowArtifactsAnimation: SetShowArtifactsAnimation,
   setIsLoading: SetIsLoading,
   setShowAngeloAnimation: SetShowAngeloAnimation,
+  setAngeloTrialState: SetAngeloTrialState,
+  setAngeloTrialVotes: SetAngeloTrialVotes,
 ) {
   // Listen for events
 
@@ -248,6 +253,19 @@ function initSocket(
     SocketServerToClientEvents.PLAYER_VOTED_ANGELO_TRIAL,
     (playerId, vote) => {
       handlePLayerVotedAngeloTrial(playerId, vote, setAcolytes, setNonAcolytes);
+    },
+  );
+
+  socket.on(
+    SocketServerToClientEvents.ANGELO_TRIAL_FINISHED,
+    (angeloUpdatedFields, angeloTrialVotes) => {
+      handleAngeloTrialFinished(
+        angeloUpdatedFields,
+        setNonAcolytes,
+        setAngeloTrialState,
+        setAngeloTrialVotes,
+        angeloTrialVotes,
+      );
     },
   );
 

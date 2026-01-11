@@ -57,6 +57,10 @@ const App = () => {
     state => state.setAngeloTrialState,
   );
 
+  const setAngeloTrialVotes = useHallOfSageStore(
+    state => state.setAngeloTrialVotes,
+  );
+
   const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
@@ -83,6 +87,8 @@ const App = () => {
         setShowArtifactsAnimation,
         setIsLoading,
         setShowAngeloAnimation,
+        setAngeloTrialState,
+        setAngeloTrialVotes,
       );
 
       return () => {
