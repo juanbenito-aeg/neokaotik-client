@@ -5,6 +5,7 @@ import {
   SetAngeloTrialState,
   SetAngeloTrialVotes,
 } from '../../interfaces/HallSages';
+import { SetIsLoading } from '../../interfaces/IsLoading';
 import { SetNonAcolytes } from '../../interfaces/player';
 
 function handleAngeloTrialFinished(
@@ -12,6 +13,7 @@ function handleAngeloTrialFinished(
   setNonAcolytes: SetNonAcolytes,
   setAngeloTrialState: SetAngeloTrialState,
   setAngeloTrialVotes: SetAngeloTrialVotes,
+  setIsLoading: SetIsLoading,
   angeloTrialVotes?: { votes: AngeloTrialVotes },
 ) {
   setNonAcolytes(prevNonAcolytes =>
@@ -29,6 +31,8 @@ function handleAngeloTrialFinished(
   if (angeloTrialVotes) {
     setAngeloTrialVotes({ ...angeloTrialVotes.votes });
   }
+
+  setIsLoading(false);
 }
 
 export { handleAngeloTrialFinished };

@@ -22,6 +22,7 @@ import { useHallOfSageStore } from '../store/useHallOfSageStore';
 import { ModalData } from '../interfaces/Modal';
 import { useModalStore } from '../store/useModalStore';
 import { emitAngeloTrialValidatedCanceled } from '../socket/events/angelo-trial-validated-canceled';
+import { useIsLoadingStore } from '../store/useIsLoadingStore';
 
 const Wrapper = styled.View<{ position: number }>`
   position: absolute;
@@ -96,6 +97,8 @@ const AngeloTrial = () => {
 
   const setModalData = useModalStore(state => state.setModalData);
 
+  const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
+
   const { ms } = useMetrics();
 
   useEffect(() => {
@@ -145,15 +148,32 @@ const AngeloTrial = () => {
 
       buttonsData.push(
         {
-          customStyleObj: { opacity: hasEveryoneVoted ? 1 : 0.65 },
+          customStyleObj: {
+            opacity:
+              hasEveryoneVoted && angeloTrialState === AngeloTrialState.ACTIVE
+                ? 1
+                : 0.65,
+          },
           onPress: () => {
-            hasEveryoneVoted && emitAngeloTrialValidatedCanceled(true);
+            if (
+              hasEveryoneVoted &&
+              angeloTrialState === AngeloTrialState.ACTIVE
+            ) {
+              setIsLoading(true);
+              emitAngeloTrialValidatedCanceled(true);
+            }
           },
           text: 'Validate trial',
         },
         {
+          customStyleObj: {
+            opacity: angeloTrialState === AngeloTrialState.ACTIVE ? 1 : 0.65,
+          },
           onPress: () => {
-            emitAngeloTrialValidatedCanceled(false);
+            if (angeloTrialState === AngeloTrialState.ACTIVE) {
+              setIsLoading(true);
+              emitAngeloTrialValidatedCanceled(false);
+            }
           },
           text: 'Cancel trial',
         },

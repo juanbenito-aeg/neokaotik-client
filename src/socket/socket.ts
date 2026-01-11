@@ -264,6 +264,7 @@ function initSocket(
         setNonAcolytes,
         setAngeloTrialState,
         setAngeloTrialVotes,
+        setIsLoading,
         angeloTrialVotes,
       );
     },
