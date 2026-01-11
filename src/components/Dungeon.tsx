@@ -61,12 +61,14 @@ const Dungeon = ({ onPressGoBackButton }: NestedScreenProps) => {
           : ScreenBackgroundImgSrc.DUNGEON
       }
     >
-      <GoBackButton onPress={onPressGoBackButton} />
       <Header>Dungeon</Header>
+
+      <GoBackButton onPress={onPressGoBackButton} />
 
       {user.rol === UserRole.MORTIMER &&
         playersInsideHS &&
-        angelo.location === OldSchoolLocation.DUNGEON && (
+        angelo.location === OldSchoolLocation.DUNGEON &&
+        !angelo.isGuilty && (
           <Button
             customStyleObj={buttonCustomStyleObj}
             backgroundImgSrc={ButtonBackgroundImgSrc.DEFAULT_THEMED}
