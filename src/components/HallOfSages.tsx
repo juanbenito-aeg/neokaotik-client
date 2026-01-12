@@ -171,6 +171,7 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const angelo = players.find(
     player =>
       player.rol === UserRole.ANGELO &&
+      !player.isCaptured &&
       player.location === OldSchoolLocation.HALL_OF_SAGES,
   );
 
