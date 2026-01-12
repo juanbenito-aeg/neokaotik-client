@@ -214,40 +214,42 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
         <ArtifactsPanel />
       ) : (
         <>
-          {allAcolytesInside && angelo && (
-            <AngeloContainer>
-              <Animatable.View
-                animation="fadeInDown"
-                duration={500}
-                easing="ease-out"
-              >
+          {angeloTrialState === AngeloTrialState.INACTIVE &&
+            allAcolytesInside &&
+            angelo && (
+              <AngeloContainer>
                 <Animatable.View
-                  animation="shake"
-                  iterationCount="infinite"
-                  duration={4200}
-                  easing="ease-in-out"
+                  animation="fadeInDown"
+                  duration={500}
+                  easing="ease-out"
                 >
-                  <AngeloAvatarWrapper>
-                    <Avatar source={{ uri: angelo.avatar }} $ms={ms} />
+                  <Animatable.View
+                    animation="shake"
+                    iterationCount="infinite"
+                    duration={4200}
+                    easing="ease-in-out"
+                  >
+                    <AngeloAvatarWrapper>
+                      <Avatar source={{ uri: angelo.avatar }} $ms={ms} />
 
-                    <Animatable.Image
-                      source={ButtonBackgroundImgSrc.CHAINS}
-                      animation="pulse"
-                      iterationCount="infinite"
-                      duration={2200}
-                      style={{
-                        position: 'absolute',
-                        width: ms(67, 1),
-                        height: ms(90, 1),
-                        opacity: 0.6,
-                      }}
-                      resizeMode="contain"
-                    />
-                  </AngeloAvatarWrapper>
+                      <Animatable.Image
+                        source={ButtonBackgroundImgSrc.CHAINS}
+                        animation="pulse"
+                        iterationCount="infinite"
+                        duration={2200}
+                        style={{
+                          position: 'absolute',
+                          width: ms(67, 1),
+                          height: ms(90, 1),
+                          opacity: 0.6,
+                        }}
+                        resizeMode="contain"
+                      />
+                    </AngeloAvatarWrapper>
+                  </Animatable.View>
                 </Animatable.View>
-              </Animatable.View>
-            </AngeloContainer>
-          )}
+              </AngeloContainer>
+            )}
 
           <AvatarsContainer>
             {angeloTrialState === AngeloTrialState.INACTIVE &&
