@@ -86,14 +86,19 @@ const AngeloTrial = () => {
   const nonBetrayerAcolytes = usePlayerStore(state => state.acolytes).filter(
     acolyte => !acolyte.isBetrayer,
   );
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const players = [...nonBetrayerAcolytes, ...nonAcolytes];
 
   const user = usePlayerStore(state => state.user)!;
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+  const setAngeloTrialState = useHallOfSageStore(
+    state => state.setAngeloTrialState,
+  );
 
   const angeloTrialVotes = useHallOfSageStore(state => state.angeloTrialVotes)!;
 
@@ -180,6 +185,24 @@ const AngeloTrial = () => {
         },
         actionButtonTextOne: 'Dismiss',
         onPressActionButtonOne: () => {
+          setAngeloTrialState(AngeloTrialState.INACTIVE);
+
+          if (user.rol === UserRole.MORTIMER) {
+            setAcolytes(prevAcolytes =>
+              prevAcolytes.map(prevAcolyte => ({
+                ...prevAcolyte,
+                voteAngeloTrial: '',
+              })),
+            );
+
+            setNonAcolytes(prevNonAcolytes =>
+              prevNonAcolytes.map(prevNonAcolyte => ({
+                ...prevNonAcolyte,
+                voteAngeloTrial: '',
+              })),
+            );
+          }
+
           setModalData(null);
         },
       };
@@ -275,13 +298,13 @@ const AngeloTrial = () => {
 
         if (player.rol === UserRole.MORTIMER) {
           return (
-            <Wrapper position={20}>
+            <Wrapper key={player._id} position={20}>
               <Avatar source={{ uri: avatarUri }} $ms={ms} $big />
             </Wrapper>
           );
         } else if (player.rol === UserRole.ANGELO) {
           return (
-            <Wrapper position={40}>
+            <Wrapper key={player._id} position={40}>
               <Avatar source={{ uri: avatarUri }} $ms={ms} $big />
             </Wrapper>
           );

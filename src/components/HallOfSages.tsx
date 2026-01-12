@@ -58,10 +58,8 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   const user = usePlayerStore(state => state.user)!;
 
   const acolytes = usePlayerStore(state => state.acolytes);
-  const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
-  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const players = [...acolytes, ...nonAcolytes];
 
@@ -74,9 +72,6 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
   );
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
-  const setAngeloTrialState = useHallOfSageStore(
-    state => state.setAngeloTrialState,
-  );
 
   const [notifyPressed, setNotifyPressed] = useState(false);
 
@@ -98,28 +93,8 @@ const HallOfSages = ({ onPressGoBackButton }: NestedScreenProps) => {
 
       return () => {
         updateAcolyteOrMortimerEnteredOrExitedHS(user!._id, false);
-
-        if (angeloTrialState === AngeloTrialState.FINISHED) {
-          setAngeloTrialState(AngeloTrialState.INACTIVE);
-
-          if (user.rol === UserRole.MORTIMER) {
-            setAcolytes(prevAcolytes =>
-              prevAcolytes.map(prevAcolyte => ({
-                ...prevAcolyte,
-                voteAngeloTrial: '',
-              })),
-            );
-
-            setNonAcolytes(prevNonAcolytes =>
-              prevNonAcolytes.map(prevNonAcolyte => ({
-                ...prevNonAcolyte,
-                voteAngeloTrial: '',
-              })),
-            );
-          }
-        }
       };
-    }, [angeloTrialState]),
+    }, []),
   );
 
   const areAllArtifactsCollected = checkAllArtifactsAreCollected();
