@@ -303,7 +303,7 @@ const AngeloTrial = () => {
               <AvatarContainer key={player._id}>
                 <Avatar source={{ uri: avatarUri }} $ms={ms} />
 
-                {player.voteAngeloTrial && (
+                {user.rol === UserRole.MORTIMER && player.voteAngeloTrial && (
                   <VoteIndicator
                     source={VoteIndicatorImgSrc[player.voteAngeloTrial]}
                     resizeMode="stretch"
