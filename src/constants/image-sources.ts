@@ -59,6 +59,7 @@ enum ButtonBackgroundImgSrc {
   ILL = require('../../public/images/icons/ill.png'),
   CHAINS = require('../../public/images/icons/chains.png'),
   ANGELO_CAPTURED = require('../../public/images/angelo-captured.png'),
+  SCALE = require('../../public/images/scale.png'),
 }
 
 enum ModalBackgroundImgSrc {
