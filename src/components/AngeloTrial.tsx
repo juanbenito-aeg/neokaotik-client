@@ -95,6 +95,8 @@ const AngeloTrial = () => {
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
 
+  const angeloTrialVotes = useHallOfSageStore(state => state.angeloTrialVotes)!;
+
   const setModalData = useModalStore(state => state.setModalData);
 
   const setIsLoading = useIsLoadingStore(state => state.setIsLoading);
@@ -137,6 +139,54 @@ const AngeloTrial = () => {
       setVote(VoteAngeloTrialType.NONE);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (angeloTrialState === AngeloTrialState.FINISHED) {
+      let message;
+      let verdict;
+
+      if (angeloTrialVotes !== null) {
+        if (angeloTrialVotes.innocent > angeloTrialVotes.guilty) {
+          message =
+            'The majority has chosen the light. Angelo is innocent. Today, at last, he will be free.';
+        } else if (angeloTrialVotes.innocent === angeloTrialVotes.guilty) {
+          message =
+            'The council stands at a tie. Rest now and reflect, for Angelo awaits the next trial. May clarity rise with the dawn.';
+        } else {
+          message =
+            'The verdict has fallen without mercy. Angelo is guilty, and for his heinous deeds he shall pay forever. May his chains in the dungeons stand as witness to his fall and the unbroken justice that bound him.';
+        }
+
+        verdict = `The trial has ended. The votes rise: innocent and guilty, all before the truth revealed.
+   
+             Innocent: ${angeloTrialVotes.innocent} 
+             Guilty: ${angeloTrialVotes.guilty} 
+             
+          ${message}`;
+      }
+
+      const cancellation =
+        'The trial has been cancelled, and until a new fate rises, Angelo will remain waiting in the deepest shadows and filth of the dungeons, silent like a storm held within, swearing that his hour will come.';
+
+      const modalData: ModalData = {
+        fullScreen: true,
+        content: {
+          message: angeloTrialVotes !== null ? verdict : cancellation,
+          image: {
+            source: ButtonBackgroundImgSrc.SCALE,
+            width: ms(250, 1),
+            height: ms(250, 1),
+          },
+        },
+        actionButtonTextOne: 'Dismiss',
+        onPressActionButtonOne: () => {
+          setModalData(null);
+        },
+      };
+
+      setModalData(modalData);
+    }
+  }, [angeloTrialState]);
 
   const buttonsData = getButtonsData();
 
