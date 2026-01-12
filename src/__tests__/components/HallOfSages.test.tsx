@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 import HallOfSages from '../../components/HallOfSages';
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
+import { AngeloTrialState } from '../../constants/general';
 
 // Mock problematic package
 jest.mock('@react-navigation/native', () => ({
@@ -43,12 +44,25 @@ jest.mock('../../store/usePlayerStore', () => {
   };
 });
 
-jest.mock('../../store/useHallOfSageStore', () => ({
-  __esModule: true,
-  useHallOfSageStore: jest.fn().mockReturnValue({
-    showArtifactsAnimation: true,
-  }),
-}));
+jest.mock('../../store/useHallOfSageStore', () => {
+  const actualState = jest
+    .requireActual<typeof import('../../store/useHallOfSageStore')>(
+      '../../store/useHallOfSageStore',
+    )
+    .useHallOfSageStore.getState();
+
+  return {
+    __esModule: true,
+    useHallOfSageStore: jest.fn(selector =>
+      selector({
+        ...actualState,
+        showArtifactsAnimation: true,
+        angeloTrialState: 0,
+        showAngeloAnimation: false,
+      }),
+    ),
+  };
+});
 
 jest.useFakeTimers();
 
@@ -59,21 +73,15 @@ describe('Hall of Sages', () => {
     expect(screen.getByText('The Hall of Sages')).toBeTruthy();
   });
 
-  it('should not display the Show Artifacts button when conditions are not met', () => {
-    const allArtifactsCollected = false;
-
+  it('should not render the "Show Artifacts" button when showArtifactsAnimation is false', () => {
     render(<HallOfSages onPressGoBackButton={() => {}} />);
 
-    if (!allArtifactsCollected) {
-      const showArtifactsButton = screen.queryByText('Show Artifacts');
-      expect(showArtifactsButton).toBeNull();
-    }
+    expect(screen.queryByText('Show Artifacts')).toBeNull();
   });
 
-  it('should display an ArtifactPanel if showArtifactsAnimation is true', () => {
+  it('should display an ArtifactPanel if showArtifactsAnimation is true', async () => {
     render(<HallOfSages onPressGoBackButton={() => {}} />);
-
-    const artifactsPanel = screen.findByTestId('artifacts-panel');
+    const artifactsPanel = await screen.findByTestId('artifacts-panel');
     expect(artifactsPanel).toBeTruthy();
   });
 });

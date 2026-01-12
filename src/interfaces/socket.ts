@@ -1,10 +1,11 @@
-import { AidType } from '../constants/general';
+import { AidType, VoteAngeloTrialType } from '../constants/general';
 import {
   SocketServerToClientEvents,
   SocketClientToServerEvents,
 } from '../constants/socket';
 import { Fields, VoidFunction } from './generics';
 import { Location } from './geolocalization';
+import { AngeloTrialVotes } from './HallSages';
 import { KaotikaUserAttributes } from './KaotikaUser';
 
 // Declaration of the events used when receiving events from the server
@@ -62,6 +63,14 @@ interface ServerToClientEvents {
   ) => void;
   [SocketServerToClientEvents.ANGELO_DELIVERED]: (
     angeloUpdatedFields: Fields,
+  ) => void;
+  [SocketServerToClientEvents.PLAYER_VOTED_ANGELO_TRIAL]: (
+    playerId: string,
+    vote: VoteAngeloTrialType,
+  ) => void;
+  [SocketServerToClientEvents.ANGELO_TRIAL_FINISHED]: (
+    angeloUpdatedFields: Fields,
+    angeloTrialVotes?: { votes: AngeloTrialVotes },
   ) => void;
 }
 
@@ -129,6 +138,9 @@ interface ClientToServerEvents {
   [SocketClientToServerEvents.PLAYER_VOTED_IN_ANGELO_TRIAL]: (
     playerId: string,
     playerVote: string,
+  ) => void;
+  [SocketClientToServerEvents.ANGELO_TRIAL_VALIDATED_CANCELED]: (
+    isTrialValidated: boolean,
   ) => void;
 }
 

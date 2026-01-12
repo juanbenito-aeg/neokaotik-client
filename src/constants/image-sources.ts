@@ -31,6 +31,7 @@ enum ScreenBackgroundImgSrc {
   DUNGEON_ANGELO = require('../../public/images/dungeon-angelo.png'),
   ENCHANTED_MIRROR = require('../../public/images/roles/acolyte/enchanted-mirror.png'),
   ANGELO_SUBDUED = require('../../public/images/roles/acolyte/angelo-subdued.png'),
+  TEXT_PANEL = require('../../public/images/text-panel.png'),
 }
 
 enum ButtonBackgroundImgSrc {
@@ -72,6 +73,7 @@ enum ModalImgSrc {
   TIRED_ACOLYTE = require('../../public/images/roles/acolyte/tired-acolyte.png'),
   ILL_ACOLYTE = require('../../public/images/roles/acolyte/ill-acolyte.png'),
   CURSED_ACOLYTE = require('../../public/images/roles/acolyte/cursed-acolyte.png'),
+  VOTE_INDICATORS_LEGEND = require('../../public/images/vote-indicators-legend.png'),
 }
 
 enum ArtifactRelatedImgSrc {
@@ -94,6 +96,12 @@ enum DiseaseImgSrc {
   'Medular Apocalypse' = require('../../public/images/icons/medular-apocalypse.png'),
 }
 
+enum VoteIndicatorImgSrc {
+  Innocent = require('../../public/images/vote-indicators/innocent.png'),
+  Guilty = require('../../public/images/vote-indicators/guilty.png'),
+  None = require('../../public/images/vote-indicators/none.png'),
+}
+
 export {
   ScreenBackgroundImgSrc,
   ButtonBackgroundImgSrc,
@@ -102,4 +110,5 @@ export {
   ArtifactImgSrc,
   ArtifactRelatedImgSrc,
   DiseaseImgSrc,
+  VoteIndicatorImgSrc,
 };
