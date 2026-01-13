@@ -15,6 +15,8 @@ jest.mock('../../helpers/fcm.helpers', () => ({
 
 jest.mock('../../store/usePlayerStore');
 
+jest.useFakeTimers();
+
 const setUser = jest.fn();
 
 const mockedUsePlayerStore = jest.mocked(usePlayerStore);

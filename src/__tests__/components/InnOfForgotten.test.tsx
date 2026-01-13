@@ -50,6 +50,8 @@ jest.mock('../../socket/events/angelo-subdued', () => ({
   emitAngeloSubdued: jest.fn(),
 }));
 
+jest.useFakeTimers();
+
 describe('The Inn of the Forgotten', () => {
   const setModalDataMock = jest.fn();
 

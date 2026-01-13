@@ -18,6 +18,8 @@ jest.mock('../../helpers/fcm.helpers', () => ({ getToastConfig: jest.fn() }));
 jest.mock('../../store/usePlayerStore');
 jest.mock('../../store/useModalStore');
 
+jest.useFakeTimers();
+
 describe("'Main' component", () => {
   let mockedPlayerStore: PlayerStore;
 

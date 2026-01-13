@@ -11,6 +11,8 @@ import { useHallOfSageStore } from '../../store/useHallOfSageStore';
 jest.mock('../../store/usePlayerStore');
 jest.mock('../../store/useHallOfSageStore');
 
+jest.useFakeTimers();
+
 describe("'AngeloTrial' component", () => {
   let mockedPlayerStore: PlayerStore;
 
