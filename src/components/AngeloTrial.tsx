@@ -86,14 +86,21 @@ const AngeloTrial = () => {
   const nonBetrayerAcolytes = usePlayerStore(state => state.acolytes).filter(
     acolyte => !acolyte.isBetrayer,
   );
+  const setAcolytes = usePlayerStore(state => state.setAcolytes);
 
   const nonAcolytes = usePlayerStore(state => state.nonAcolytes);
+  const setNonAcolytes = usePlayerStore(state => state.setNonAcolytes);
 
   const players = [...nonBetrayerAcolytes, ...nonAcolytes];
 
   const user = usePlayerStore(state => state.user)!;
 
   const angeloTrialState = useHallOfSageStore(state => state.angeloTrialState);
+  const setAngeloTrialState = useHallOfSageStore(
+    state => state.setAngeloTrialState,
+  );
+
+  const angeloTrialVotes = useHallOfSageStore(state => state.angeloTrialVotes)!;
 
   const setModalData = useModalStore(state => state.setModalData);
 
@@ -137,6 +144,72 @@ const AngeloTrial = () => {
       setVote(VoteAngeloTrialType.NONE);
     }
   }, [user]);
+
+  useEffect(() => {
+    if (angeloTrialState === AngeloTrialState.FINISHED) {
+      let message;
+      let verdict;
+
+      if (angeloTrialVotes !== null) {
+        if (angeloTrialVotes.innocent > angeloTrialVotes.guilty) {
+          message =
+            'The majority has chosen the light. Angelo is innocent. Today, at last, he will be free.';
+        } else if (angeloTrialVotes.innocent === angeloTrialVotes.guilty) {
+          message =
+            'The council stands at a tie. Rest now and reflect, for Angelo awaits the next trial. May clarity rise with the dawn.';
+        } else {
+          message =
+            'The verdict has fallen without mercy. Angelo is guilty, and for his heinous deeds he shall pay forever. May his chains in the dungeons stand as witness to his fall and the unbroken justice that bound him.';
+        }
+
+        verdict = `The trial has ended. The votes rise: innocent and guilty, all before the truth revealed.
+   
+             Innocent: ${angeloTrialVotes.innocent} 
+             Guilty: ${angeloTrialVotes.guilty} 
+             
+          ${message}`;
+      }
+
+      const cancellation =
+        'The trial has been cancelled, and until a new fate rises, Angelo will remain waiting in the deepest shadows and filth of the dungeons, silent like a storm held within, swearing that his hour will come.';
+
+      const modalData: ModalData = {
+        fullScreen: true,
+        content: {
+          message: angeloTrialVotes !== null ? verdict : cancellation,
+          image: {
+            source: ButtonBackgroundImgSrc.SCALE,
+            width: ms(250, 1),
+            height: ms(250, 1),
+          },
+        },
+        actionButtonTextOne: 'Dismiss',
+        onPressActionButtonOne: () => {
+          setAngeloTrialState(AngeloTrialState.INACTIVE);
+
+          if (user.rol === UserRole.MORTIMER) {
+            setAcolytes(prevAcolytes =>
+              prevAcolytes.map(prevAcolyte => ({
+                ...prevAcolyte,
+                voteAngeloTrial: '',
+              })),
+            );
+
+            setNonAcolytes(prevNonAcolytes =>
+              prevNonAcolytes.map(prevNonAcolyte => ({
+                ...prevNonAcolyte,
+                voteAngeloTrial: '',
+              })),
+            );
+          }
+
+          setModalData(null);
+        },
+      };
+
+      setModalData(modalData);
+    }
+  }, [angeloTrialState]);
 
   const buttonsData = getButtonsData();
 
@@ -225,13 +298,13 @@ const AngeloTrial = () => {
 
         if (player.rol === UserRole.MORTIMER) {
           return (
-            <Wrapper position={20}>
+            <Wrapper key={player._id} position={20}>
               <Avatar source={{ uri: avatarUri }} $ms={ms} $big />
             </Wrapper>
           );
         } else if (player.rol === UserRole.ANGELO) {
           return (
-            <Wrapper position={40}>
+            <Wrapper key={player._id} position={40}>
               <Avatar source={{ uri: avatarUri }} $ms={ms} $big />
             </Wrapper>
           );
@@ -253,7 +326,7 @@ const AngeloTrial = () => {
               <AvatarContainer key={player._id}>
                 <Avatar source={{ uri: avatarUri }} $ms={ms} />
 
-                {player.voteAngeloTrial && (
+                {user.rol === UserRole.MORTIMER && player.voteAngeloTrial && (
                   <VoteIndicator
                     source={VoteIndicatorImgSrc[player.voteAngeloTrial]}
                     resizeMode="stretch"

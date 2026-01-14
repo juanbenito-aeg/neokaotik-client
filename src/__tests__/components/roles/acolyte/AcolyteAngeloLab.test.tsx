@@ -26,6 +26,8 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
+jest.useFakeTimers();
+
 const componentTreeToRender = (
   <NavigationContainer>
     <AcolyteAngeloLab onPressGoBackButton={() => {}} />

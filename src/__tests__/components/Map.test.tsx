@@ -17,6 +17,8 @@ jest.mock('../../components/Swamp', () => jest.fn());
 jest.mock('../../store/useMapStore');
 jest.mock('../../store/usePlayerStore');
 
+jest.useFakeTimers();
+
 describe("'Map' component", () => {
   const user = userEvent.setup();
 

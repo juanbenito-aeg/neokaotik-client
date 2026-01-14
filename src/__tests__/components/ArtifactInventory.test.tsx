@@ -17,6 +17,8 @@ jest.mock('../../store/useArtifactStore', () => {
   };
 });
 
+jest.useFakeTimers();
+
 describe("'ArtifactInventory' component", () => {
   it("should render a number of 'Artifact' components equal to the length of the 'artifacts' array", () => {
     render(<ArtifactInventory />);

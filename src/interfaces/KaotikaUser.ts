@@ -55,7 +55,7 @@ interface KaotikaUser {
   isGuilty?: boolean;
   diseases?: string[];
   isCursed?: boolean;
-  voteAngeloTrial?: VoteAngeloTrialType;
+  voteAngeloTrial?: VoteAngeloTrialType | '';
 }
 
 interface CommonEquipmentFields {
