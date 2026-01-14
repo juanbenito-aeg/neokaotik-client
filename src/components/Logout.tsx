@@ -11,6 +11,8 @@ import {
 import usePlayerStore from '../store/usePlayerStore';
 import { useModalStore } from '../store/useModalStore';
 import useMapStore from '../store/useMapStore';
+import * as Keychain from 'react-native-keychain';
+import { AuthTokenKey } from '../constants/jwt';
 
 const Container = styled.View`
   flex: 1;
@@ -27,6 +29,9 @@ const Logout = () => {
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   async function logOut() {
+    Keychain.resetGenericPassword({ service: AuthTokenKey.ACCESS });
+    Keychain.resetGenericPassword({ service: AuthTokenKey.REFRESH });
+
     await GoogleAuth.signOut();
     await updateFcmToken(user!.email, '');
     await avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn();
