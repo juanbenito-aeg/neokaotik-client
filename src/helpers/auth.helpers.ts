@@ -1,30 +1,28 @@
 import type { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
+import { axiosInstance } from './axios.helper';
 
 export async function authenticateUser(
   endpoint: string,
   idToken: string,
   fcmToken: string,
 ): Promise<AuthenticateUserReturnValue> {
-  const response = await fetch(
-    `https://neokaotik-server.onrender.com/auth/${endpoint}`,
-    {
-      method: 'POST',
-      body: JSON.stringify({ idToken, fcmToken }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  );
-
   const authenticationAttemptResult: AuthenticateUserReturnValue = {
-    statusCode: response.status,
+    statusCode: 0,
     user: null,
   };
 
-  if (response.ok) {
-    const { user } = await response.json();
-    authenticationAttemptResult.user = user;
-  }
+  await axiosInstance
+    .post(`/auth/${endpoint}`, {
+      idToken,
+      fcmToken,
+    })
+    .then(response => {
+      authenticationAttemptResult.user = response.data.user;
+      authenticationAttemptResult.statusCode = response.status;
+    })
+    .catch(error => {
+      console.log(error.message);
+    });
 
   return authenticationAttemptResult;
 }

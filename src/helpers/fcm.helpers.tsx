@@ -27,23 +27,19 @@ import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 import { SetAngeloTrialState } from '../interfaces/HallSages';
+import { axiosInstance } from './axios.helper';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
-  const response = await fetch(
-    `https://neokaotik-server.onrender.com/players/${userEmail}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+  await axiosInstance
+    .patch(`/players/${userEmail}`, {
       body: JSON.stringify({ pushToken: fcmToken }),
-    },
-  );
-
-  const data = await response.json();
-  if (response.ok) {
-    console.log('FCM token updated successfully on server', data.pushToken);
-  }
+    })
+    .then(response => {
+      console.log(
+        'FCM token updated successfully on server',
+        response.data.pushToken,
+      );
+    });
 }
 
 function setNotificationHandlers(

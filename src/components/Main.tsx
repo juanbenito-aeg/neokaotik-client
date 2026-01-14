@@ -17,6 +17,7 @@ import { ModalImage } from '../interfaces/Modal';
 import { ModalImgSrc } from '../constants/image-sources';
 import { useDiseaseStore } from '../store/useDiseaseStore';
 import { Disease } from '../interfaces/disease-store';
+import { axiosInstance } from '../helpers/axios.helper';
 
 const Container = styled.View`
   height: 100%;
@@ -41,22 +42,22 @@ const Main = () => {
       // Make calls to the API to get acolytes, non-acolytes, artifacts & diseases & save them locally
 
       const acolytesArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/players/acolytes/',
+        '/players/acolytes/',
       )) as KaotikaUser[];
       setAcolytes(acolytesArray);
 
       const nonAcolyteArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/players/non-acolytes/',
+        '/players/non-acolytes/',
       )) as KaotikaUser[];
       setNonAcolytes(nonAcolyteArray);
 
       const artifactsArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/missions/artifacts/',
+        '/missions/artifacts/',
       )) as Artifact[];
       setArtifacts(artifactsArray);
 
       const diseasesArray = (await getXArray(
-        'https://neokaotik-server.onrender.com/missions/diseases/',
+        '/missions/diseases/',
       )) as Disease[];
       setDiseases(diseasesArray);
 
@@ -67,13 +68,11 @@ const Main = () => {
   async function getXArray(
     url: string,
   ): Promise<KaotikaUser[] | Artifact[] | Disease[]> {
-    const response = await fetch(url);
+    let xArray: any = [];
 
-    let xArray = [];
-
-    if (response.ok) {
-      xArray = await response.json();
-    }
+    await axiosInstance.get(url).then(response => {
+      xArray = response.data;
+    });
 
     return xArray;
   }
