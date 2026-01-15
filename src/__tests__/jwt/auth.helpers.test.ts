@@ -1,9 +1,9 @@
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { authenticateUser } from '../../helpers/auth.helpers';
 import * as Keychain from 'react-native-keychain';
-import { axiosInstance } from '../../helpers/axios.helper';
+import { axiosInstance } from '../../helpers/axios.helpers';
 
-jest.mock('../../helpers/axios.helper', () => ({
+jest.mock('../../helpers/axios.helpers', () => ({
   axiosInstance: {
     post: jest.fn(),
   },

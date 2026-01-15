@@ -17,7 +17,7 @@ import { ModalImage } from '../interfaces/Modal';
 import { ModalImgSrc } from '../constants/image-sources';
 import { useDiseaseStore } from '../store/useDiseaseStore';
 import { Disease } from '../interfaces/disease-store';
-import { axiosInstance } from '../helpers/axios.helper';
+import { axiosInstance } from '../helpers/axios.helpers';
 
 const Container = styled.View`
   height: 100%;

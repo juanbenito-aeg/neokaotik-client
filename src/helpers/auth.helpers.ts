@@ -1,5 +1,5 @@
 import type { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import { axiosInstance } from './axios.helper';
+import { axiosInstance } from './axios.helpers';
 import { setAccessAndRefreshTokens } from './jwt.helpers';
 
 export async function authenticateUser(
