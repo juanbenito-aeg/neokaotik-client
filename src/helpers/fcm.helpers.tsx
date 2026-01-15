@@ -33,7 +33,7 @@ async function updateFcmToken(userEmail: string, fcmToken: string) {
   const {
     data: { pushToken },
   } = await axiosInstance.patch(`/players/${userEmail}`, {
-    body: JSON.stringify({ pushToken: fcmToken }),
+    pushToken: fcmToken,
   });
 
   console.log('FCM token updated successfully on server', pushToken);

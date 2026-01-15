@@ -68,11 +68,13 @@ const Main = () => {
   async function getXArray(
     url: string,
   ): Promise<KaotikaUser[] | Artifact[] | Disease[]> {
-    let xArray: any = [];
+    const response = await axiosInstance.get(url);
 
-    await axiosInstance.get(url).then(response => {
+    let xArray = [];
+
+    if (response.status === 200) {
       xArray = response.data;
-    });
+    }
 
     return xArray;
   }

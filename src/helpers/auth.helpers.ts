@@ -8,7 +8,7 @@ export async function authenticateUser(
   fcmToken: string,
 ): Promise<AuthenticateUserReturnValue> {
   const authenticationAttemptResult: AuthenticateUserReturnValue = {
-    statusCode: 0,
+    statusCode: -1,
     user: null,
   };
 
@@ -18,8 +18,11 @@ export async function authenticateUser(
       fcmToken,
     });
 
-    authenticationAttemptResult.user = response.data.user;
     authenticationAttemptResult.statusCode = response.status;
+
+    if (response.status === 200 || response.status === 201) {
+      authenticationAttemptResult.user = response.data.user;
+    }
 
     const { accessToken, refreshToken } = response.data;
 
