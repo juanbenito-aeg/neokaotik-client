@@ -38,7 +38,10 @@ const Login = () => {
         const authenticationAttemptResult: AuthenticateUserReturnValue =
           await authenticateUser('log-in', idToken, fcmToken);
 
-        if (authenticationAttemptResult.statusCode <= 201) {
+        if (
+          authenticationAttemptResult.statusCode === 200 ||
+          authenticationAttemptResult.statusCode === 201
+        ) {
           setUser(authenticationAttemptResult.user!);
         } else {
           await GoogleAuth.signOut();

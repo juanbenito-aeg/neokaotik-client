@@ -27,20 +27,16 @@ import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 import { SetAngeloTrialState } from '../interfaces/HallSages';
+import { axiosInstance } from './axios.helper';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
-  const response = await fetch(`http://10.50.0.50:6000/players/${userEmail}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ pushToken: fcmToken }),
+  const {
+    data: { pushToken },
+  } = await axiosInstance.patch(`/players/${userEmail}`, {
+    pushToken: fcmToken,
   });
 
-  const data = await response.json();
-  if (response.ok) {
-    console.log('FCM token updated successfully on server', data.pushToken);
-  }
+  console.log('FCM token updated successfully on server', pushToken);
 }
 
 function setNotificationHandlers(
