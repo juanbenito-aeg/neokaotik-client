@@ -1,8 +1,8 @@
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { authenticateUser } from '../../helpers/auth.helpers';
-import { axiosInstance } from '../../helpers/axios.helper';
+import { axiosInstance } from '../../helpers/axios.helpers';
 
-jest.mock('../../helpers/axios.helper');
+jest.mock('../../helpers/axios.helpers');
 
 describe('AxiosIntance', () => {
   it("shouldn't display 'Authorization' header when user is login", async () => {

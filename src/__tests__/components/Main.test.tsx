@@ -5,7 +5,7 @@ import usePlayerStore from '../../store/usePlayerStore';
 import { PlayerStore } from '../../interfaces/player';
 import { useModalStore } from '../../store/useModalStore';
 import { ModalImgSrc } from '../../constants/image-sources';
-import { axiosInstance } from '../../helpers/axios.helper';
+import { axiosInstance } from '../../helpers/axios.helpers';
 import { useDiseaseStore } from '../../store/useDiseaseStore';
 
 // Mock unused problematic modules
@@ -21,7 +21,7 @@ jest.mock('../../store/usePlayerStore');
 jest.mock('../../store/useModalStore');
 jest.mock('../../store/useDiseaseStore');
 
-jest.mock('../../helpers/axios.helper');
+jest.mock('../../helpers/axios.helpers');
 
 jest.useFakeTimers();
 

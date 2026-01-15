@@ -27,7 +27,7 @@ import { socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 import { SetAngeloTrialState } from '../interfaces/HallSages';
-import { axiosInstance } from './axios.helper';
+import { axiosInstance } from './axios.helpers';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const {
