@@ -1,7 +1,6 @@
 import type { AuthenticateUserReturnValue } from '../interfaces/auth.helpers';
-import * as Keychain from 'react-native-keychain';
 import { axiosInstance } from './axios.helper';
-import { AuthTokenKey } from '../constants/jwt';
+import { setAccessAndRefreshTokens } from './jwt.helpers';
 
 export async function authenticateUser(
   endpoint: string,
@@ -25,13 +24,7 @@ export async function authenticateUser(
     const { accessToken, refreshToken } = response.data;
 
     if (accessToken && refreshToken) {
-      await Keychain.setGenericPassword(AuthTokenKey.ACCESS, accessToken, {
-        service: AuthTokenKey.ACCESS,
-      });
-
-      await Keychain.setGenericPassword(AuthTokenKey.REFRESH, refreshToken, {
-        service: AuthTokenKey.REFRESH,
-      });
+      await setAccessAndRefreshTokens(accessToken, refreshToken);
     }
   } catch (error: any) {
     console.log('Auth error:', error.message);
