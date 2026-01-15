@@ -271,14 +271,18 @@ function initSocket(
   );
 
   if (socket.disconnected) {
-    socket.on(SocketGeneralEvents.CONNECT, () => {
-      handleConnection(user.email);
-    });
-
-    socket.connect();
+    registerConnectEventAndConnect(user.email);
   }
 
   return performSocketCleanUp;
+}
+
+function registerConnectEventAndConnect(userEmail: string) {
+  socket.on(SocketGeneralEvents.CONNECT, () => {
+    handleConnection(userEmail);
+  });
+
+  socket.connect();
 }
 
 function performSocketCleanUp(userRef: React.RefObject<KaotikaUser | null>) {
@@ -293,4 +297,4 @@ function performSocketCleanUp(userRef: React.RefObject<KaotikaUser | null>) {
   }, 0);
 }
 
-export { socket, initSocket };
+export { socket, initSocket, registerConnectEventAndConnect };

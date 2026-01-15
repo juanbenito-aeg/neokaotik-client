@@ -23,7 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAcolytes, SetNonAcolytes } from '../interfaces/player';
 import { MS } from '../interfaces/Metrics';
 import { ModalData, SetModalData } from '../interfaces/Modal';
-import { socket } from '../socket/socket';
+import { registerConnectEventAndConnect, socket } from '../socket/socket';
 import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 import { SetAngeloTrialState } from '../interfaces/HallSages';
@@ -138,6 +138,10 @@ function handleBackgroundOrQuitNotification(
   user?: KaotikaUser,
   setUser?: SetUser,
 ) {
+  if (deviceState === DeviceState.BACKGROUND && socket.disconnected) {
+    registerConnectEventAndConnect(user!.email);
+  }
+
   const notificationTitle = remoteMessage?.notification!.title;
 
   let canMoveUser = true;
