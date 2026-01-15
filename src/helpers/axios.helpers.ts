@@ -30,26 +30,28 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   response => response,
-  async error => {
-    const ACCESS_TOKEN_EXPIRED_MSG = 'Access token is expired.';
-
-    if (
-      error.response &&
-      error.response.status === 403 &&
-      error.response.data === ACCESS_TOKEN_EXPIRED_MSG
-    ) {
-      const {
-        data: { accessToken, refreshToken },
-      } = await axiosInstance.get('/jwt/refresh');
-
-      if (accessToken && refreshToken) {
-        await setAccessAndRefreshTokens(accessToken, refreshToken);
-        return axiosInstance(error.config);
-      }
-    }
-
-    return Promise.reject(error);
-  },
+  handleRejectedPromise,
 );
 
-export { axiosInstance };
+async function handleRejectedPromise(error: any) {
+  const ACCESS_TOKEN_EXPIRED_MSG = 'Access token is expired.';
+
+  if (
+    error.response &&
+    error.response.status === 403 &&
+    error.response.data === ACCESS_TOKEN_EXPIRED_MSG
+  ) {
+    const {
+      data: { accessToken, refreshToken },
+    } = await axiosInstance.get('/jwt/refresh');
+
+    if (accessToken && refreshToken) {
+      await setAccessAndRefreshTokens(accessToken, refreshToken);
+      return axiosInstance(error.config);
+    }
+  }
+
+  return Promise.reject(error);
+}
+
+export { axiosInstance, handleRejectedPromise };
