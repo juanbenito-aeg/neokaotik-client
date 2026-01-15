@@ -30,16 +30,13 @@ import { SetAngeloTrialState } from '../interfaces/HallSages';
 import { axiosInstance } from './axios.helper';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
-  await axiosInstance
-    .patch(`/players/${userEmail}`, {
-      body: JSON.stringify({ pushToken: fcmToken }),
-    })
-    .then(response => {
-      console.log(
-        'FCM token updated successfully on server',
-        response.data.pushToken,
-      );
-    });
+  const {
+    data: { pushToken },
+  } = await axiosInstance.patch(`/players/${userEmail}`, {
+    body: JSON.stringify({ pushToken: fcmToken }),
+  });
+
+  console.log('FCM token updated successfully on server', pushToken);
 }
 
 function setNotificationHandlers(

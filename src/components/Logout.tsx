@@ -29,11 +29,10 @@ const Logout = () => {
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
 
   async function logOut() {
-    Keychain.resetGenericPassword({ service: AuthTokenKey.ACCESS });
-    Keychain.resetGenericPassword({ service: AuthTokenKey.REFRESH });
-
     await GoogleAuth.signOut();
     await updateFcmToken(user!.email, '');
+    await Keychain.resetGenericPassword({ service: AuthTokenKey.ACCESS });
+    await Keychain.resetGenericPassword({ service: AuthTokenKey.REFRESH });
     await avoidDuplicateMsgIdGlitchWhenLoggingOutAndIn();
     setMapNavigation(MapNavigation.MAP);
     setUser(null);
