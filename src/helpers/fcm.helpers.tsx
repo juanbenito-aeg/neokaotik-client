@@ -28,6 +28,7 @@ import KaotikaUser from '../interfaces/KaotikaUser';
 import { SetUser } from '../interfaces/player';
 import { SetAngeloTrialState } from '../interfaces/HallSages';
 import { axiosInstance } from './axios.helpers';
+import { SetIsSocketReconnected } from '../interfaces/socket';
 
 async function updateFcmToken(userEmail: string, fcmToken: string) {
   const {
@@ -47,6 +48,7 @@ function setNotificationHandlers(
   setUser: SetUser,
   setNonAcolytes: SetNonAcolytes,
   setAngeloTrialState: SetAngeloTrialState,
+  setIsSocketReconnected: SetIsSocketReconnected,
 ) {
   const unsubscribeFunctions: VoidFunction[] = [];
 
@@ -72,6 +74,7 @@ function setNotificationHandlers(
         setAcolytes,
         user,
         setUser,
+        setIsSocketReconnected,
       );
     }),
   );
@@ -137,9 +140,10 @@ function handleBackgroundOrQuitNotification(
   setAcolytes?: SetAcolytes,
   user?: KaotikaUser,
   setUser?: SetUser,
+  setIsSocketReconnected?: SetIsSocketReconnected,
 ) {
-  if (deviceState === DeviceState.BACKGROUND && socket.disconnected) {
-    registerConnectEventAndConnect(user!.email);
+  if (deviceState === DeviceState.BACKGROUND) {
+    registerConnectEventAndConnect(user!.email, setIsSocketReconnected!);
   }
 
   const notificationTitle = remoteMessage?.notification!.title;
