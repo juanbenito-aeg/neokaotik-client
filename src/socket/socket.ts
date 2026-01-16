@@ -4,6 +4,7 @@ import type {
   ClientToServerEvents,
   AcolyteDataAfterAccessExitLab,
   AcolyteDataToAccessOrExitTower,
+  SetIsSocketReconnected,
 } from '../interfaces/socket';
 import {
   SocketGeneralEvents,
@@ -63,6 +64,7 @@ function initSocket(
   setShowAngeloAnimation: SetShowAngeloAnimation,
   setAngeloTrialState: SetAngeloTrialState,
   setAngeloTrialVotes: SetAngeloTrialVotes,
+  setIsSocketReconnected: SetIsSocketReconnected,
 ) {
   // Listen for events
 
@@ -271,17 +273,21 @@ function initSocket(
   );
 
   if (socket.disconnected) {
-    registerConnectEventAndConnect(user.email);
+    registerConnectEventAndConnect(user.email, setIsSocketReconnected);
   }
 
   return performSocketCleanUp;
 }
 
-function registerConnectEventAndConnect(userEmail: string) {
+function registerConnectEventAndConnect(
+  userEmail: string,
+  setIsSocketReconnected: SetIsSocketReconnected,
+) {
   socket.on(SocketGeneralEvents.CONNECT, () => {
-    handleConnection(userEmail);
+    handleConnection(userEmail, setIsSocketReconnected);
   });
 
+  socket.disconnect();
   socket.connect();
 }
 
