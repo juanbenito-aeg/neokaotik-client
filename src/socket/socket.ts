@@ -263,6 +263,7 @@ function initSocket(
     (angeloUpdatedFields, angeloTrialVotes) => {
       handleAngeloTrialFinished(
         angeloUpdatedFields,
+        user,
         setNonAcolytes,
         setAngeloTrialState,
         setAngeloTrialVotes,

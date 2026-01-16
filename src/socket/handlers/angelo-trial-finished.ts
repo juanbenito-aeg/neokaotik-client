@@ -6,10 +6,12 @@ import {
   SetAngeloTrialVotes,
 } from '../../interfaces/HallSages';
 import { SetIsLoading } from '../../interfaces/IsLoading';
+import KaotikaUser from '../../interfaces/KaotikaUser';
 import { SetNonAcolytes } from '../../interfaces/player';
 
 function handleAngeloTrialFinished(
   angeloUpdatedFields: Fields,
+  user: KaotikaUser,
   setNonAcolytes: SetNonAcolytes,
   setAngeloTrialState: SetAngeloTrialState,
   setAngeloTrialVotes: SetAngeloTrialVotes,
@@ -26,13 +28,15 @@ function handleAngeloTrialFinished(
     }),
   );
 
-  setAngeloTrialState(AngeloTrialState.FINISHED);
+  if (!(user.isBetrayer && user.rol === UserRole.ACOLYTE)) {
+    setAngeloTrialState(AngeloTrialState.FINISHED);
 
-  if (angeloTrialVotes) {
-    setAngeloTrialVotes({ ...angeloTrialVotes.votes });
+    if (angeloTrialVotes) {
+      setAngeloTrialVotes({ ...angeloTrialVotes.votes });
+    }
+
+    setIsLoading(false);
   }
-
-  setIsLoading(false);
 }
 
 export { handleAngeloTrialFinished };
