@@ -4,6 +4,7 @@ import type {
   ClientToServerEvents,
   AcolyteDataAfterAccessExitLab,
   AcolyteDataToAccessOrExitTower,
+  SetIsSocketReconnected,
 } from '../interfaces/socket';
 import {
   SocketGeneralEvents,
@@ -63,6 +64,7 @@ function initSocket(
   setShowAngeloAnimation: SetShowAngeloAnimation,
   setAngeloTrialState: SetAngeloTrialState,
   setAngeloTrialVotes: SetAngeloTrialVotes,
+  setIsSocketReconnected: SetIsSocketReconnected,
 ) {
   // Listen for events
 
@@ -271,14 +273,22 @@ function initSocket(
   );
 
   if (socket.disconnected) {
-    socket.on(SocketGeneralEvents.CONNECT, () => {
-      handleConnection(user.email);
-    });
-
-    socket.connect();
+    registerConnectEventAndConnect(user.email, setIsSocketReconnected);
   }
 
   return performSocketCleanUp;
+}
+
+function registerConnectEventAndConnect(
+  userEmail: string,
+  setIsSocketReconnected: SetIsSocketReconnected,
+) {
+  socket.on(SocketGeneralEvents.CONNECT, () => {
+    handleConnection(userEmail, setIsSocketReconnected);
+  });
+
+  socket.disconnect();
+  socket.connect();
 }
 
 function performSocketCleanUp(userRef: React.RefObject<KaotikaUser | null>) {
@@ -293,4 +303,4 @@ function performSocketCleanUp(userRef: React.RefObject<KaotikaUser | null>) {
   }, 0);
 }
 
-export { socket, initSocket };
+export { socket, initSocket, registerConnectEventAndConnect };

@@ -19,6 +19,8 @@ jest.mock('@react-native-async-storage/async-storage', () => {
 
 jest.mock('../../RootNavigation');
 
+jest.mock('../../socket/socket');
+
 // Arrange (1)
 const setModalData = jest.fn();
 const ms = jest.fn();
@@ -36,6 +38,7 @@ const deviceState = DeviceState.BACKGROUND;
 const setAcolytes = jest.fn();
 let acolyte = mockedPlayers[MockedPlayer.ACOLYTE];
 const setUser = jest.fn();
+const setIsSocketReconnected = jest.fn();
 
 describe("'Summoned to The Hall of Sages' notification", () => {
   it("should not move the acolyte to THoS when they are inside Angelo's laboratory or The Swamp Tower", async () => {
@@ -51,6 +54,7 @@ describe("'Summoned to The Hall of Sages' notification", () => {
       setAcolytes,
       acolyte,
       setUser,
+      setIsSocketReconnected,
     );
 
     // Assert
@@ -72,6 +76,7 @@ describe("'Summoned to The Hall of Sages' notification", () => {
       setAcolytes,
       acolyte,
       setUser,
+      setIsSocketReconnected,
     );
 
     // Assert
