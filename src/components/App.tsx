@@ -23,6 +23,7 @@ import { useModalStore } from '../store/useModalStore';
 import { useIsLoadingStore } from '../store/useIsLoadingStore';
 import useArtifactStore from '../store/useArtifactStore';
 import { useHallOfSageStore } from '../store/useHallOfSageStore';
+import { useSocketStore } from '../store/useSocketStore';
 
 const App = () => {
   const [isConfigured, setIsConfigured] = useState<boolean>(false);
@@ -61,6 +62,10 @@ const App = () => {
     state => state.setAngeloTrialVotes,
   );
 
+  const setIsSocketReconnected = useSocketStore(
+    state => state.setIsSocketReconnected,
+  );
+
   const { ms } = useMetrics();
 
   DEFAULT_MODAL_DATA.onPressActionButtonOne = () => {
@@ -89,6 +94,7 @@ const App = () => {
         setShowAngeloAnimation,
         setAngeloTrialState,
         setAngeloTrialVotes,
+        setIsSocketReconnected,
       );
 
       return () => {
@@ -109,6 +115,7 @@ const App = () => {
         setUser,
         setNonAcolytes,
         setAngeloTrialState,
+        setIsSocketReconnected,
       );
 
       messaging()

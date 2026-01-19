@@ -1,12 +1,13 @@
 import { MockedPlayer, mockedPlayers } from '../../__mocks__/mockedPlayers';
 import { authenticateUser } from '../../helpers/auth.helpers';
-import { axiosInstance } from '../../helpers/axios.helpers';
+import {
+  axiosInstance,
+  handleRejectedPromise,
+} from '../../helpers/axios.helpers';
 
-jest.mock('../../helpers/axios.helpers');
-
-describe('AxiosIntance', () => {
+describe('AxiosInstance', () => {
   it("shouldn't display 'Authorization' header when user is login", async () => {
-    (axiosInstance.post as unknown as jest.Mock).mockReturnValue({
+    jest.spyOn(axiosInstance, 'post').mockResolvedValueOnce({
       status: 200,
       data: {
         user: mockedPlayers[MockedPlayer.ACOLYTE],
@@ -15,7 +16,7 @@ describe('AxiosIntance', () => {
       },
     });
 
-    const endpoint = 'login';
+    const endpoint = 'log-in';
     const idToken = 'google-id-token';
     const fcmToken = 'fcm-token';
 
@@ -26,5 +27,27 @@ describe('AxiosIntance', () => {
         Authorization: 'Bearer',
       }),
     );
+  });
+});
+
+describe("'Axios' response interceptor", () => {
+  const JWT_REFRESH_ROUTE = '/jwt/refresh';
+
+  it(`should call "${JWT_REFRESH_ROUTE}" API route when access token is expired`, async () => {
+    const spy = jest
+      .spyOn(axiosInstance, 'get')
+      .mockResolvedValueOnce({ data: {} });
+
+    const ACCESS_TOKEN_EXPIRED_MSG = 'Access token is expired.';
+
+    const error = {
+      response: { status: 403, data: ACCESS_TOKEN_EXPIRED_MSG },
+    };
+
+    try {
+      await handleRejectedPromise(error);
+    } catch (error) {
+      expect(spy).toHaveBeenCalledWith(JWT_REFRESH_ROUTE);
+    }
   });
 });

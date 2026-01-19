@@ -18,6 +18,7 @@ import { ModalImgSrc } from '../constants/image-sources';
 import { useDiseaseStore } from '../store/useDiseaseStore';
 import { Disease } from '../interfaces/disease-store';
 import { axiosInstance } from '../helpers/axios.helpers';
+import { useSocketStore } from '../store/useSocketStore';
 
 const Container = styled.View`
   height: 100%;
@@ -35,35 +36,46 @@ const Main = () => {
   const diseases = useDiseaseStore(state => state.diseases);
   const setDiseases = useDiseaseStore(state => state.setDiseases);
 
+  const isSocketReconnected = useSocketStore(
+    state => state.isSocketReconnected,
+  );
+  const setIsSocketReconnected = useSocketStore(
+    state => state.setIsSocketReconnected,
+  );
+
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
+    if (isSocketReconnected) {
+      (async () => {
+        setIsLoading(true);
 
-      // Make calls to the API to get acolytes, non-acolytes, artifacts & diseases & save them locally
+        // Make calls to the API to get acolytes, non-acolytes, artifacts & diseases & save them locally
 
-      const acolytesArray = (await getXArray(
-        '/players/acolytes/',
-      )) as KaotikaUser[];
-      setAcolytes(acolytesArray);
+        const acolytesArray = (await getXArray(
+          '/players/acolytes/',
+        )) as KaotikaUser[];
+        setAcolytes(acolytesArray);
 
-      const nonAcolyteArray = (await getXArray(
-        '/players/non-acolytes/',
-      )) as KaotikaUser[];
-      setNonAcolytes(nonAcolyteArray);
+        const nonAcolyteArray = (await getXArray(
+          '/players/non-acolytes/',
+        )) as KaotikaUser[];
+        setNonAcolytes(nonAcolyteArray);
 
-      const artifactsArray = (await getXArray(
-        '/missions/artifacts/',
-      )) as Artifact[];
-      setArtifacts(artifactsArray);
+        const artifactsArray = (await getXArray(
+          '/missions/artifacts/',
+        )) as Artifact[];
+        setArtifacts(artifactsArray);
 
-      const diseasesArray = (await getXArray(
-        '/missions/diseases/',
-      )) as Disease[];
-      setDiseases(diseasesArray);
+        const diseasesArray = (await getXArray(
+          '/missions/diseases/',
+        )) as Disease[];
+        setDiseases(diseasesArray);
 
-      setIsLoading(false);
-    })();
-  }, []);
+        setIsLoading(false);
+
+        setIsSocketReconnected(false);
+      })();
+    }
+  }, [isSocketReconnected]);
 
   async function getXArray(
     url: string,

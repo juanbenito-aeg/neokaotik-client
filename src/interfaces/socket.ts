@@ -144,9 +144,18 @@ interface ClientToServerEvents {
   ) => void;
 }
 
+interface SocketStore {
+  isSocketReconnected: boolean;
+  setIsSocketReconnected: SetIsSocketReconnected;
+}
+
+type SetIsSocketReconnected = (isSocketReconnected: boolean) => void;
+
 export type {
   ServerToClientEvents,
   AcolyteDataAfterAccessExitLab,
   AcolyteDataToAccessOrExitTower,
   ClientToServerEvents,
+  SetIsSocketReconnected,
+  SocketStore,
 };
