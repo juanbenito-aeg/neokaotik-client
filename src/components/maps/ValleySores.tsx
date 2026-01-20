@@ -8,17 +8,13 @@ import {
 import useMapStore from '../../store/useMapStore';
 import GoBackButton from '../GoBackButton';
 import InnOfForgotten from '../InnOfForgotten';
-import Button from '../Button';
-import { ViewStyle } from 'react-native';
-import useMetrics from '../../hooks/use-metrics';
+import { MapLocation } from '../MapLocation';
 
 const ValleySores = () => {
   const [currentValleySoresLocation, setCurrentValleySoresLocation] =
     useState<ValleySoresLocation>(ValleySoresLocation.MAP);
 
   const setMapNavigation = useMapStore(state => state.setMapNavigation);
-
-  const { ms } = useMetrics();
 
   function handlePress(newLocation: MapNavigation | ValleySoresLocation) {
     if (newLocation === MapNavigation.MAP) {
@@ -28,26 +24,17 @@ const ValleySores = () => {
     }
   }
 
-  const getInnForgottenButton = () => {
-    const buttonFixedSize: number = 90;
-    const scaleFactor: number = 1;
-    const buttonCustomStyleObj: ViewStyle = {
-      width: ms(buttonFixedSize, scaleFactor),
-      height: ms(buttonFixedSize, scaleFactor),
-      position: 'absolute',
-      top: '25%',
-    };
-
-    return (
-      <Button
-        customStyleObj={buttonCustomStyleObj}
-        onPress={() => {
-          handlePress(ValleySoresLocation.INN_FORGOTTEN);
-        }}
-        backgroundImgSrc={ButtonBackgroundImgSrc.INN_FORGOTTEN}
-      />
-    );
-  };
+  const getInnForgottenButton = () => (
+    <MapLocation
+      text="Inn of the Forgotten"
+      textStyle={{ color: 'rgb(187, 192, 195)' }}
+      position={{ top: '35%' }}
+      onPress={() => {
+        handlePress(ValleySoresLocation.INN_FORGOTTEN);
+      }}
+      backgroundImgSrc={ButtonBackgroundImgSrc.INN_FORGOTTEN}
+    />
+  );
 
   let content;
 

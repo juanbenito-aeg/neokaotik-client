@@ -9,10 +9,7 @@ import {
   ButtonBackgroundImgSrc,
 } from '../../constants/image-sources';
 import ScreenContainer from '../ScreenContainer';
-import Button from '../Button';
 import OldSchoolMap from './OldSchoolMap';
-import useMetrics from '../../hooks/use-metrics';
-import { ViewStyle } from 'react-native';
 import { useState, useEffect } from 'react';
 import {
   EventMapCore,
@@ -29,6 +26,7 @@ import usePlayerStore from '../../store/usePlayerStore';
 import Obituary from '../Obituary';
 import ValleySores from './ValleySores';
 import HollowOfLost from '../HollowOfLost';
+import { MapLocation } from '../MapLocation';
 
 const Map = ({ route }: MapProps) => {
   const [specificLocation, setSpecificLocation] =
@@ -80,16 +78,6 @@ const Map = ({ route }: MapProps) => {
     }
   }, [screenChangingNotificationData]);
 
-  const { ms } = useMetrics();
-  const buttonFixedSize: number = 70;
-  const scaleFactor: number = 1;
-  const buttonCustomStyleObj: ViewStyle = {
-    width: ms(buttonFixedSize, scaleFactor),
-    height: ms(buttonFixedSize, scaleFactor),
-    position: 'absolute',
-    top: '25%',
-  };
-
   const handlePress = (newMapNavigation: MapNavigation) => {
     setMapNavigation(newMapNavigation);
   };
@@ -102,29 +90,29 @@ const Map = ({ route }: MapProps) => {
 
   const isBetrayerAcolyte = user.isBetrayer && user.rol === UserRole.ACOLYTE;
 
+  const mapLocationsTextColor = 'rgb(174, 157, 136)';
+
   const changeScreen = (currentScreen: MapNavigation) => {
     switch (currentScreen) {
       case MapNavigation.MAP:
         return (
           <ScreenContainer backgroundImgSrc={ScreenBackgroundImgSrc.MAP}>
-            <Button
-              customStyleObj={{
-                ...buttonCustomStyleObj,
-                [isBetrayerAcolyte ? 'opacity' : 'borderRadius']: 0.5,
-              }}
+            <MapLocation
+              text="Old School"
+              textStyle={{ color: mapLocationsTextColor }}
+              position={{ top: '27.25%', left: '30%' }}
+              isDisabled={isBetrayerAcolyte}
               onPress={() => {
-                !isBetrayerAcolyte && handlePress(MapNavigation.OLD_SCHOOL_MAP);
+                handlePress(MapNavigation.OLD_SCHOOL_MAP);
               }}
               backgroundImgSrc={ButtonBackgroundImgSrc.OLD_SCHOOL}
               testID="old-school-button"
             />
 
-            <Button
-              customStyleObj={{
-                ...buttonCustomStyleObj,
-                top: '50%',
-                left: '48%',
-              }}
+            <MapLocation
+              text="Swamp"
+              textStyle={{ color: mapLocationsTextColor }}
+              position={{ top: '52.5%', left: '48%' }}
               onPress={() => {
                 handlePress(MapNavigation.SWAMP);
               }}
@@ -133,12 +121,10 @@ const Map = ({ route }: MapProps) => {
 
             {(user.rol === UserRole.ACOLYTE ||
               user.rol === UserRole.MORTIMER) && (
-              <Button
-                customStyleObj={{
-                  ...buttonCustomStyleObj,
-                  top: '67%',
-                  left: '46.5%',
-                }}
+              <MapLocation
+                text="Swamp Tower"
+                textStyle={{ color: mapLocationsTextColor }}
+                position={{ top: '70%', left: '35%' }}
                 onPress={() => {
                   handlePress(MapNavigation.SWAMP_TOWER);
                 }}
@@ -149,12 +135,10 @@ const Map = ({ route }: MapProps) => {
             {acolytes.find(
               acolyte => acolyte.has_completed_artifacts_search,
             ) && (
-              <Button
-                customStyleObj={{
-                  ...buttonCustomStyleObj,
-                  top: '36%',
-                  left: '20%',
-                }}
+              <MapLocation
+                text="Obituary"
+                textStyle={{ color: mapLocationsTextColor }}
+                position={{ top: '42.5%', left: '12.5%' }}
                 onPress={() => {
                   handlePress(MapNavigation.OBITUARY);
                 }}
@@ -162,12 +146,10 @@ const Map = ({ route }: MapProps) => {
               />
             )}
 
-            <Button
-              customStyleObj={{
-                ...buttonCustomStyleObj,
-                top: '13%',
-                left: '49.5%',
-              }}
+            <MapLocation
+              text="Valley of Sores"
+              textStyle={{ color: mapLocationsTextColor }}
+              position={{ top: '13%', left: '49.5%' }}
               onPress={() => {
                 handlePress(MapNavigation.VALLEY_SORES);
               }}
@@ -175,12 +157,10 @@ const Map = ({ route }: MapProps) => {
             />
 
             {!isBetrayerAcolyte && (
-              <Button
-                customStyleObj={{
-                  ...buttonCustomStyleObj,
-                  top: '20%',
-                  right: '15%',
-                }}
+              <MapLocation
+                text="Hollow of the Lost"
+                textStyle={{ color: mapLocationsTextColor }}
+                position={{ top: '30%', left: '60%' }}
                 onPress={() => {
                   handlePress(MapNavigation.HOLLOW_LOST);
                 }}

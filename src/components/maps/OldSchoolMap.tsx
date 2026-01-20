@@ -5,10 +5,7 @@ import {
   ButtonBackgroundImgSrc,
 } from '../../constants/image-sources';
 import ScreenContainer from '../ScreenContainer';
-import Button from '../Button';
 import React, { useEffect, useState } from 'react';
-import { ViewStyle } from 'react-native';
-import useMetrics from '../../hooks/use-metrics';
 import AcolyteAngeloLab from '../roles/acolyte/AcolyteAngeloLab';
 import ScanQr from '../roles/istvan/ScanQr';
 import AcolytesList from '../roles/mortimer/AcolytesList';
@@ -18,6 +15,7 @@ import { OldSchoolMapProps } from '../../interfaces/OldSchoolMap';
 import useMapStore from '../../store/useMapStore';
 import usePlayerStore from '../../store/usePlayerStore';
 import Dungeon from '../Dungeon';
+import { MapLocation } from '../MapLocation';
 
 const OldSchoolMap = ({
   initialLocation,
@@ -55,23 +53,16 @@ const OldSchoolMap = ({
     nonAcolyte => nonAcolyte.rol === UserRole.ANGELO,
   )!;
 
-  const { ms } = useMetrics();
+  const mapLocationsTextColor = 'rgb(174, 157, 136)';
 
   const getAngeloLabButton = () => {
     if (user!.rol === UserRole.VILLAIN) return null;
 
-    const buttonFixedSize: number = 70;
-    const scaleFactor: number = 1;
-    const buttonCustomStyleObj: ViewStyle = {
-      width: ms(buttonFixedSize, scaleFactor),
-      height: ms(buttonFixedSize, scaleFactor),
-      position: 'absolute',
-      top: '22.05%',
-    };
-
     return (
-      <Button
-        customStyleObj={buttonCustomStyleObj}
+      <MapLocation
+        text="Angelo's Laboratory"
+        textStyle={{ color: mapLocationsTextColor }}
+        position={{ top: '22.05%' }}
         onPress={() => {
           handlePress(OldSchoolLocation.ANGELO_LAB);
         }}
@@ -84,18 +75,11 @@ const OldSchoolMap = ({
     if (user?.rol === UserRole.ACOLYTE && !user?.has_been_summoned_to_hos)
       return null;
 
-    const buttonFixedSize: number = 75;
-    const scaleFactor: number = 1;
-    const buttonCustomStyleObj: ViewStyle = {
-      width: ms(buttonFixedSize, scaleFactor),
-      height: ms(buttonFixedSize, scaleFactor),
-      position: 'absolute',
-      top: '42.05%',
-    };
-
     return (
-      <Button
-        customStyleObj={buttonCustomStyleObj}
+      <MapLocation
+        text="Hall of Sages"
+        textStyle={{ color: mapLocationsTextColor }}
+        position={{ top: '42.05%', left: '18.5%' }}
         onPress={() => {
           handlePress(OldSchoolLocation.HALL_OF_SAGES);
         }}
@@ -104,31 +88,22 @@ const OldSchoolMap = ({
     );
   };
 
-  const getDungeonButton = () => {
-    const buttonFixedSize: number = 75;
-    const scaleFactor: number = 1;
-    const buttonCustomStyleObj: ViewStyle = {
-      width: ms(buttonFixedSize, scaleFactor),
-      height: ms(buttonFixedSize, scaleFactor),
-      position: 'absolute',
-      bottom: '30%',
-    };
-
-    return (
-      <Button
-        customStyleObj={buttonCustomStyleObj}
-        onPress={() => {
-          handlePress(OldSchoolLocation.DUNGEON);
-        }}
-        backgroundImgSrc={
-          angelo.location !== OldSchoolLocation.HALL_OF_SAGES &&
-          (angelo.isCaptured || angelo.isGuilty)
-            ? ButtonBackgroundImgSrc.DUNGEON_ANGELO
-            : ButtonBackgroundImgSrc.DUNGEON
-        }
-      />
-    );
-  };
+  const getDungeonButton = () => (
+    <MapLocation
+      text="Dungeon"
+      textStyle={{ color: mapLocationsTextColor }}
+      position={{ top: '42.05%', left: '60.5%' }}
+      onPress={() => {
+        handlePress(OldSchoolLocation.DUNGEON);
+      }}
+      backgroundImgSrc={
+        angelo.location !== OldSchoolLocation.HALL_OF_SAGES &&
+        (angelo.isCaptured || angelo.isGuilty)
+          ? ButtonBackgroundImgSrc.DUNGEON_ANGELO
+          : ButtonBackgroundImgSrc.DUNGEON
+      }
+    />
+  );
 
   const getContent = () => {
     let content;
