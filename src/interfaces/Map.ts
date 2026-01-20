@@ -1,12 +1,24 @@
 import { StaticScreenProps } from '@react-navigation/native';
-import { ViewStyle } from 'react-native';
+import { DimensionValue, TextStyle, ViewStyle } from 'react-native';
 import { ScreenChangingNotificationData } from './fcm';
 import { MapNavigation } from '../constants/navigation';
+import { ButtonProps } from './buttons';
 
 type MapProps = StaticScreenProps<{
   screenChangingNotificationData?: ScreenChangingNotificationData;
   tabBarStyle: ViewStyle;
 }>;
+
+interface MapLocationProps extends ButtonProps {
+  textStyle: TextStyle;
+  position: MapLocationPosition;
+  isDisabled?: boolean;
+}
+
+interface MapLocationPosition {
+  top: DimensionValue;
+  left?: DimensionValue;
+}
 
 interface MapStore {
   mapNavigation: MapNavigation;
@@ -19,4 +31,4 @@ type SetMapNavigation = (mapNavigation: MapNavigation) => void;
 
 type SetTabBarStyle = (tabBarStyle: ViewStyle) => void;
 
-export type { MapProps, MapStore };
+export type { MapProps, MapLocationProps, MapLocationPosition, MapStore };
