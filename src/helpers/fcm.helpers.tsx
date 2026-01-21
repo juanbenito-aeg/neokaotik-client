@@ -171,7 +171,9 @@ function handleBackgroundOrQuitNotification(
         canMoveUser = false;
       }
 
-      updateAcolyteHasBeenSummonedToHOS(setUser!);
+      if (!user!.has_been_summoned_to_hos) {
+        updateAcolyteHasBeenSummonedToHOS(setUser!);
+      }
 
       break;
     }
