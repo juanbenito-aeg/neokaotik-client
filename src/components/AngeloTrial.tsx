@@ -64,20 +64,23 @@ const ButtonContainer = styled.View`
   gap: 20px;
 `;
 
+const VoteContainer = styled.View`
+  position: absolute;
+  top: 66%;
+  justify-content: center;
+  align-items: center;
+`;
+
 const TextPanel = styled.Image<{ $ms: MS }>`
   width: ${({ $ms }) => $ms(350, 1)}px;
   height: ${({ $ms }) => $ms(180, 1)}px;
-  position: absolute;
-  top: 66%;
 `;
 
 const TextContainer = styled(Text)<{ $ms: MS }>`
+  width: 70%;
+  position: absolute;
   font-size: ${({ $ms }) => $ms(25, 1)}px;
   color: rgb(191 245 205);
-  position: absolute;
-  top: ${({ $ms }) => $ms(625, 0.4)}px;
-  text-align: center;
-  width: 70%;
 `;
 
 const AngeloTrial = () => {
@@ -357,13 +360,13 @@ const AngeloTrial = () => {
       )}
 
       {vote && (
-        <>
+        <VoteContainer>
           <TextPanel $ms={ms} source={ScreenBackgroundImgSrc.TEXT_PANEL} />
 
           <TextContainer $ms={ms}>
             {user.nickname} has voted that Angelo is {vote.toLowerCase()}.
           </TextContainer>
-        </>
+        </VoteContainer>
       )}
     </>
   );
